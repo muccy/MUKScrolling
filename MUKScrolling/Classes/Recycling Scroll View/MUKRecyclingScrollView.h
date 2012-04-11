@@ -93,7 +93,8 @@
  
  @param visibleViews A set containg views marked as visible.
  @param bounds Visible bounds of the scroll view.
- @warning Default implementation does nothing.
+ @warning Default implementation does nothing, because it's up to *concrete*
+ classes to implement layout reusing views.
  @warning This method is fired for each layoutSubviews call, so you
  should return as quick as you can to optimize performance. On the other side
  you have a deep control over subviews positioning.

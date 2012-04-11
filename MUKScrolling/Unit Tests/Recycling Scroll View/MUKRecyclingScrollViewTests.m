@@ -200,6 +200,15 @@
     STAssertTrue([[scrollView visibleViews] containsObject:view], @"Recyclable view added");
     STAssertTrue([[scrollView subviews] containsObject:view], @"Subview added");
     
+    viewRect = CGRectMake(1000, 0, 200, 200);
+    MUKDummyRecyclableView *outsideView = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
+    outsideView.recycleIdentifier = @"Foo";
+    
+    [scrollView addSubview:outsideView];
+    STAssertFalse([[scrollView visibleViews] containsObject:outsideView], @"Recyclable view not added because is not visible");
+    STAssertFalse([[scrollView subviews] containsObject:outsideView], @"Subview not added because is not visible");
+    STAssertTrue([[scrollView enqueuedViews] containsObject:outsideView], @"Subview enqueued");
+    
     MUKDummyRecyclableView *unnamedView = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
 
     [scrollView addSubview:unnamedView];

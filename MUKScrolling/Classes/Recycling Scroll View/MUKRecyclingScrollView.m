@@ -90,10 +90,18 @@
         if ([view conformsToProtocol:@protocol(MUKRecyclable)]) {
             UIView<MUKRecyclable> *recyclableView = (UIView<MUKRecyclable> *)view;
             
-            if (recyclableView.recycleIdentifier != nil) {            
-                NSMutableSet *recycleSet = [self recycleSetWithIdentifier_:recyclableView.recycleIdentifier create_:NO];
-                [recycleSet removeObject:recyclableView];
-                [self.visibleViews_ addObject:recyclableView];
+            if (recyclableView.recycleIdentifier != nil) {     
+                if ([self shouldEnqueueView:recyclableView forVisibleBounds:self.bounds])
+                {
+                    [self enqueueView:recyclableView];
+                    return; // Do not add subview
+                }
+                else {
+                    // New subview is in bounds
+                    NSMutableSet *recycleSet = [self recycleSetWithIdentifier_:recyclableView.recycleIdentifier create_:NO];
+                    [recycleSet removeObject:recyclableView];
+                    [self.visibleViews_ addObject:recyclableView];
+                }
             }
         }
         

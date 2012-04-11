@@ -173,7 +173,7 @@
     NSMutableSet *set = [NSMutableSet set];
     [recyclableViews__ enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop)
      {
-         [set unionSet:set];
+         [set unionSet:obj];
      }];
     
     return set;

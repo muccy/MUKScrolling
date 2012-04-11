@@ -27,7 +27,6 @@
 		06339BDE153584FE00FB07ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339BCC153584FD00FB07ED /* Foundation.framework */; };
 		06339BE1153584FE00FB07ED /* libMUKScrolling.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339BC9153584FD00FB07ED /* libMUKScrolling.a */; };
 		06339BF71535855F00FB07ED /* MUKScrolling.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339BD1153584FD00FB07ED /* MUKScrolling.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		06339C06153585E000FB07ED /* MUKScrollingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C03153585E000FB07ED /* MUKScrollingTests.m */; };
 		06339C071535867400FB07ED /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06339BFF153585E000FB07ED /* InfoPlist.strings */; };
 		06339C0C153587D600FB07ED /* MUKRecyclingScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339C0A153587D600FB07ED /* MUKRecyclingScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06339C0D153587D600FB07ED /* MUKRecyclingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C0B153587D600FB07ED /* MUKRecyclingScrollView.m */; };
@@ -35,6 +34,10 @@
 		06339C1415358A2700FB07ED /* MUKRecyclingScrollView_Memory.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339C1315358A2700FB07ED /* MUKRecyclingScrollView_Memory.h */; };
 		06339C1615358A5300FB07ED /* MUKRecyclingScrollView_Storage.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339C1515358A5300FB07ED /* MUKRecyclingScrollView_Storage.h */; };
 		06339C1915358BB200FB07ED /* MUKRecyclable.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339C1815358BB200FB07ED /* MUKRecyclable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06339C27153599CA00FB07ED /* MUKRecyclingScrollViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C26153599CA00FB07ED /* MUKRecyclingScrollViewTests.m */; };
+		06339C2B15359A8000FB07ED /* MUKDummyRecyclableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C2A15359A8000FB07ED /* MUKDummyRecyclableView.m */; };
+		06339C3015359C3F00FB07ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C2F15359C3F00FB07ED /* CoreGraphics.framework */; };
+		06339C3115359C4C00FB07ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C2F15359C3F00FB07ED /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,14 +61,17 @@
 		06339BFC153585B900FB07ED /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		06339C00153585E000FB07ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		06339C01153585E000FB07ED /* MUKScrollingTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MUKScrollingTests-Info.plist"; sourceTree = "<group>"; };
-		06339C02153585E000FB07ED /* MUKScrollingTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKScrollingTests.h; sourceTree = "<group>"; };
-		06339C03153585E000FB07ED /* MUKScrollingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKScrollingTests.m; sourceTree = "<group>"; };
 		06339C0A153587D600FB07ED /* MUKRecyclingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKRecyclingScrollView.h; sourceTree = "<group>"; };
 		06339C0B153587D600FB07ED /* MUKRecyclingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKRecyclingScrollView.m; sourceTree = "<group>"; };
 		06339C0E153587E400FB07ED /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		06339C1315358A2700FB07ED /* MUKRecyclingScrollView_Memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKRecyclingScrollView_Memory.h; sourceTree = "<group>"; };
 		06339C1515358A5300FB07ED /* MUKRecyclingScrollView_Storage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKRecyclingScrollView_Storage.h; sourceTree = "<group>"; };
 		06339C1815358BB200FB07ED /* MUKRecyclable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKRecyclable.h; sourceTree = "<group>"; };
+		06339C25153599CA00FB07ED /* MUKRecyclingScrollViewTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKRecyclingScrollViewTests.h; sourceTree = "<group>"; };
+		06339C26153599CA00FB07ED /* MUKRecyclingScrollViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKRecyclingScrollViewTests.m; sourceTree = "<group>"; };
+		06339C2915359A8000FB07ED /* MUKDummyRecyclableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKDummyRecyclableView.h; sourceTree = "<group>"; };
+		06339C2A15359A8000FB07ED /* MUKDummyRecyclableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKDummyRecyclableView.m; sourceTree = "<group>"; };
+		06339C2F15359C3F00FB07ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06339C3015359C3F00FB07ED /* CoreGraphics.framework in Frameworks */,
 				06339C0F153587E400FB07ED /* UIKit.framework in Frameworks */,
 				06339BCD153584FD00FB07ED /* Foundation.framework in Frameworks */,
 			);
@@ -82,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06339C3115359C4C00FB07ED /* CoreGraphics.framework in Frameworks */,
 				06339BDB153584FD00FB07ED /* SenTestingKit.framework in Frameworks */,
 				06339BDD153584FE00FB07ED /* UIKit.framework in Frameworks */,
 				06339BDE153584FE00FB07ED /* Foundation.framework in Frameworks */,
@@ -117,6 +125,7 @@
 		06339BCB153584FD00FB07ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				06339C2F15359C3F00FB07ED /* CoreGraphics.framework */,
 				06339C0E153587E400FB07ED /* UIKit.framework */,
 				06339BCC153584FD00FB07ED /* Foundation.framework */,
 				06339BDA153584FD00FB07ED /* SenTestingKit.framework */,
@@ -140,8 +149,8 @@
 			children = (
 				06339BFF153585E000FB07ED /* InfoPlist.strings */,
 				06339C01153585E000FB07ED /* MUKScrollingTests-Info.plist */,
-				06339C02153585E000FB07ED /* MUKScrollingTests.h */,
-				06339C03153585E000FB07ED /* MUKScrollingTests.m */,
+				06339C2815359A6600FB07ED /* Recyclable View */,
+				06339C24153599B700FB07ED /* Recycling Scroll View */,
 			);
 			name = "Unit Tests";
 			path = "MUKScrolling/Unit Tests";
@@ -172,6 +181,24 @@
 				06339C1815358BB200FB07ED /* MUKRecyclable.h */,
 			);
 			path = Types;
+			sourceTree = "<group>";
+		};
+		06339C24153599B700FB07ED /* Recycling Scroll View */ = {
+			isa = PBXGroup;
+			children = (
+				06339C25153599CA00FB07ED /* MUKRecyclingScrollViewTests.h */,
+				06339C26153599CA00FB07ED /* MUKRecyclingScrollViewTests.m */,
+			);
+			path = "Recycling Scroll View";
+			sourceTree = "<group>";
+		};
+		06339C2815359A6600FB07ED /* Recyclable View */ = {
+			isa = PBXGroup;
+			children = (
+				06339C2915359A8000FB07ED /* MUKDummyRecyclableView.h */,
+				06339C2A15359A8000FB07ED /* MUKDummyRecyclableView.m */,
+			);
+			path = "Recyclable View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -323,7 +350,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06339C06153585E000FB07ED /* MUKScrollingTests.m in Sources */,
+				06339C27153599CA00FB07ED /* MUKRecyclingScrollViewTests.m in Sources */,
+				06339C2B15359A8000FB07ED /* MUKDummyRecyclableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

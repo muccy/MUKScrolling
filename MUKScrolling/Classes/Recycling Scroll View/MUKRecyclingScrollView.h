@@ -35,6 +35,7 @@
  @warning This subclass overrides addSubview: method. If passed view conforms
  to MUKRecyclable protocol, and recycleIdentifier is not nil, the new subview
  will participate to reusing dance.
+ @warning This class is meant for subclassing.
  */
 @interface MUKRecyclingScrollView : UIScrollView
 
@@ -55,6 +56,7 @@
  from visible ones (calling removeFromSuperview, too).
  
  @param view The view which will be marked as recyclable.
+ @warning Do not call this method directly: it is used for subclassing.
  */
 - (void)enqueueView:(UIView<MUKRecyclable> *)view;
 /**
@@ -73,12 +75,14 @@
  
  @param views Views which will be checked.
  @param bounds Visible bounds of the scroll view.
+ @warning Do not call this method directly: it is used for subclassing.
  */
 - (void)enqueueViews:(NSSet *)views ifNeededForVisibleBounds:(CGRect)bounds;
 /**
  Enqueue views and layout visible views.
  
  @warning This method is called for each layoutSubviews invocation.
+ @warning Do not call this method directly: it is used for subclassing.
  */
 - (void)layoutRecyclableSubviews;
 @end
@@ -98,6 +102,7 @@
  @warning This method is fired for each layoutSubviews call, so you
  should return as quick as you can to optimize performance. On the other side
  you have a deep control over subviews positioning.
+ @warning Do not call this method directly: it is used for subclassing.
  */
 - (void)layoutViews:(NSSet *)visibleViews forVisibleBounds:(CGRect)bounds;
 @end

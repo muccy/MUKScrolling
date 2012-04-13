@@ -94,16 +94,20 @@
                 if ([self shouldEnqueueView:recyclableView forVisibleBounds:self.bounds])
                 {
                     [self enqueueView:recyclableView];
-                    return; // Do not add subview
                 }
                 else {
                     // New subview is in bounds
                     NSMutableSet *recycleSet = [self recycleSetWithIdentifier_:recyclableView.recycleIdentifier create_:NO];
                     [recycleSet removeObject:recyclableView];
                     [self.visibleViews_ addObject:recyclableView];
+                    
+                    // Do not overlap scroll indicators
+                    [self insertSubview:view atIndex:0];
                 }
-            }
-        }
+                
+                return; // Do not call super -addSubview:
+            } // if recycleIdentifier != nil
+        } // if protocol is MUKRecyclable
         
         [super addSubview:view];
     }
@@ -125,6 +129,9 @@
     [view removeFromSuperview];
 }
 
+/*
+ Do not use this method internally, because subclasses may change its behaviour.
+ */
 - (UIView<MUKRecyclable> *)dequeueViewWithIdentifier:(NSString *)recycleIdentifier
 {
     NSMutableSet *recycleSet = [self recycleSetWithIdentifier_:recycleIdentifier create_:NO];
@@ -170,6 +177,11 @@
 }
 
 #pragma mark - Subviews
+
+/*
+ Do not use those methods internally, because subclasses may change their
+ behaviours
+ */
 
 - (NSSet *)visibleViews {
     return [visibleViews__ copy];

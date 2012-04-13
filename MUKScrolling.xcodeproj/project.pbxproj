@@ -38,6 +38,20 @@
 		06339C2B15359A8000FB07ED /* MUKDummyRecyclableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C2A15359A8000FB07ED /* MUKDummyRecyclableView.m */; };
 		06339C3015359C3F00FB07ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C2F15359C3F00FB07ED /* CoreGraphics.framework */; };
 		06339C3115359C4C00FB07ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C2F15359C3F00FB07ED /* CoreGraphics.framework */; };
+		06339C6F1535F13100FB07ED /* MUKGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339C6D1535F13100FB07ED /* MUKGridView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06339C701535F13100FB07ED /* MUKGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C6E1535F13100FB07ED /* MUKGridView.m */; };
+		066863A4153726CC005D4BC1 /* MUKGridCoordinate.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863A2153726CC005D4BC1 /* MUKGridCoordinate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		066863A5153726CC005D4BC1 /* MUKGridCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863A3153726CC005D4BC1 /* MUKGridCoordinate.m */; };
+		066863A715384013005D4BC1 /* MUKGridView_Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863A615384013005D4BC1 /* MUKGridView_Layout.h */; };
+		066863AB153844BC005D4BC1 /* MUKGridCellView_.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863A9153844BC005D4BC1 /* MUKGridCellView_.h */; };
+		066863AC153844BC005D4BC1 /* MUKGridCellView_.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863AA153844BC005D4BC1 /* MUKGridCellView_.m */; };
+		066863B015384AFB005D4BC1 /* MUKGridCellSize.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863AE15384AFB005D4BC1 /* MUKGridCellSize.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		066863B115384AFB005D4BC1 /* MUKGridCellSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863AF15384AFB005D4BC1 /* MUKGridCellSize.m */; };
+		066863B6153853A7005D4BC1 /* MUKGridCoordinateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863B5153853A7005D4BC1 /* MUKGridCoordinateTests.m */; };
+		066863B915385DBA005D4BC1 /* MUKGridCellSizeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863B815385DBA005D4BC1 /* MUKGridCellSizeTests.m */; };
+		066863BD15387538005D4BC1 /* MUKGridViewPrivateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863BC15387538005D4BC1 /* MUKGridViewPrivateTests.m */; };
+		06D0FCB91535F697008E652E /* MUKGridView_RowsAndColumns.h in Headers */ = {isa = PBXBuildFile; fileRef = 06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */; };
+		06D0FCC21535F932008E652E /* MUKGridViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06D0FCC11535F932008E652E /* MUKGridViewTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +86,24 @@
 		06339C2915359A8000FB07ED /* MUKDummyRecyclableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKDummyRecyclableView.h; sourceTree = "<group>"; };
 		06339C2A15359A8000FB07ED /* MUKDummyRecyclableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKDummyRecyclableView.m; sourceTree = "<group>"; };
 		06339C2F15359C3F00FB07ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		06339C6D1535F13100FB07ED /* MUKGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView.h; sourceTree = "<group>"; };
+		06339C6E1535F13100FB07ED /* MUKGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridView.m; sourceTree = "<group>"; };
+		066863A2153726CC005D4BC1 /* MUKGridCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCoordinate.h; sourceTree = "<group>"; };
+		066863A3153726CC005D4BC1 /* MUKGridCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCoordinate.m; sourceTree = "<group>"; };
+		066863A615384013005D4BC1 /* MUKGridView_Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView_Layout.h; sourceTree = "<group>"; };
+		066863A9153844BC005D4BC1 /* MUKGridCellView_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCellView_.h; sourceTree = "<group>"; };
+		066863AA153844BC005D4BC1 /* MUKGridCellView_.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellView_.m; sourceTree = "<group>"; };
+		066863AE15384AFB005D4BC1 /* MUKGridCellSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCellSize.h; sourceTree = "<group>"; };
+		066863AF15384AFB005D4BC1 /* MUKGridCellSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellSize.m; sourceTree = "<group>"; };
+		066863B4153853A7005D4BC1 /* MUKGridCoordinateTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCoordinateTests.h; sourceTree = "<group>"; };
+		066863B5153853A7005D4BC1 /* MUKGridCoordinateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCoordinateTests.m; sourceTree = "<group>"; };
+		066863B715385DBA005D4BC1 /* MUKGridCellSizeTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCellSizeTests.h; sourceTree = "<group>"; };
+		066863B815385DBA005D4BC1 /* MUKGridCellSizeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellSizeTests.m; sourceTree = "<group>"; };
+		066863BB15387538005D4BC1 /* MUKGridViewPrivateTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridViewPrivateTests.h; sourceTree = "<group>"; };
+		066863BC15387538005D4BC1 /* MUKGridViewPrivateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridViewPrivateTests.m; sourceTree = "<group>"; };
+		06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView_RowsAndColumns.h; sourceTree = "<group>"; };
+		06D0FCC01535F932008E652E /* MUKGridViewTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridViewTests.h; sourceTree = "<group>"; };
+		06D0FCC11535F932008E652E /* MUKGridViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridViewTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +169,7 @@
 		06339BFD153585D800FB07ED /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				06339C6B1535F10700FB07ED /* Grid */,
 				06339C1715358B9D00FB07ED /* Types */,
 				06339C09153587BF00FB07ED /* Recycling Scroll View */,
 			);
@@ -149,6 +182,7 @@
 			children = (
 				06339BFF153585E000FB07ED /* InfoPlist.strings */,
 				06339C01153585E000FB07ED /* MUKScrollingTests-Info.plist */,
+				06D0FCBE1535F925008E652E /* Grid */,
 				06339C2815359A6600FB07ED /* Recyclable View */,
 				06339C24153599B700FB07ED /* Recycling Scroll View */,
 			);
@@ -201,6 +235,94 @@
 			path = "Recyclable View";
 			sourceTree = "<group>";
 		};
+		06339C6B1535F10700FB07ED /* Grid */ = {
+			isa = PBXGroup;
+			children = (
+				066863AD15384ADF005D4BC1 /* Cell Size */,
+				066863A0153726BB005D4BC1 /* Coordinate */,
+				06339C711535F2CA00FB07ED /* Private */,
+				06339C6D1535F13100FB07ED /* MUKGridView.h */,
+				06339C6E1535F13100FB07ED /* MUKGridView.m */,
+			);
+			path = Grid;
+			sourceTree = "<group>";
+		};
+		06339C711535F2CA00FB07ED /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				066863A815384468005D4BC1 /* Cell */,
+				06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */,
+				066863A615384013005D4BC1 /* MUKGridView_Layout.h */,
+			);
+			path = Private;
+			sourceTree = "<group>";
+		};
+		066863A0153726BB005D4BC1 /* Coordinate */ = {
+			isa = PBXGroup;
+			children = (
+				066863A2153726CC005D4BC1 /* MUKGridCoordinate.h */,
+				066863A3153726CC005D4BC1 /* MUKGridCoordinate.m */,
+			);
+			path = Coordinate;
+			sourceTree = "<group>";
+		};
+		066863A815384468005D4BC1 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				066863A9153844BC005D4BC1 /* MUKGridCellView_.h */,
+				066863AA153844BC005D4BC1 /* MUKGridCellView_.m */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		066863AD15384ADF005D4BC1 /* Cell Size */ = {
+			isa = PBXGroup;
+			children = (
+				066863AE15384AFB005D4BC1 /* MUKGridCellSize.h */,
+				066863AF15384AFB005D4BC1 /* MUKGridCellSize.m */,
+			);
+			path = "Cell Size";
+			sourceTree = "<group>";
+		};
+		066863B215385394005D4BC1 /* Cell Size */ = {
+			isa = PBXGroup;
+			children = (
+				066863B715385DBA005D4BC1 /* MUKGridCellSizeTests.h */,
+				066863B815385DBA005D4BC1 /* MUKGridCellSizeTests.m */,
+			);
+			path = "Cell Size";
+			sourceTree = "<group>";
+		};
+		066863B315385394005D4BC1 /* Coordinate */ = {
+			isa = PBXGroup;
+			children = (
+				066863B4153853A7005D4BC1 /* MUKGridCoordinateTests.h */,
+				066863B5153853A7005D4BC1 /* MUKGridCoordinateTests.m */,
+			);
+			path = Coordinate;
+			sourceTree = "<group>";
+		};
+		066863BA15387523005D4BC1 /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				066863BB15387538005D4BC1 /* MUKGridViewPrivateTests.h */,
+				066863BC15387538005D4BC1 /* MUKGridViewPrivateTests.m */,
+			);
+			path = Private;
+			sourceTree = "<group>";
+		};
+		06D0FCBE1535F925008E652E /* Grid */ = {
+			isa = PBXGroup;
+			children = (
+				066863BA15387523005D4BC1 /* Private */,
+				066863B215385394005D4BC1 /* Cell Size */,
+				066863B315385394005D4BC1 /* Coordinate */,
+				06D0FCC01535F932008E652E /* MUKGridViewTests.h */,
+				06D0FCC11535F932008E652E /* MUKGridViewTests.m */,
+			);
+			path = Grid;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -213,6 +335,12 @@
 				06339C1415358A2700FB07ED /* MUKRecyclingScrollView_Memory.h in Headers */,
 				06339C1615358A5300FB07ED /* MUKRecyclingScrollView_Storage.h in Headers */,
 				06339C1915358BB200FB07ED /* MUKRecyclable.h in Headers */,
+				06339C6F1535F13100FB07ED /* MUKGridView.h in Headers */,
+				06D0FCB91535F697008E652E /* MUKGridView_RowsAndColumns.h in Headers */,
+				066863A4153726CC005D4BC1 /* MUKGridCoordinate.h in Headers */,
+				066863A715384013005D4BC1 /* MUKGridView_Layout.h in Headers */,
+				066863AB153844BC005D4BC1 /* MUKGridCellView_.h in Headers */,
+				066863B015384AFB005D4BC1 /* MUKGridCellSize.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +471,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				06339C0D153587D600FB07ED /* MUKRecyclingScrollView.m in Sources */,
+				06339C701535F13100FB07ED /* MUKGridView.m in Sources */,
+				066863A5153726CC005D4BC1 /* MUKGridCoordinate.m in Sources */,
+				066863AC153844BC005D4BC1 /* MUKGridCellView_.m in Sources */,
+				066863B115384AFB005D4BC1 /* MUKGridCellSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +484,10 @@
 			files = (
 				06339C27153599CA00FB07ED /* MUKRecyclingScrollViewTests.m in Sources */,
 				06339C2B15359A8000FB07ED /* MUKDummyRecyclableView.m in Sources */,
+				06D0FCC21535F932008E652E /* MUKGridViewTests.m in Sources */,
+				066863B6153853A7005D4BC1 /* MUKGridCoordinateTests.m in Sources */,
+				066863B915385DBA005D4BC1 /* MUKGridCellSizeTests.m in Sources */,
+				066863BD15387538005D4BC1 /* MUKGridViewPrivateTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,6 +666,7 @@
 				06339C221535988A00FB07ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

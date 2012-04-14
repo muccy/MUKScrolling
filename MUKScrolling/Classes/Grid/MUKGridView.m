@@ -30,7 +30,7 @@
 
 #import "MUKGridCellView_.h"
 
-#define DEBUG_STATS     1
+#define DEBUG_STATS     0
 
 @interface MUKGridView ()
 - (void)commonIntialization_;
@@ -101,11 +101,31 @@
     
     // Take involved indexes
     NSIndexSet *cellIndexes = [self indexesOfCellsInVisibleBounds:bounds];
+    
+    /*
+     Enqueue visible views not in bounds.
+     This may occur after autorotation.
+     
+     This job could be done into -shouldEnqueueView:forVisibleBounds: but
+     I don't want to recalculate cellIndexes again.
+     */
+    NSMutableSet *filteredVisibleViews = [[NSMutableSet alloc] initWithCapacity:[visibleViews count]];
+    [visibleViews enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        MUKGridCellView_ *cellView = obj;
+        if ([cellIndexes containsIndex:cellView.cellIndex]) {
+            // This view will be rendered
+            [filteredVisibleViews addObject:cellView];
+        }
+        else {
+            // This view is excluded
+            [self enqueueView:cellView];
+        }
+    }];
 
     // Layout cells at those coordinates
     CGSize cellSize = [self.cellSize sizeRespectSize:self.bounds.size];
     NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:self.frame.size cellSize_:cellSize direction_:self.direction];
-    [self layoutCellsAtIndexes_:cellIndexes visibleCells_:visibleViews maxCellsPerRow_:maxCellsPerRow];
+    [self layoutCellsAtIndexes_:cellIndexes visibleCells_:filteredVisibleViews maxCellsPerRow_:maxCellsPerRow];
 }
 
 - (NSSet *)visibleViews {

@@ -42,13 +42,9 @@
         [self.guestView removeFromSuperview];
         guestView_ = guestView;
         self.guestView.frame = self.bounds;
+        self.guestView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         [self addSubview:self.guestView];
     }
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    self.guestView.frame = self.bounds;
 }
 
 @end

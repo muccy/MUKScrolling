@@ -50,6 +50,8 @@
 		066863B6153853A7005D4BC1 /* MUKGridCoordinateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863B5153853A7005D4BC1 /* MUKGridCoordinateTests.m */; };
 		066863B915385DBA005D4BC1 /* MUKGridCellSizeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863B815385DBA005D4BC1 /* MUKGridCellSizeTests.m */; };
 		066863BD15387538005D4BC1 /* MUKGridViewPrivateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863BC15387538005D4BC1 /* MUKGridViewPrivateTests.m */; };
+		066863D715396690005D4BC1 /* MUKGridCellFixedSize.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863D515396690005D4BC1 /* MUKGridCellFixedSize.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		066863D815396690005D4BC1 /* MUKGridCellFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863D615396690005D4BC1 /* MUKGridCellFixedSize.m */; };
 		06D0FCB91535F697008E652E /* MUKGridView_RowsAndColumns.h in Headers */ = {isa = PBXBuildFile; fileRef = 06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */; };
 		06D0FCC21535F932008E652E /* MUKGridViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06D0FCC11535F932008E652E /* MUKGridViewTests.m */; };
 /* End PBXBuildFile section */
@@ -101,6 +103,8 @@
 		066863B815385DBA005D4BC1 /* MUKGridCellSizeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellSizeTests.m; sourceTree = "<group>"; };
 		066863BB15387538005D4BC1 /* MUKGridViewPrivateTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridViewPrivateTests.h; sourceTree = "<group>"; };
 		066863BC15387538005D4BC1 /* MUKGridViewPrivateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridViewPrivateTests.m; sourceTree = "<group>"; };
+		066863D515396690005D4BC1 /* MUKGridCellFixedSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCellFixedSize.h; sourceTree = "<group>"; };
+		066863D615396690005D4BC1 /* MUKGridCellFixedSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellFixedSize.m; sourceTree = "<group>"; };
 		06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView_RowsAndColumns.h; sourceTree = "<group>"; };
 		06D0FCC01535F932008E652E /* MUKGridViewTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridViewTests.h; sourceTree = "<group>"; };
 		06D0FCC11535F932008E652E /* MUKGridViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridViewTests.m; sourceTree = "<group>"; };
@@ -278,6 +282,7 @@
 		066863AD15384ADF005D4BC1 /* Cell Size */ = {
 			isa = PBXGroup;
 			children = (
+				066863D315396672005D4BC1 /* Fixed */,
 				066863AE15384AFB005D4BC1 /* MUKGridCellSize.h */,
 				066863AF15384AFB005D4BC1 /* MUKGridCellSize.m */,
 			);
@@ -311,6 +316,15 @@
 			path = Private;
 			sourceTree = "<group>";
 		};
+		066863D315396672005D4BC1 /* Fixed */ = {
+			isa = PBXGroup;
+			children = (
+				066863D515396690005D4BC1 /* MUKGridCellFixedSize.h */,
+				066863D615396690005D4BC1 /* MUKGridCellFixedSize.m */,
+			);
+			path = Fixed;
+			sourceTree = "<group>";
+		};
 		06D0FCBE1535F925008E652E /* Grid */ = {
 			isa = PBXGroup;
 			children = (
@@ -341,6 +355,7 @@
 				066863A715384013005D4BC1 /* MUKGridView_Layout.h in Headers */,
 				066863AB153844BC005D4BC1 /* MUKGridCellView_.h in Headers */,
 				066863B015384AFB005D4BC1 /* MUKGridCellSize.h in Headers */,
+				066863D715396690005D4BC1 /* MUKGridCellFixedSize.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +490,7 @@
 				066863A5153726CC005D4BC1 /* MUKGridCoordinate.m in Sources */,
 				066863AC153844BC005D4BC1 /* MUKGridCellView_.m in Sources */,
 				066863B115384AFB005D4BC1 /* MUKGridCellSize.m in Sources */,
+				066863D815396690005D4BC1 /* MUKGridCellFixedSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

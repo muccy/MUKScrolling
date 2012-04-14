@@ -58,9 +58,6 @@ typedef enum {
 /**
  Cell size.
  
- You can also assign `MUKGridCellSizeKindProportional` in order to fill
- grid bounds.
- 
  You have to assign a size in order to display grid properly.
  */
 @property (nonatomic, strong) MUKGridCellSize *cellSize;
@@ -77,14 +74,14 @@ typedef enum {
  
  Please use recycling. Example:
      __unsafe_unretained MUKGridView *weakGridView = self.gridView;
-     [self.gridView setCellCreationHandler:^UIView<MUKRecyclable> *(NSInteger index) 
+     [self.gridView setCellCreationHandler:^(NSInteger index) 
      {
         MyCellView *cellView = (MyCellView *)[weakGridView dequeueViewWithIdentifier:@"MyCell"];
      
-         if (cellView == nil) {
+        if (cellView == nil) {
             cellView = [[MyCellView alloc] initWithFrame:...];
             cellView.recycleIdentifier = @"MyCell";
-         }
+        }
      
         // Customize cell
         return cellView;

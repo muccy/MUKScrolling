@@ -26,27 +26,22 @@
 #import "MUKGridCellSize.h"
 
 @implementation MUKGridCellSize
-@synthesize kind;
-@synthesize size = size_;
+@synthesize sizeHandler = sizeHandler_;
 
-- (id)initWithSize:(CGSize)size {
+- (id)initWithSizeHandler:(CGSize (^)(CGSize))sizeHandler {
     self = [super init];
     if (self) {
-        self.size = size;
+        self.sizeHandler = sizeHandler;
     }
     return self;
 }
 
 - (CGSize)sizeRespectSize:(CGSize)size {
-    if (MUKGridCellSizeKindFixed == self.kind) {
-        return self.size;
+    if (self.sizeHandler) {
+        return self.sizeHandler(size);
     }
     
-    CGSize calculatedSize;
-    calculatedSize.width = roundf(self.size.width * size.width);
-    calculatedSize.height = roundf(self.size.height * size.height);
-    
-    return calculatedSize;
+    return CGSizeZero;
 }
 
 @end

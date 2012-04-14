@@ -36,36 +36,26 @@ typedef enum {
 @interface MUKGridCellSize : NSObject
 /** @name Properties */
 /**
- Kind of size.
+ Block used to calculate the size respect a container.
  
- Size could be:
- * `MUKGridCellSizeKindFixed`, which means size ivar represents size of cell in 
- points (*default*).
- * `MUKGridCellSizeKindProportional`, which means size ivar represents size of
- cell respect its grid. So, if you give a size of `(1.0, 0.5)` in a grid of 
- `(320,200)`, computed size will be `(320,100)`.
+ The block takes size of container and returns size of the cell.
  */
-@property (nonatomic) MUKGridCellSizeKind kind;
-/**
- `CGSize` of cell.
- */
-@property (nonatomic) CGSize size;
+@property (nonatomic, copy) CGSize (^sizeHandler)(CGSize containerSize);
+
 
 /** @name Initializers */
 /**
  Designated initializer.
- @param size Value which will be put in size ivar.
+ @param sizeHandler Handler which will be put in sizeHandler ivar.
  @return A new instance.
  */
-- (id)initWithSize:(CGSize)size;
+- (id)initWithSizeHandler:(CGSize (^)(CGSize containerSize))sizeHandler;
 
 /** @name Methods */
 /**
- Size respect a container size, using instance kind.
+ Size respect a container size, using instance sizeHandler.
  @param size Container size.
- @return Size respect container, using instance kind.
- @warning If kind is `MUKGridCellSizeKindProportional`, width and height will
- be rounded.
+ @return Size respect container, using instance sizeHandler.
  */
 - (CGSize)sizeRespectSize:(CGSize)size;
 

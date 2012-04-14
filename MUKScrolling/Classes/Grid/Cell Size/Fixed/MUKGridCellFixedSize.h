@@ -23,30 +23,25 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "MUKGridCellSizeTests.h"
-#import "MUKGridCellSize.h"
-#import "MUKGridCellFixedSize.h"
+#import <MUKScrolling/MUKGridCellSize.h>
 
-@implementation MUKGridCellSizeTests
+/**
+ Shortend class to have a fixed size.
+ 
+ This subclass ignores sizeHandler, returning CGSize ivar.
+ */
+@interface MUKGridCellFixedSize : MUKGridCellSize
+/** @name Properties */
+/**
+ Fixed size.
+ */
+@property (nonatomic) CGSize CGSize;
 
-- (void)testFixedSize {
-    CGSize scalarSize = CGSizeMake(100, 100);
-    MUKGridCellFixedSize *size = [[MUKGridCellFixedSize alloc] initWithSize:scalarSize];
-    STAssertTrue(CGSizeEqualToSize(scalarSize, size.CGSize), nil);
-    STAssertTrue(CGSizeEqualToSize(scalarSize, [size sizeRespectSize:CGSizeMake(200, 200)]), nil);
-}
-
-- (void)testProportionalSize {
-    CGSize containerSize = CGSizeMake(200, 200);
-    
-    MUKGridCellSize *size = [[MUKGridCellSize alloc] initWithSizeHandler:^(CGSize containerSize)
-    {
-        containerSize.height *= 0.5;
-        return containerSize;
-    }];
-    
-    CGSize expectedSize = CGSizeMake(200, 100);
-    STAssertTrue(CGSizeEqualToSize(expectedSize, [size sizeRespectSize:containerSize]), nil);
-}
-
+/** @name Initializer */
+/**
+ Designated initializer.
+ @param size Fixed size.
+ @return A new instance.
+ */
+- (id)initWithSize:(CGSize)size;
 @end

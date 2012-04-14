@@ -23,30 +23,33 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "MUKGridCellSizeTests.h"
-#import "MUKGridCellSize.h"
 #import "MUKGridCellFixedSize.h"
 
-@implementation MUKGridCellSizeTests
+@implementation MUKGridCellFixedSize
+@synthesize CGSize = CGSize_;
 
-- (void)testFixedSize {
-    CGSize scalarSize = CGSizeMake(100, 100);
-    MUKGridCellFixedSize *size = [[MUKGridCellFixedSize alloc] initWithSize:scalarSize];
-    STAssertTrue(CGSizeEqualToSize(scalarSize, size.CGSize), nil);
-    STAssertTrue(CGSizeEqualToSize(scalarSize, [size sizeRespectSize:CGSizeMake(200, 200)]), nil);
+- (id)initWithSize:(CGSize)size {
+    self = [super initWithSizeHandler:nil];
+    if (self) {
+        self.CGSize = size;
+    }
+    return self;
 }
 
-- (void)testProportionalSize {
-    CGSize containerSize = CGSizeMake(200, 200);
-    
-    MUKGridCellSize *size = [[MUKGridCellSize alloc] initWithSizeHandler:^(CGSize containerSize)
-    {
-        containerSize.height *= 0.5;
-        return containerSize;
-    }];
-    
-    CGSize expectedSize = CGSizeMake(200, 100);
-    STAssertTrue(CGSizeEqualToSize(expectedSize, [size sizeRespectSize:containerSize]), nil);
+#pragma mark - Overrides
+
+- (void)setSizeHandler:(CGSize (^)(CGSize))sizeHandler {
+    //
+}
+
+- (CGSize (^)(CGSize))sizeHandler {
+    return ^(CGSize containerSize) {
+        return self.CGSize;  
+    };
+}
+
+- (CGSize)sizeRespectSize:(CGSize)size {
+    return self.CGSize;
 }
 
 @end

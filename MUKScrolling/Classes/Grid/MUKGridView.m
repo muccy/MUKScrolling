@@ -69,10 +69,14 @@
 }
 
 - (void)dealloc {
-    self.delegate = nil;
+    
 }
 
 #pragma mark - Overrides
+
+- (void)setDelegate:(id<UIScrollViewDelegate>)delegate {
+    //
+}
 
 - (id<UIScrollViewDelegate>)delegate {
     return self;

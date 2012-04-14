@@ -12,11 +12,13 @@
 		06339C461535F09200FB07ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C451535F09200FB07ED /* CoreGraphics.framework */; };
 		06339C4C1535F09200FB07ED /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06339C4A1535F09200FB07ED /* InfoPlist.strings */; };
 		06339C4E1535F09200FB07ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C4D1535F09200FB07ED /* main.m */; };
-		06339C521535F09200FB07ED /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C511535F09200FB07ED /* AppDelegate.m */; };
-		06339C551535F09200FB07ED /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C541535F09200FB07ED /* ViewController.m */; };
-		06339C581535F09300FB07ED /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06339C561535F09300FB07ED /* ViewController.xib */; };
-		066863CC15388746005D4BC1 /* LabelCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863CB15388746005D4BC1 /* LabelCellView.m */; };
 		066863CF15388A17005D4BC1 /* libMUKScrolling.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C681535F0BF00FB07ED /* libMUKScrolling.a */; };
+		066863ED153969D9005D4BC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863E7153969D9005D4BC1 /* AppDelegate.m */; };
+		066863EE153969D9005D4BC1 /* LabelCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863EC153969D9005D4BC1 /* LabelCellView.m */; };
+		066863F1153969FA005D4BC1 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863F0153969FA005D4BC1 /* RootViewController.m */; };
+		0668640415396CD1005D4BC1 /* GridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0668640315396CD1005D4BC1 /* GridViewController.m */; };
+		0668640715396DA6005D4BC1 /* SquaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0668640615396DA6005D4BC1 /* SquaresViewController.m */; };
+		0668640915397583005D4BC1 /* SquaresViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0668640815397583005D4BC1 /* SquaresViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,14 +54,18 @@
 		06339C4B1535F09200FB07ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		06339C4D1535F09200FB07ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		06339C4F1535F09200FB07ED /* MUKScrollingExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MUKScrollingExample-Prefix.pch"; sourceTree = "<group>"; };
-		06339C501535F09200FB07ED /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		06339C511535F09200FB07ED /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		06339C531535F09200FB07ED /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		06339C541535F09200FB07ED /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		06339C571535F09300FB07ED /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
 		06339C5E1535F0BE00FB07ED /* MUKScrolling.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MUKScrolling.xcodeproj; path = ../../MUKScrolling.xcodeproj; sourceTree = "<group>"; };
-		066863CA15388746005D4BC1 /* LabelCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelCellView.h; sourceTree = "<group>"; };
-		066863CB15388746005D4BC1 /* LabelCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelCellView.m; sourceTree = "<group>"; };
+		066863E6153969D9005D4BC1 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		066863E7153969D9005D4BC1 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		066863EB153969D9005D4BC1 /* LabelCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelCellView.h; sourceTree = "<group>"; };
+		066863EC153969D9005D4BC1 /* LabelCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelCellView.m; sourceTree = "<group>"; };
+		066863EF153969FA005D4BC1 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		066863F0153969FA005D4BC1 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		0668640215396CD1005D4BC1 /* GridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridViewController.h; sourceTree = "<group>"; };
+		0668640315396CD1005D4BC1 /* GridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridViewController.m; sourceTree = "<group>"; };
+		0668640515396DA6005D4BC1 /* SquaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquaresViewController.h; sourceTree = "<group>"; };
+		0668640615396DA6005D4BC1 /* SquaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquaresViewController.m; sourceTree = "<group>"; };
+		0668640815397583005D4BC1 /* SquaresViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SquaresViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,14 +114,8 @@
 		06339C471535F09200FB07ED /* MUKScrollingExample */ = {
 			isa = PBXGroup;
 			children = (
-				06339C501535F09200FB07ED /* AppDelegate.h */,
-				06339C511535F09200FB07ED /* AppDelegate.m */,
-				06339C531535F09200FB07ED /* ViewController.h */,
-				06339C541535F09200FB07ED /* ViewController.m */,
-				06339C561535F09300FB07ED /* ViewController.xib */,
+				066863E4153969D9005D4BC1 /* Classes */,
 				06339C481535F09200FB07ED /* Supporting Files */,
-				066863CA15388746005D4BC1 /* LabelCellView.h */,
-				066863CB15388746005D4BC1 /* LabelCellView.m */,
 			);
 			path = MUKScrollingExample;
 			sourceTree = "<group>";
@@ -138,6 +138,72 @@
 				06339C6A1535F0BF00FB07ED /* MUKScrollingTests.octest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		066863E4153969D9005D4BC1 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				066863E5153969D9005D4BC1 /* App Delegate */,
+				066863E8153969D9005D4BC1 /* Controllers */,
+				066863EA153969D9005D4BC1 /* Views */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		066863E5153969D9005D4BC1 /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				066863E6153969D9005D4BC1 /* AppDelegate.h */,
+				066863E7153969D9005D4BC1 /* AppDelegate.m */,
+			);
+			path = "App Delegate";
+			sourceTree = "<group>";
+		};
+		066863E8153969D9005D4BC1 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				066863E9153969D9005D4BC1 /* Root */,
+				0668640015396CB9005D4BC1 /* Base Grid */,
+				0668640115396CB9005D4BC1 /* Squares */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		066863E9153969D9005D4BC1 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				066863EF153969FA005D4BC1 /* RootViewController.h */,
+				066863F0153969FA005D4BC1 /* RootViewController.m */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		066863EA153969D9005D4BC1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				066863EB153969D9005D4BC1 /* LabelCellView.h */,
+				066863EC153969D9005D4BC1 /* LabelCellView.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0668640015396CB9005D4BC1 /* Base Grid */ = {
+			isa = PBXGroup;
+			children = (
+				0668640215396CD1005D4BC1 /* GridViewController.h */,
+				0668640315396CD1005D4BC1 /* GridViewController.m */,
+			);
+			path = "Base Grid";
+			sourceTree = "<group>";
+		};
+		0668640115396CB9005D4BC1 /* Squares */ = {
+			isa = PBXGroup;
+			children = (
+				0668640515396DA6005D4BC1 /* SquaresViewController.h */,
+				0668640615396DA6005D4BC1 /* SquaresViewController.m */,
+				0668640815397583005D4BC1 /* SquaresViewController.xib */,
+			);
+			path = Squares;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,7 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				06339C4C1535F09200FB07ED /* InfoPlist.strings in Resources */,
-				06339C581535F09300FB07ED /* ViewController.xib in Resources */,
+				0668640915397583005D4BC1 /* SquaresViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,9 +293,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				06339C4E1535F09200FB07ED /* main.m in Sources */,
-				06339C521535F09200FB07ED /* AppDelegate.m in Sources */,
-				06339C551535F09200FB07ED /* ViewController.m in Sources */,
-				066863CC15388746005D4BC1 /* LabelCellView.m in Sources */,
+				066863ED153969D9005D4BC1 /* AppDelegate.m in Sources */,
+				066863EE153969D9005D4BC1 /* LabelCellView.m in Sources */,
+				066863F1153969FA005D4BC1 /* RootViewController.m in Sources */,
+				0668640415396CD1005D4BC1 /* GridViewController.m in Sources */,
+				0668640715396DA6005D4BC1 /* SquaresViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,14 +318,6 @@
 				06339C4B1535F09200FB07ED /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		06339C561535F09300FB07ED /* ViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				06339C571535F09300FB07ED /* en */,
-			);
-			name = ViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -28,6 +28,7 @@
 #import "MUKGridView.h"
 #import "MUKDummyRecyclableView.h"
 #import "MUKGridCellView_.h"
+#import "MUKGridCellFixedSize.h"
 
 @implementation MUKGridViewTests
 
@@ -71,6 +72,227 @@
     
     id dequeuedView = [gridView dequeueViewWithIdentifier:@"Foo"];
     STAssertTrue([dequeuedView isMemberOfClass:[MUKDummyRecyclableView class]], nil);
+}
+
+- (void)testDirection {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    gridView.numberOfCells = 100;
+    
+    /*
+     25 vertical rows, 4 horizontal columns
+     */
+    gridView.direction = MUKGridDirectionHorizontal;
+    [gridView reloadData];
+    STAssertEqualsWithAccuracy(gridView.contentSize.width, 25.0f * cellSize.width, 0.000001, @"25 vertical rows");
+    STAssertEqualsWithAccuracy(gridView.contentSize.height, 4.0f * cellSize.height, 0.00001, @"4 horizontal columns");
+    
+    /*
+     25 horizontal rows, 4 vertical columns
+     */
+    gridView.direction = MUKGridDirectionVertical;
+    [gridView reloadData];
+    STAssertEqualsWithAccuracy(gridView.contentSize.height, 25.0f * cellSize.height, 0.000001, @"25 vertical rows");
+    STAssertEqualsWithAccuracy(gridView.contentSize.width, 4.0f * cellSize.width, 0.00001, @"4 horizontal columns");
+}
+
+- (void)testNumberOfCells {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.direction = MUKGridDirectionVertical;
+    
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    gridView.cellCreationHandler = ^(NSInteger index) {
+        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        view.recycleIdentifier = @"Foo";
+        return view;
+    };
+
+    gridView.numberOfCells = 0;
+    [gridView reloadData];
+    STAssertEqualsWithAccuracy(gridView.contentSize.width, 0.0f, 0.000001, @"No cells");
+    STAssertEqualsWithAccuracy(gridView.contentSize.height, 0.0f, 0.000001, @"No cells");
+    
+    gridView.numberOfCells = 2;
+    [gridView reloadData];
+    STAssertEqualsWithAccuracy(gridView.contentSize.width, cellSize.width * 2.0f, 0.000001, @"2 cells");
+    STAssertEqualsWithAccuracy(gridView.contentSize.height, cellSize.height, 0.000001, @"2 cells");
+    STAssertEquals([[gridView visibleViews] count], (NSUInteger)2, @"2 cells");
+    STAssertEquals([[gridView indexesOfVisibleCells] count], (NSUInteger)2, @"2 cells");
+    
+    gridView.numberOfCells = 400; // 100 rows & 4 columns
+    NSUInteger maxVisibleCells = 16; // 4 rows & 4 columns are visible
+    [gridView reloadData];
+    STAssertEqualsWithAccuracy(gridView.contentSize.width, cellSize.width * 4.0f, 0.000001, @"%i cells", maxVisibleCells);
+    STAssertEqualsWithAccuracy(gridView.contentSize.height, cellSize.height * 100.0f, 0.000001, @"%i cells", maxVisibleCells);
+    STAssertEquals([[gridView visibleViews] count], maxVisibleCells, @"%i cells", maxVisibleCells);
+    STAssertEquals([[gridView indexesOfVisibleCells] count], maxVisibleCells, @"%i cells", maxVisibleCells);
+}
+
+- (void)testCellCreationHandler {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.direction = MUKGridDirectionVertical;
+    
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    
+    gridView.numberOfCells = 400;
+    NSUInteger maxVisibleCells = 16; // 4 rows & 4 columns are visible
+    
+    __block NSUInteger handlerCallsCount = 0;
+    __block NSInteger recycledCellsCount = 0;
+    __unsafe_unretained MUKGridView *weakGridView = gridView;
+    gridView.cellCreationHandler = ^(NSInteger index) {
+        handlerCallsCount++;
+        
+        MUKDummyRecyclableView *view = (MUKDummyRecyclableView *)[weakGridView dequeueViewWithIdentifier:@"Foo"];
+        if (view == nil) {
+            view = [[MUKDummyRecyclableView alloc] init];
+            view.recycleIdentifier = @"Foo";
+        }
+        else {
+            recycledCellsCount++;
+        }
+        
+        return view;
+    };
+    
+    [gridView reloadData];
+    STAssertEquals(handlerCallsCount, maxVisibleCells, @"All cells created");
+    STAssertEquals(recycledCellsCount, 0, @"No cells recycled");
+    
+    handlerCallsCount = 0;
+    recycledCellsCount = 0;
+    [gridView reloadData];
+    STAssertEquals(handlerCallsCount, maxVisibleCells, @"All cells created");
+    STAssertEquals((NSUInteger)recycledCellsCount, maxVisibleCells, @"All cells recycled");    
+}
+
+- (void)testReloadData {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.direction = MUKGridDirectionVertical;
+
+    STAssertEquals((NSUInteger)0, [[gridView visibleViews] count], @"No cells layed out");
+    STAssertTrue(CGSizeEqualToSize(CGSizeZero, gridView.contentSize), @"No cells layed out");
+    
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    gridView.numberOfCells = 2;
+    gridView.cellCreationHandler = ^(NSInteger index) {
+        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        view.recycleIdentifier = @"Foo";
+        return view;
+    };
+    
+    [gridView reloadData];
+    STAssertEquals((NSUInteger)gridView.numberOfCells, [[gridView visibleViews] count], @"2 cells layed out");
+}
+
+- (void)testIndexesOfVisibleCells {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.direction = MUKGridDirectionVertical;
+    gridView.numberOfCells = 1000;
+    
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    gridView.cellCreationHandler = ^(NSInteger index) {
+        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        view.recycleIdentifier = @"Foo";
+        return view;
+    };
+    
+    [gridView reloadData];
+    NSIndexSet *visibleIndexes = [gridView indexesOfVisibleCells];
+    STAssertEquals((NSUInteger)16, [visibleIndexes count], @"16 visible cells");
+    NSRange visibleRange = NSMakeRange(0, 16);
+    [visibleIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        STAssertTrue(NSLocationInRange(idx, visibleRange), @"Visible indexes = [0, 15]");
+    }];
+}
+
+- (void)testIndexesOfCellsInVisibleBounds {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.direction = MUKGridDirectionVertical;
+    gridView.numberOfCells = 16; // 4 rows
+    
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    
+    CGRect bounds = CGRectMake(0, 0, 200, 100);
+    NSIndexSet *indexSet = [gridView indexesOfCellsInVisibleBounds:bounds];
+    NSRange expectedRange = NSMakeRange(0, 8);
+    STAssertEquals((NSUInteger)8, [indexSet count], @"Two rows");
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        STAssertTrue(NSLocationInRange(idx, expectedRange), @"%i in first two rows", idx);
+    }];
+    
+    bounds = CGRectMake(0, -100, 200, 100);
+    indexSet = [gridView indexesOfCellsInVisibleBounds:bounds];
+    expectedRange = NSMakeRange(0, 4);
+    STAssertEquals((NSUInteger)4, [indexSet count], @"One row");
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        STAssertTrue(NSLocationInRange(idx, expectedRange), @"%i in first row", idx);
+    }];
+    
+    bounds = CGRectMake(0, 50, 200, 100);
+    indexSet = [gridView indexesOfCellsInVisibleBounds:bounds];
+    expectedRange = NSMakeRange(4, 8);
+    STAssertEquals((NSUInteger)8, [indexSet count], @"Two rows");
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        STAssertTrue(NSLocationInRange(idx, expectedRange), @"%i in second and third row", idx);
+    }];
+    
+    bounds = CGRectMake(0, 150, 200, 100);
+    indexSet = [gridView indexesOfCellsInVisibleBounds:bounds];
+    expectedRange = NSMakeRange(12, 4);
+    STAssertEquals((NSUInteger)4, [indexSet count], @"One row");
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        STAssertTrue(NSLocationInRange(idx, expectedRange), @"%i in last row", idx);
+    }];
+    
+    bounds = CGRectMake(0, 1500, 200, 100);
+    indexSet = [gridView indexesOfCellsInVisibleBounds:bounds];
+    STAssertEquals((NSUInteger)0, [indexSet count], @"No rows");
+}
+
+- (void)testFrameOfCell {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 240)];
+    gridView.direction = MUKGridDirectionVertical;
+    gridView.numberOfCells = 16; // 4 rows
+    
+    CGSize cellSize = CGSizeMake(50, 60);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    
+    NSInteger cellIndex = 0;
+    CGRect cellFrame = [gridView frameOfCellAtIndex:cellIndex];
+    STAssertTrue(CGSizeEqualToSize(cellFrame.size, cellSize), @"Cell size preserved");
+    STAssertEqualsWithAccuracy(0.0f, cellFrame.origin.y, 0.0000001, @"Origin");
+    STAssertEqualsWithAccuracy(0.0f, cellFrame.origin.x, 0.0000001, @"Origin");
+    
+    cellIndex = 6;
+    cellFrame = [gridView frameOfCellAtIndex:cellIndex];
+    STAssertTrue(CGSizeEqualToSize(cellFrame.size, cellSize), @"Cell size preserved");
+    STAssertEqualsWithAccuracy(cellSize.height, cellFrame.origin.y, 0.0000001, @"Coord: (1, 2)");
+    STAssertEqualsWithAccuracy(cellSize.width * 2.0f, cellFrame.origin.x, 0.0000001, @"Coord: (1, 2)");
+    
+    
+    
+    // Horizontal (vertical rows)
+    gridView.direction = MUKGridDirectionHorizontal;
+    
+    cellIndex = 0;
+    cellFrame = [gridView frameOfCellAtIndex:cellIndex];
+    STAssertTrue(CGSizeEqualToSize(cellFrame.size, cellSize), @"Cell size preserved");
+    STAssertEqualsWithAccuracy(0.0f, cellFrame.origin.y, 0.0000001, @"Origin");
+    STAssertEqualsWithAccuracy(0.0f, cellFrame.origin.x, 0.0000001, @"Origin");
+    
+    cellIndex = 6;
+    cellFrame = [gridView frameOfCellAtIndex:cellIndex];
+    STAssertTrue(CGSizeEqualToSize(cellFrame.size, cellSize), @"Cell size preserved");
+    STAssertEqualsWithAccuracy(cellSize.width, cellFrame.origin.x, 0.0000001, @"Coord: (1, 2)");
+    STAssertEqualsWithAccuracy(cellSize.height * 2.0f, cellFrame.origin.y, 0.0000001, @"Coord: (1, 2)");
 }
 
 @end

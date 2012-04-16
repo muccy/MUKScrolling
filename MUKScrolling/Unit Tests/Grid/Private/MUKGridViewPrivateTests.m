@@ -256,60 +256,75 @@
     NSInteger maxCellsPerRow_h = [MUKGridView maxCellsPerRowInContainerSize_:gridSize cellSize_:cellSize direction_:MUKGridDirectionHorizontal];
     NSInteger maxCellsPerRow_v = [MUKGridView maxCellsPerRowInContainerSize_:gridSize cellSize_:cellSize direction_:MUKGridDirectionVertical];
     
-    NSInteger maxRows = [MUKGridView maxRowsForCellsCount_:0 maxCellsPerRow_:maxCellsPerRow_h direction_:MUKGridDirectionHorizontal];
-    CGSize contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionHorizontal containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.height, contentSize.height, 0.0000001, @"Also with no cells, height should be preserved with horizontal direction");
-    STAssertEqualsWithAccuracy(0.0f, contentSize.width, 0.0000001, @"No cells, no width");
+    ////////////////
+    // Horizontal //
+    ////////////////
+    MUKGridDirection direction = MUKGridDirectionHorizontal;
     
-    maxRows = [MUKGridView maxRowsForCellsCount_:1 maxCellsPerRow_:maxCellsPerRow_h direction_:MUKGridDirectionHorizontal];
-    contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionHorizontal containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.height, contentSize.height, 0.0000001, @"Height should be preserved with horizontal direction");
+    NSInteger numberOfCells = 0;
+    NSInteger maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_h direction_:direction];
+    CGSize contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_h numberOfCells_:numberOfCells];
+    STAssertTrue(CGSizeEqualToSize(CGSizeZero, contentSize), @"No cells, no size");
+    
+    numberOfCells = 1;
+    maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_h direction_:direction];
+    contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_h numberOfCells_:numberOfCells];
+    STAssertEqualsWithAccuracy(cellSize.height, contentSize.height, 0.0000001, @"One horizontal column");
     STAssertEqualsWithAccuracy(cellSize.width, contentSize.width, 0.0000001, @"One vertical row");
     
     // Look at previous -testMaxCellsForRow
-    maxRows = [MUKGridView maxRowsForCellsCount_:3 maxCellsPerRow_:maxCellsPerRow_h direction_:MUKGridDirectionHorizontal];
-    contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionHorizontal containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.height, contentSize.height, 0.0000001, @"Height should be preserved with horizontal direction");
+    numberOfCells = 3;
+    maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_h direction_:direction];
+    contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_h numberOfCells_:numberOfCells];
+    STAssertEqualsWithAccuracy(cellSize.height * (float)numberOfCells, contentSize.height, 0.0000001, @"3 horizontal columns");
     STAssertEqualsWithAccuracy(cellSize.width, contentSize.width, 0.0000001, @"One vertical row");
     
-    maxRows = [MUKGridView maxRowsForCellsCount_:4 maxCellsPerRow_:maxCellsPerRow_h direction_:MUKGridDirectionHorizontal];
-    contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionHorizontal containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.height, contentSize.height, 0.0000001, @"Height should be preserved with horizontal direction");
+    numberOfCells = 4;
+    maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_h direction_:direction];
+    contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_h numberOfCells_:numberOfCells];
+    STAssertEqualsWithAccuracy(cellSize.height * 3.0f, contentSize.height, 0.0000001, @"3 horizontal columns");
     STAssertEqualsWithAccuracy(cellSize.width * 2.0f, contentSize.width, 0.0000001, @"Two vertical rows");
     
-    maxRows = [MUKGridView maxRowsForCellsCount_:40 maxCellsPerRow_:maxCellsPerRow_h direction_:MUKGridDirectionHorizontal];
-    contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionHorizontal containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.height, contentSize.height, 0.0000001, @"Height should be preserved with horizontal direction");
+    numberOfCells = 40;
+    maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_h direction_:direction];
+    contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_h numberOfCells_:numberOfCells];
+    STAssertEqualsWithAccuracy(cellSize.height * 3.0f, contentSize.height, 0.0000001, @"3 horizontal columns");
     STAssertEqualsWithAccuracy(cellSize.width * 14.0f, contentSize.width, 0.0000001, @"14 vertical rows");
     
     
     //////////////
     // Vertical //
     //////////////
-    maxRows = [MUKGridView maxRowsForCellsCount_:0 maxCellsPerRow_:maxCellsPerRow_v direction_:MUKGridDirectionVertical];
-    contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionVertical containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.width, contentSize.width, 0.0000001, @"Also with no cells, width should be preserved with vertical direction");
-    STAssertEqualsWithAccuracy(0.0f, contentSize.height, 0.0000001, @"No cells, no height");
+    direction = MUKGridDirectionVertical;
     
-    maxRows = [MUKGridView maxRowsForCellsCount_:1 maxCellsPerRow_:maxCellsPerRow_v direction_:MUKGridDirectionVertical];
-    contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionVertical containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.width, contentSize.width, 0.0000001, @"Width should be preserved with vertical direction");
+    numberOfCells = 0;
+    maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_v direction_:direction];
+    contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_v numberOfCells_:numberOfCells];
+    STAssertTrue(CGSizeEqualToSize(CGSizeZero, contentSize), @"No cells, no size");
+    
+    numberOfCells = 1;
+    maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_v direction_:direction];
+    contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_v numberOfCells_:numberOfCells];
+    STAssertEqualsWithAccuracy(cellSize.width, contentSize.width, 0.0000001, @"One vertical column");
     STAssertEqualsWithAccuracy(cellSize.height, contentSize.height, 0.0000001, @"One horizontal row");
     
     // Look at previous -testMaxCellsForRow
-    maxRows = [MUKGridView maxRowsForCellsCount_:4 maxCellsPerRow_:maxCellsPerRow_v direction_:MUKGridDirectionVertical];
-    contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionVertical containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.width, contentSize.width, 0.0000001, @"Width should be preserved with vertical direction");
+    numberOfCells = 4;
+    maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_v direction_:direction];
+    contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_v numberOfCells_:numberOfCells];
+    STAssertEqualsWithAccuracy(cellSize.width * 4.0f, contentSize.width, 0.0000001, @"4 vertical columns");
     STAssertEqualsWithAccuracy(cellSize.height, contentSize.height, 0.0000001, @"One horizontal row");
     
-    maxRows = [MUKGridView maxRowsForCellsCount_:5 maxCellsPerRow_:maxCellsPerRow_v direction_:MUKGridDirectionVertical];
-    contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionVertical containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.width, contentSize.width, 0.0000001, @"Width should be preserved with vertical direction");
+    numberOfCells = 5;
+    maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_v direction_:direction];
+    contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_v numberOfCells_:numberOfCells];
+    STAssertEqualsWithAccuracy(cellSize.width * 4.0f, contentSize.width, 0.0000001, @"4 vertical columns");
     STAssertEqualsWithAccuracy(cellSize.height * 2.0f, contentSize.height, 0.0000001, @"Two horizontal rows");
     
-    maxRows = [MUKGridView maxRowsForCellsCount_:41 maxCellsPerRow_:maxCellsPerRow_v direction_:MUKGridDirectionVertical];
-    contentSize = [MUKGridView contentSizeForDirection_:MUKGridDirectionVertical containerSize_:gridSize cellSize_:cellSize maxRows_:maxRows];
-    STAssertEqualsWithAccuracy(gridSize.width, contentSize.width, 0.0000001, @"Width should be preserved with vertical direction");
+    numberOfCells = 41;
+    maxRows = [MUKGridView maxRowsForCellsCount_:numberOfCells maxCellsPerRow_:maxCellsPerRow_v direction_:direction];
+    contentSize = [MUKGridView contentSizeForDirection_:direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow_v numberOfCells_:numberOfCells];
+    STAssertEqualsWithAccuracy(cellSize.width * 4.0f, contentSize.width, 0.0000001, @"4 vertical columns");
     STAssertEqualsWithAccuracy(cellSize.height * 11.0f, contentSize.height, 0.0000001, @"11 horizontal rows");
 }
 

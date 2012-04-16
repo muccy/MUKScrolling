@@ -166,7 +166,10 @@
 - (NSIndexSet *)indexesOfVisibleCells {
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     
-
+    [[self visibleHostCellViews_] enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        MUKGridCellView_ *cellView = obj;
+        [indexSet addIndex:cellView.cellIndex];
+    }];
     
     return indexSet;
 }
@@ -293,7 +296,7 @@
     return cellView;
 }
 
-+ (CGSize)contentSizeForDirection_:(MUKGridDirection)direction containerSize_:(CGSize)containerSize cellSize_:(CGSize)cellSize maxRows_:(NSInteger)maxRows
++ (CGSize)contentSizeForDirection_:(MUKGridDirection)direction cellSize_:(CGSize)cellSize maxRows_:(NSInteger)maxRows maxCellsPerRow_:(NSInteger)maxCellsPerRow numberOfCells_:(NSInteger)numberOfCells
 {
     CGSize size = CGSizeZero;
     
@@ -301,11 +304,11 @@
         switch (direction) {
             case MUKGridDirectionHorizontal:
                 size.width = cellSize.width * maxRows;
-                size.height = containerSize.height;
+                size.height = cellSize.height * MIN(numberOfCells, maxCellsPerRow);
                 break;
                 
             case MUKGridDirectionVertical:
-                size.width = containerSize.width;
+                size.width = cellSize.width * MIN(numberOfCells, maxCellsPerRow);
                 size.height = cellSize.height * maxRows;
                 break;
         }
@@ -318,7 +321,8 @@
     CGSize cellSize = [self.cellSize sizeRespectSize:self.bounds.size];
     NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:self.frame.size cellSize_:cellSize direction_:self.direction];
     NSInteger maxRows = [[self class] maxRowsForCellsCount_:self.numberOfCells maxCellsPerRow_:maxCellsPerRow direction_:self.direction];
-    self.contentSize = [[self class] contentSizeForDirection_:self.direction containerSize_:self.frame.size cellSize_:cellSize maxRows_:maxRows];
+    
+    self.contentSize = [[self class] contentSizeForDirection_:self.direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow numberOfCells_:self.numberOfCells];
 }
 
 #pragma mark - Private: Rows & Columns

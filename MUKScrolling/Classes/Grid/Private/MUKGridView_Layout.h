@@ -31,7 +31,7 @@
 /*
  This method returns content size given a list of params
  */
-+ (CGSize)contentSizeForDirection_:(MUKGridDirection)direction containerSize_:(CGSize)containerSize cellSize_:(CGSize)cellSize maxRows_:(NSInteger)maxRows;
++ (CGSize)contentSizeForDirection_:(MUKGridDirection)direction cellSize_:(CGSize)cellSize maxRows_:(NSInteger)maxRows maxCellsPerRow_:(NSInteger)maxCellsPerRow numberOfCells_:(NSInteger)numberOfCells;
 /*
  Shortend to apply content size calculated in previous method
  */

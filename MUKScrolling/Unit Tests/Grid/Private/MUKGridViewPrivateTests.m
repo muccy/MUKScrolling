@@ -498,4 +498,36 @@
     }];
 }
 
+#pragma mark - Cell View
+
+- (void)testCellViewIdentifier {
+    NSString *identifier = @"Foo";
+    
+    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] init];
+    guestView.recycleIdentifier = identifier;
+    
+    MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] init];
+    cellView.guestView = guestView;
+    STAssertEqualObjects(cellView.recycleIdentifier, identifier, @"Recycle identifier is guest view's");
+    
+    identifier = @"Bar";
+    cellView.recycleIdentifier = identifier;
+    STAssertEqualObjects(guestView.recycleIdentifier, identifier, @"Cell view set identifier to guest");
+}
+
+- (void)testCellViewGuestFrame {
+    CGRect guestFrame = CGRectMake(10, 10, 100, 100);
+    CGRect cellFrame = CGRectMake(20, 20, 200, 158);
+    
+    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] initWithFrame:guestFrame];
+    MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] initWithFrame:cellFrame];
+    cellView.guestView = guestView;
+    
+    STAssertTrue(CGRectEqualToRect(guestView.frame, cellView.bounds), @"Guest frame are cell bounds");
+    
+    cellFrame = CGRectMake(200, 20, 2000, 200);
+    cellView.frame = cellFrame;
+    STAssertTrue(CGRectEqualToRect(guestView.frame, cellView.bounds), @"Guest frame are cell bounds, also after resizing");
+}
+
 @end

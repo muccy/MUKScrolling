@@ -297,23 +297,25 @@
 {
     CGSize size = CGSizeZero;
     
-    switch (direction) {
-        case MUKGridDirectionHorizontal:
-            size.width = cellSize.width * maxRows;
-            size.height = containerSize.height;
-            break;
-            
-        case MUKGridDirectionVertical:
-            size.width = containerSize.width;
-            size.height = cellSize.height * maxRows;
-            break;
+    if (maxRows > 0) {
+        switch (direction) {
+            case MUKGridDirectionHorizontal:
+                size.width = cellSize.width * maxRows;
+                size.height = containerSize.height;
+                break;
+                
+            case MUKGridDirectionVertical:
+                size.width = containerSize.width;
+                size.height = cellSize.height * maxRows;
+                break;
+        }
     }
-
+    
     return size;
 }
 
 - (void)adjustContentSize_ {
-    CGSize cellSize = [self.cellSize sizeRespectSize:self.frame.size];
+    CGSize cellSize = [self.cellSize sizeRespectSize:self.bounds.size];
     NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:self.frame.size cellSize_:cellSize direction_:self.direction];
     NSInteger maxRows = [[self class] maxRowsForCellsCount_:self.numberOfCells maxCellsPerRow_:maxCellsPerRow direction_:self.direction];
     self.contentSize = [[self class] contentSizeForDirection_:self.direction containerSize_:self.frame.size cellSize_:cellSize maxRows_:maxRows];

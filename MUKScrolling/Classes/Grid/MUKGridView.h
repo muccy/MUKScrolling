@@ -32,6 +32,13 @@ typedef enum {
     MUKGridDirectionVertical
 } MUKGridDirection;
 
+typedef enum {
+    MUKGridScrollPositionNone = 0,
+    MUKGridScrollPositionHead,
+    MUKGridScrollPositionMiddle,
+    MUKGridScrollPositionTail
+} MUKGridScrollPosition;
+
 /**
  This class is a concrete implementation of MUKRecyclingScrollView, used to 
  realize a grid of cells, both vertical and horizontal.
@@ -131,4 +138,28 @@ typedef enum {
  @return Frame of the cell.
  */
 - (CGRect)frameOfCellAtIndex:(NSInteger)index;
+@end
+
+
+@interface MUKGridView (Scroll)
+/**
+ Scroll grid to a cell.
+ @param index Index of cell to show.
+ @param position How to show cell scrolling.
+ @param animated `YES` if scroll will be animated.
+ 
+ You could set cell position after scroll in four ways:
+ 
+ * `MUKGridScrollPositionNone` performs the minimum scroll to show the cell.
+ * `MUKGridScrollPositionHead` scrolls to show cell head (top for vertical grids, 
+ left for horizontal grids). If cell is at tail of the grid, cell could not be 
+ at exact head after scrolling.
+ * `MUKGridScrollPositionMiddle` scrolls to show cell at middle of the grid. If
+ cell is at head/tail of the grid, cell could not be at exact middle after
+ scrolling.
+ * `MUKGridScrollPositionTail` scrolls to show cell tail (bottom for vertical 
+ grids, right for horizontal grids). If cell is at head of the grid, cell could
+ not be at exact tail after scrolling.
+ */
+- (void)scrollToCellAtIndex:(NSInteger)index position:(MUKGridScrollPosition)position animated:(BOOL)animated;
 @end

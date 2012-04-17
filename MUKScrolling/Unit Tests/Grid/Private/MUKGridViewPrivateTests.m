@@ -545,4 +545,129 @@
     STAssertTrue(CGRectEqualToRect(guestView.frame, cellView.bounds), @"Guest frame are cell bounds, also after resizing");
 }
 
+- (void)testTransformForScrollPosition {
+    /*
+     The only piece of logic is contained in the case of MUKGridScrollPositionNone
+     */
+    
+    // Partially overlapped (cell comes a little before)
+    MUKGridDirection direction = MUKGridDirectionVertical;
+    CGRect cellFrame = CGRectMake(0, 50, 50, 50);
+    CGRect bounds = CGRectMake(0, 80, 200, 200);
+    MUKGeometryTransform transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformTopLeft, transform, @"Scroll to head");
+    
+    // Partially overlapped (bounds come a little before)
+    cellFrame = CGRectMake(0, 210, 50, 50);
+    bounds = CGRectMake(0, 0, 200, 200);
+    transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformBottomLeft, transform, @"Scroll to tail");
+    
+    // Not overlapped (cell comes before)
+    cellFrame = CGRectMake(0, 0, 50, 50);
+    bounds = CGRectMake(0, 80, 200, 200);
+    transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformTopLeft, transform, @"Scroll to head");
+    
+    // Not overlapped (bounds come before)
+    cellFrame = CGRectMake(0, 2100, 50, 50);
+    bounds = CGRectMake(0, 0, 200, 200);
+    transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformBottomLeft, transform, @"Scroll to tail");
+    
+    // Overlapped
+    cellFrame = CGRectMake(0, 50, 50, 50);
+    bounds = CGRectMake(0, 0, 200, 200);
+    transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformIdentity, transform, @"Do not scroll");
+    
+    
+    
+    ////////////////
+    // Horizontal //
+    ////////////////
+    direction = MUKGridDirectionHorizontal;
+    
+    // Partially overlapped (cell comes a little before)
+    cellFrame = CGRectMake(50, 0, 50, 50);
+    bounds = CGRectMake(80, 0, 200, 200);
+    transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformTopLeft, transform, @"Scroll to head");
+    
+    // Partially overlapped (bounds come a little before)
+    cellFrame = CGRectMake(210, 0, 50, 50);
+    bounds = CGRectMake(0, 0, 200, 200);
+    transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformTopRight, transform, @"Scroll to tail");
+    
+    // Not overlapped (cell comes before)
+    cellFrame = CGRectMake(0, 0, 50, 50);
+    bounds = CGRectMake(80, 0, 200, 200);
+    transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformTopLeft, transform, @"Scroll to head");
+    
+    // Not overlapped (bounds come before)
+    cellFrame = CGRectMake(2100, 0, 50, 50);
+    bounds = CGRectMake(0, 0, 200, 200);
+    transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformTopRight, transform, @"Scroll to tail");
+    
+    // Overlapped
+    cellFrame = CGRectMake(50, 0, 50, 50);
+    bounds = CGRectMake(0, 0, 200, 200);
+    transform = [MUKGridView geometryTransformForScrollPosition_:MUKGridScrollPositionNone direction_:direction cellFrame_:cellFrame visibleBounds_:bounds];
+    STAssertEquals(MUKGeometryTransformIdentity, transform, @"Do not scroll");
+}
+
+- (void)testBoundsFixing {
+    MUKGridDirection direction = MUKGridDirectionVertical;
+    CGRect bounds = CGRectMake(0, 50, 200, 200);
+    CGSize containerSize = CGSizeMake(200, 500);
+    
+    CGRect fixedBounds = [MUKGridView bounds_:bounds inContainerSize_:containerSize direction_:direction];
+    STAssertEqualsWithAccuracy(0.0f, fixedBounds.origin.x, 0.0000001, @"Aligned to left");
+    STAssertEqualsWithAccuracy(bounds.origin.y, fixedBounds.origin.y, 0.0000001, @"Preserved");
+    STAssertTrue(CGSizeEqualToSize(bounds.size, fixedBounds.size), @"Preserved");
+    
+    // Too up
+    bounds.origin.y = -100.0;
+    fixedBounds = [MUKGridView bounds_:bounds inContainerSize_:containerSize direction_:direction];
+    STAssertEqualsWithAccuracy(0.0f, fixedBounds.origin.x, 0.0000001, @"Aligned to left");
+    STAssertEqualsWithAccuracy(0.0f, fixedBounds.origin.y, 0.0000001, @"Aligned to top");
+    STAssertTrue(CGSizeEqualToSize(bounds.size, fixedBounds.size), @"Preserved");
+    
+    // Too down
+    bounds.origin.y = containerSize.height + 100.0;
+    fixedBounds = [MUKGridView bounds_:bounds inContainerSize_:containerSize direction_:direction];
+    STAssertEqualsWithAccuracy(0.0f, fixedBounds.origin.x, 0.0000001, @"Aligned to left");
+    STAssertEqualsWithAccuracy(containerSize.height-fixedBounds.size.height, fixedBounds.origin.y, 0.0000001, @"Aligned to bottom");
+    STAssertTrue(CGSizeEqualToSize(bounds.size, fixedBounds.size), @"Preserved");
+    
+    
+    
+    // Horizontal
+    direction = MUKGridDirectionHorizontal;
+    bounds = CGRectMake(50, 0, 200, 200);
+    containerSize = CGSizeMake(500, 200);
+    
+    fixedBounds = [MUKGridView bounds_:bounds inContainerSize_:containerSize direction_:direction];
+    STAssertEqualsWithAccuracy(0.0f, fixedBounds.origin.y, 0.0000001, @"Aligned to top");
+    STAssertEqualsWithAccuracy(bounds.origin.x, fixedBounds.origin.x, 0.0000001, @"Preserved");
+    STAssertTrue(CGSizeEqualToSize(bounds.size, fixedBounds.size), @"Preserved");
+    
+    // Too left
+    bounds.origin.x = -100.0;
+    fixedBounds = [MUKGridView bounds_:bounds inContainerSize_:containerSize direction_:direction];
+    STAssertEqualsWithAccuracy(0.0f, fixedBounds.origin.y, 0.0000001, @"Aligned to top");
+    STAssertEqualsWithAccuracy(0.0f, fixedBounds.origin.y, 0.0000001, @"Aligned to left");
+    STAssertTrue(CGSizeEqualToSize(bounds.size, fixedBounds.size), @"Preserved");
+    
+    // Too right
+    bounds.origin.x = containerSize.width + 100.0;
+    fixedBounds = [MUKGridView bounds_:bounds inContainerSize_:containerSize direction_:direction];
+    STAssertEqualsWithAccuracy(0.0f, fixedBounds.origin.y, 0.0000001, @"Aligned to top");
+    STAssertEqualsWithAccuracy(containerSize.width-fixedBounds.size.width, fixedBounds.origin.x, 0.0000001, @"Aligned to right");
+    STAssertTrue(CGSizeEqualToSize(bounds.size, fixedBounds.size), @"Preserved");
+}
+
 @end

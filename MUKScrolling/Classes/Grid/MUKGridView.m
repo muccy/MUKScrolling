@@ -213,18 +213,29 @@
     return [[self class] frameOfCellAtIndex_:index cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow direction_:self.direction];
 }
 
+#pragma mark - Scroll
+
+- (void)scrollToCellAtIndex:(NSInteger)index position:(MUKGridScrollPosition)position animated:(BOOL)animated
+{
+    if (index < 0 || index >= self.numberOfCells) return;
+    
+    CGRect cellFrame = [self frameOfCellAtIndex:index];    
+    MUKGeometryTransform transform = [[self class] geometryTransformForScrollPosition_:position direction_:self.direction cellFrame_:cellFrame visibleBounds_:self.bounds];
+    
+    // Move bounds to contain cell
+    CGRect alignedBounds = [MUK rect:self.bounds transform:transform respectToRect:cellFrame];
+    
+    // Fix aligned bounds
+    CGRect fixedBounds = [[self class] bounds_:alignedBounds inContainerSize_:self.contentSize direction_:self.direction];
+    
+    // Perform scroll
+    [self setContentOffset:fixedBounds.origin animated:animated];
+}
+
 #pragma mark - Private
 
 - (void)commonIntialization_ {
     //
-}
-
-- (NSSet *)visibleHostCellViews_ {
-    return [super visibleViews];
-}
-
-- (NSSet *)enqueuedHostCellViews_ {
-    return [super enqueuedViews];
 }
 
 #pragma mark - Private: Layout
@@ -323,6 +334,123 @@
     NSInteger maxRows = [[self class] maxRowsForCellsCount_:self.numberOfCells maxCellsPerRow_:maxCellsPerRow direction_:self.direction];
     
     self.contentSize = [[self class] contentSizeForDirection_:self.direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow numberOfCells_:self.numberOfCells];
+}
+
+- (NSSet *)visibleHostCellViews_ {
+    return [super visibleViews];
+}
+
+- (NSSet *)enqueuedHostCellViews_ {
+    return [super enqueuedViews];
+}
+
++ (MUKGeometryTransform)geometryTransformForScrollPosition_:(MUKGridScrollPosition)position direction_:(MUKGridDirection)direction cellFrame_:(CGRect)cellFrame visibleBounds_:(CGRect)visibleBounds;
+{
+    if (MUKGridScrollPositionNone == position) {
+        // Calculate position if cell is not shown
+        
+        if (!CGRectContainsRect(visibleBounds, cellFrame)) {
+            // Cell not shown
+            // Perform the minimum move
+            CGFloat cellPos = (direction == MUKGridDirectionHorizontal ? cellFrame.origin.x : cellFrame.origin.y);
+            CGFloat boundsPos = (direction == MUKGridDirectionHorizontal ? visibleBounds.origin.x : visibleBounds.origin.y);
+            
+            if (cellPos > boundsPos) {
+                // Cell is after bounds
+                position = MUKGridScrollPositionTail;
+            }
+            else {
+                // Cell is before bounds
+                position = MUKGridScrollPositionHead;
+            }
+        }
+    }
+    
+    // Now calculate geometric transform from position
+    MUKGeometryTransform transform;
+    
+    switch (position) {
+        case MUKGridScrollPositionHead: {
+            transform = MUKGeometryTransformTopLeft;
+            break;
+        }
+            
+        case MUKGridScrollPositionMiddle: {
+            if (MUKGridDirectionVertical == direction) {
+                transform = MUKGeometryTransformLeft;
+            }
+            else {
+                transform = MUKGeometryTransformTop;
+            }
+            
+            break;
+        }
+            
+        case MUKGridScrollPositionTail: {
+            if (MUKGridDirectionVertical == direction) {
+                transform = MUKGeometryTransformBottomLeft;
+            }
+            else {
+                transform = MUKGeometryTransformTopRight;
+            }
+            
+            break;
+        }
+            
+        default: {
+            transform = MUKGeometryTransformIdentity;
+            break;
+        }
+    }
+    
+    return transform;
+}
+
++ (CGRect)bounds_:(CGRect)bounds inContainerSize_:(CGSize)containerSize direction_:(MUKGridDirection)direction
+{
+    CGRect alignedBounds = bounds;
+    
+    // Fix edge
+    if (MUKGridDirectionVertical == direction) {
+        alignedBounds.origin.x = 0.0f;
+    }
+    else {
+        alignedBounds.origin.y = 0.0f;
+    }
+    
+    // Check if new bounds are too big
+    CGRect fullBounds = CGRectZero;
+    fullBounds.size = containerSize;
+    
+    if (!CGRectContainsRect(fullBounds, alignedBounds)) {
+        // New bounds will exceed frame
+        MUKGeometryTransform excessTransform;
+        
+        if (MUKGridDirectionVertical == direction) {
+            if (CGRectGetMinY(alignedBounds) < CGRectGetMinY(fullBounds)) {
+                // Bounds are "too up"
+                excessTransform = MUKGeometryTransformTopLeft;
+            }
+            else {
+                // Bounds are "too down"
+                excessTransform = MUKGeometryTransformBottomLeft;
+            }
+        }
+        else {
+            if (CGRectGetMinX(alignedBounds) < CGRectGetMinX(fullBounds)) {
+                // Bounds are "too left"
+                excessTransform = MUKGeometryTransformTopLeft;
+            }
+            else {
+                // Bounds are "too right"
+                excessTransform = MUKGeometryTransformTopRight;
+            }
+        }
+        
+        alignedBounds = [MUK rect:alignedBounds transform:excessTransform respectToRect:fullBounds];
+    }
+    
+    return alignedBounds;
 }
 
 #pragma mark - Private: Rows & Columns

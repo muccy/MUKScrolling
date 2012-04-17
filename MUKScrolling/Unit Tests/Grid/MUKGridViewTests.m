@@ -295,4 +295,94 @@
     STAssertEqualsWithAccuracy(cellSize.height * 2.0f, cellFrame.origin.y, 0.0000001, @"Coord: (1, 2)");
 }
 
+- (void)testScrollToCell {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.direction = MUKGridDirectionVertical;
+    gridView.numberOfCells = 32; // 8 rows
+    
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    [gridView reloadData];
+    
+    NSInteger cellIndex = 15;
+    CGFloat offset = 3.0 * cellSize.height;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionHead animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, 0.0f, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, offset, 0.000001, @"4th row");
+    
+    offset = 3.0 * cellSize.height - gridView.bounds.size.height/2.0 + cellSize.height/2.0;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionMiddle animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, 0.0f, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, offset, 0.000001, @"4th row");
+    
+    offset = 3.0 * cellSize.height - gridView.bounds.size.height + cellSize.height;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionTail animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, 0.0f, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, offset, 0.000001, @"4th row");
+    
+    // Head preserved
+    cellIndex = 0;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionTail animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, 0.0f, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, @"1st row");
+    
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionMiddle animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, 0.0f, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, @"1st row");
+    
+    // Tail preserved
+    cellIndex = gridView.numberOfCells - 1;
+    offset = gridView.contentSize.height - gridView.bounds.size.height;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionHead animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, 0.0f, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, offset, 0.000001, @"Last row");
+    
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionMiddle animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, 0.0f, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, offset, 0.000001, @"Last row");
+    
+    
+    /////////////////////////////////////////
+    // Horizontal
+    cellIndex = 15;
+    gridView.direction = MUKGridDirectionHorizontal;
+    [gridView reloadData];
+    
+    offset = 3.0 * cellSize.width;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionHead animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, offset, 0.000001, @"4th vertical row");
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, nil);
+    
+    offset = 3.0 * cellSize.width - gridView.bounds.size.width/2.0 + cellSize.width/2.0;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionMiddle animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, offset, 0.000001, @"4th vertical row");
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, nil);
+    
+    offset = 3.0 * cellSize.width - gridView.bounds.size.width + cellSize.width;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionTail animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, offset, 0.000001, @"4th vertical row");
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, nil);
+    
+    // Head preserved
+    cellIndex = 0;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionTail animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, 0.0f, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, @"1st row");
+    
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionMiddle animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, 0.0f, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, @"1st row");
+    
+    // Tail preserved
+    cellIndex = gridView.numberOfCells - 1;
+    offset = gridView.contentSize.width - gridView.bounds.size.width;
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionHead animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, offset, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, @"Last row");
+    
+    [gridView scrollToCellAtIndex:cellIndex position:MUKGridScrollPositionMiddle animated:NO];
+    STAssertEqualsWithAccuracy(gridView.contentOffset.x, offset, 0.000001, nil);
+    STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, @"Last row");
+}
+
 @end

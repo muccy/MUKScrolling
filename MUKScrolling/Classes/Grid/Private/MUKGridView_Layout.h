@@ -24,6 +24,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "MUKGridView.h"
+#import <MUKToolkit/MUKToolkit.h>
 
 @class MUKGridCellView_;
 @interface MUKGridView ()
@@ -61,5 +62,14 @@
  */
 - (NSSet *)visibleHostCellViews_;
 - (NSSet *)enqueuedHostCellViews_;
+
+/*
+ This method returns proper transform for scroll position
+ */
++ (MUKGeometryTransform)geometryTransformForScrollPosition_:(MUKGridScrollPosition)position direction_:(MUKGridDirection)direction cellFrame_:(CGRect)cellFrame visibleBounds_:(CGRect)visibleBounds;
+/*
+ This method fixes bounds for fit in container size
+ */
++ (CGRect)bounds_:(CGRect)bounds inContainerSize_:(CGSize)containerSize direction_:(MUKGridDirection)direction;
 
 @end

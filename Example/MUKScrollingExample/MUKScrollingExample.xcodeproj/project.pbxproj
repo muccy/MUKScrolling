@@ -67,7 +67,7 @@
 		0668640515396DA6005D4BC1 /* SquaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquaresViewController.h; sourceTree = "<group>"; };
 		0668640615396DA6005D4BC1 /* SquaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquaresViewController.m; sourceTree = "<group>"; };
 		0668640815397583005D4BC1 /* SquaresViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SquaresViewController.xib; sourceTree = "<group>"; };
-		0699888E153C5B6700CBE31E /* libMUKToolkit.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libMUKToolkit.a; path = "../../Submodules/MUKToolkit/build/Release-iphoneos/libMUKToolkit.a"; sourceTree = "<group>"; };
+		0699888E153C5B6700CBE31E /* libMUKToolkit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMUKToolkit.a; path = "../../Submodules/MUKToolkit/build/Release-iphoneos/libMUKToolkit.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

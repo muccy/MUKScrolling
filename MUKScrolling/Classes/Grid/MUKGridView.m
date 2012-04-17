@@ -34,6 +34,7 @@
 
 @interface MUKGridView ()
 - (void)commonIntialization_;
+- (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate;
 @end
 
 @implementation MUKGridView
@@ -41,6 +42,7 @@
 @synthesize cellSize = cellSize_;
 @synthesize numberOfCells = numberOfCells_;
 @synthesize cellCreationHandler = cellCreationHandler_;
+@synthesize scrollCompletionHandler = scrollCompletionHandler_;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -69,17 +71,13 @@
 }
 
 - (void)dealloc {
-    
+    [self setScrollViewDelegate_:nil];
 }
 
 #pragma mark - Overrides
 
 - (void)setDelegate:(id<UIScrollViewDelegate>)delegate {
-    //
-}
-
-- (id<UIScrollViewDelegate>)delegate {
-    return self;
+    // Disabled setter
 }
 
 - (void)layoutSubviews {
@@ -237,10 +235,21 @@
     [self setContentOffset:fixedBounds.origin animated:animated];
 }
 
+- (void)didFinishScrollingOfKind:(MUKGridScrollKind)scrollKind {
+    if (self.scrollCompletionHandler) {
+        self.scrollCompletionHandler(scrollKind);
+    }
+}
+
 #pragma mark - Private
 
 - (void)commonIntialization_ {
-    //
+    [self setScrollViewDelegate_:self];
+}
+
+- (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate 
+{
+    [super setDelegate:scrollViewDelegate];
 }
 
 #pragma mark - Private: Layout
@@ -550,6 +559,29 @@
     }
     
     return [MUKGridCoordinate coordinatesInRectangleBetweenCoordinate:firstCellCoordinate andCoordinate:lastCellCoordinate];
+}
+
+#pragma mark - <UIScrollViewDelegate>
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    if (self == scrollView) {
+        [self didFinishScrollingOfKind:MUKGridScrollKindAnimated];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (self == scrollView) {
+        if (decelerate == NO) {
+            [self didFinishScrollingOfKind:MUKGridScrollKindUserDrag];
+        }
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (self == scrollView) {
+        [self didFinishScrollingOfKind:MUKGridScrollKindUserDeceleration];
+    }
 }
 
 @end

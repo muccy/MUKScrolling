@@ -30,6 +30,8 @@
 #import "MUKGridCellView_.h"
 #import "MUKGridCellFixedSize.h"
 
+#import <MUKToolkit/MUKToolkit.h>
+
 @implementation MUKGridViewTests
 
 - (void)testEnqueuedViewClass {
@@ -398,6 +400,31 @@
     [gridView addSubview:cellView];
     STAssertNil([gridView cellViewAtIndex:0], nil);
     STAssertEqualObjects([gridView cellViewAtIndex:1], guestView, nil);
+}
+
+- (void)testScrollCompletionHandler {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.numberOfCells = 100;
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:CGSizeMake(50, 50)];
+    [gridView reloadData];
+    
+    __block MUKGridScrollKind originatedScrollKind = -1;
+    __block BOOL handlerCalled = NO;
+    gridView.scrollCompletionHandler = ^(MUKGridScrollKind scrollKind) {
+        originatedScrollKind = scrollKind;
+        handlerCalled = YES;
+    };
+    
+    [gridView scrollToCellAtIndex:80 position:MUKGridScrollPositionHead animated:NO];
+    STAssertFalse(handlerCalled, @"Not animated");
+    
+    [gridView scrollToCellAtIndex:0 position:MUKGridScrollPositionHead animated:YES];
+
+    BOOL done = NO;
+    [MUK waitForCompletion:&done timeout:2.0 runLoop:nil];
+    
+    STAssertTrue(handlerCalled, @"Animated");
+    STAssertEquals(originatedScrollKind, MUKGridScrollKindAnimated, @"Programmatically animated");
 }
 
 @end

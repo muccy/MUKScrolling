@@ -62,6 +62,29 @@
         cellView.label.text = [NSString stringWithFormat:@"%i", index];
         return cellView;
     };
+    
+    self.gridView.scrollCompletionHandler = ^(MUKGridScrollKind scrollKind) {
+        NSString *kind;
+        switch (scrollKind) {
+            case MUKGridScrollKindAnimated:
+                kind = @"Animated";
+                break;
+            
+            case MUKGridScrollKindUserDrag:
+                kind = @"Drag";
+                break;
+                
+            case MUKGridScrollKindUserDeceleration:
+                kind = @"Deceleration";
+                break;
+                
+            default:
+                kind = @"Unknown";
+                break;
+        }
+        
+        NSLog(@"Scrolled with kind %@", kind);
+    };
 }
 
 - (void)verticalSwitchValueChanged:(id)sender {

@@ -39,6 +39,12 @@ typedef enum {
     MUKGridScrollPositionTail
 } MUKGridScrollPosition;
 
+typedef enum {
+    MUKGridScrollKindAnimated = 0,
+    MUKGridScrollKindUserDrag,
+    MUKGridScrollKindUserDeceleration
+} MUKGridScrollKind;
+
 /**
  This class is a concrete implementation of MUKRecyclingScrollView, used to 
  realize a grid of cells, both vertical and horizontal.
@@ -53,6 +59,12 @@ typedef enum {
      3   4   5
      6   7   8
      9   ...
+ 
+ This class implements following methods of `UIScrollViewDelegate` protocol:
+ 
+ * `- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView`
+ * `- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate`
+ * `- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView`
  */
 @interface MUKGridView : MUKRecyclingScrollView <UIScrollViewDelegate>
 /** @name Properties */
@@ -74,6 +86,8 @@ typedef enum {
  `0` is default.
  */
 @property (nonatomic) NSInteger numberOfCells;
+
+/** @ Handlers */
 /**
  Creates cells to be displayed by the grid.
  
@@ -95,6 +109,13 @@ typedef enum {
      }];
 */
 @property (nonatomic, copy) UIView<MUKRecyclable>* (^cellCreationHandler)(NSInteger cellIndex);
+/**
+ Callback which signals when an animated scrolling did finish.
+ 
+ @see didFinishScrollingOfKind:
+ */
+@property (nonatomic, copy) void (^scrollCompletionHandler)(MUKGridScrollKind scrollKind);
+
 
 /** @name Methods */
 /**
@@ -168,4 +189,28 @@ typedef enum {
  not be at exact tail after scrolling.
  */
 - (void)scrollToCellAtIndex:(NSInteger)index position:(MUKGridScrollPosition)position animated:(BOOL)animated;
+/**
+ Callback for animated scroll.
+ @param scrollKind The kind of scroll animation.
+ 
+ This method is fired in response of scrollToCellAtIndex:position:animated:
+ (with `animated` = `YES`) or in response of user touches.
+ 
+ There are three kinds of scrolling:
+ 
+ * `MUKGridScrollKindAnimated`, originated programmatically from 
+ scrollToCellAtIndex:position:animated:.
+ * `MUKGridScrollKindUserDrag`, originated from a user which drags the grid
+ and lifts up the finger causing no deceleration.
+ * `MUKGridScrollKindUserDeceleration`, originated from a user which drags the
+ grid and lifts up the finger causing a deceleration.
+ 
+ Default implementation calls scrollCompletionHandler.
+ 
+ @warning It is possible to see subsequents invocations of this method with
+ `MUKGridScrollKindUserDrag` and `MUKGridScrollKindUserDeceleration`: this 
+ happens when user make grid decelerate and, then, he stops deceleration putting
+ the finger again on the screen.
+ */
+- (void)didFinishScrollingOfKind:(MUKGridScrollKind)scrollKind;
 @end

@@ -422,7 +422,7 @@
 
     BOOL done = NO;
     [MUK waitForCompletion:&done timeout:2.0 runLoop:nil];
-    
+    [gridView layoutSubviews]; // Call last to complete animation layout
     STAssertTrue(handlerCalled, @"Animated");
     STAssertEquals(originatedScrollKind, MUKGridScrollKindAnimated, @"Programmatically animated");
 }

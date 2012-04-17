@@ -17,9 +17,11 @@
 @implementation SquaresViewController
 @synthesize cellsTextField;
 @synthesize verticalSwitch;
+@synthesize scrollTextField;
 
 - (void)dealloc {
     self.cellsTextField.delegate = nil;
+    self.scrollTextField.delegate = nil;
 }
 
 - (void)viewDidUnload {
@@ -27,6 +29,7 @@
     
     self.cellsTextField = nil;
     self.verticalSwitch = nil;
+    self.scrollTextField = nil;
 }
 
 - (void)viewDidLoad
@@ -71,8 +74,13 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     
-    self.gridView.numberOfCells = [self chosenCellsNumber_];
-    [self.gridView reloadData];
+    if (self.cellsTextField == textField) {
+        self.gridView.numberOfCells = [self chosenCellsNumber_];
+        [self.gridView reloadData];
+    }
+    else if (self.scrollTextField == textField) {
+        [self.gridView scrollToCellAtIndex:[textField.text intValue] position:MUKGridScrollPositionMiddle animated:YES];
+    }
     
     return NO;
 }

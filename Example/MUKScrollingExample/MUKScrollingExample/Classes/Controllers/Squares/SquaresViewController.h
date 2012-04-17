@@ -9,7 +9,7 @@
 #import "GridViewController.h"
 
 @interface SquaresViewController : GridViewController <UITextFieldDelegate>
-@property (nonatomic, strong) IBOutlet UITextField *cellsTextField;
+@property (nonatomic, strong) IBOutlet UITextField *cellsTextField, *scrollTextField;
 @property (nonatomic, strong) IBOutlet UISwitch *verticalSwitch;
 
 - (IBAction)verticalSwitchValueChanged:(id)sender;

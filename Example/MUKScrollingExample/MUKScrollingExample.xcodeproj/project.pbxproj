@@ -19,6 +19,7 @@
 		0668640415396CD1005D4BC1 /* GridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0668640315396CD1005D4BC1 /* GridViewController.m */; };
 		0668640715396DA6005D4BC1 /* SquaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0668640615396DA6005D4BC1 /* SquaresViewController.m */; };
 		0668640915397583005D4BC1 /* SquaresViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0668640815397583005D4BC1 /* SquaresViewController.xib */; };
+		0699888F153C5B6700CBE31E /* libMUKToolkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0699888E153C5B6700CBE31E /* libMUKToolkit.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		0668640515396DA6005D4BC1 /* SquaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquaresViewController.h; sourceTree = "<group>"; };
 		0668640615396DA6005D4BC1 /* SquaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquaresViewController.m; sourceTree = "<group>"; };
 		0668640815397583005D4BC1 /* SquaresViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SquaresViewController.xib; sourceTree = "<group>"; };
+		0699888E153C5B6700CBE31E /* libMUKToolkit.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libMUKToolkit.a; path = "../../Submodules/MUKToolkit/build/Release-iphoneos/libMUKToolkit.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0699888F153C5B6700CBE31E /* libMUKToolkit.a in Frameworks */,
 				066863CF15388A17005D4BC1 /* libMUKScrolling.a in Frameworks */,
 				06339C421535F09200FB07ED /* UIKit.framework in Frameworks */,
 				06339C441535F09200FB07ED /* Foundation.framework in Frameworks */,
@@ -103,6 +106,7 @@
 		06339C401535F09200FB07ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0699888E153C5B6700CBE31E /* libMUKToolkit.a */,
 				06339C5E1535F0BE00FB07ED /* MUKScrolling.xcodeproj */,
 				06339C411535F09200FB07ED /* UIKit.framework */,
 				06339C431535F09200FB07ED /* Foundation.framework */,
@@ -344,6 +348,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -363,6 +368,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

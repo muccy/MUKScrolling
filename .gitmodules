@@ -1,0 +1,3 @@
+[submodule "Submodules/MUKToolkit"]
+	path = Submodules/MUKToolkit
+	url = git://github.com/muccy/MUKToolkit.git

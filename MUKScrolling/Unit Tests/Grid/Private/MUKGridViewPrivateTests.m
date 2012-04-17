@@ -670,4 +670,14 @@
     STAssertTrue(CGSizeEqualToSize(bounds.size, fixedBounds.size), @"Preserved");
 }
 
+- (void)testCellZoomingEnabled {
+    MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] init];
+    
+    STAssertFalse([cellView isZoomingEnabled], @"Zooming is disabled by default");
+    
+    cellView.minimumZoomScale = 1.0;
+    cellView.maximumZoomScale = 3.0;
+    STAssertTrue([cellView isZoomingEnabled], @"Zooming is enabled with different min/max scales");
+}
+
 @end

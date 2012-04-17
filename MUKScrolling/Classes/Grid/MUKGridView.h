@@ -67,6 +67,10 @@ typedef enum {
  * `- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate`
  * `- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView`
  * `- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView`
+ * `- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView`
+ * `- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view`
+ * `- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale`
+ * `- (void)scrollViewDidZoom:(UIScrollView *)scrollView`
  */
 @interface MUKGridView : MUKRecyclingScrollView <UIScrollViewDelegate>
 /** @name Properties */
@@ -88,6 +92,12 @@ typedef enum {
  `0` is default.
  */
 @property (nonatomic) NSInteger numberOfCells;
+/**
+ Zoom scale to adopt with double tap gesture.
+ 
+ `2.0` is default.
+ */
+@property (nonatomic) float doubleTapZoomScale;
 
 /** @ Handlers */
 /**
@@ -123,6 +133,48 @@ typedef enum {
  @see didTapCellAtIndex:
  */
 @property (nonatomic, copy) void (^cellTapHandler)(NSInteger cellIndex);
+/**
+ Callback which signals when a cell is double tapped.
+ 
+ @see didDoubleTapCellAtIndex:
+ */
+@property (nonatomic, copy) void (^cellDoubleTapHandler)(NSInteger cellIndex);
+/**
+ Handler to set minimum zoom scale for a cell.
+ 
+ Do not set an handler or return same value of cellMaximumZoomHandler in order
+ to disable zooming.
+ 
+ @see minimumZoomScaleForCellAtIndex:
+ */
+@property (nonatomic, copy) float (^cellMinimumZoomHandler)(NSInteger cellIndex);
+/**
+ Handler to set maximum zoom scale for a cell.
+ 
+ Do not set an handler or return same value of cellMinimumZoomHandler in order
+ to disable zooming.
+ 
+ @see maximumZoomScaleForCellAtIndex:
+ */
+@property (nonatomic, copy) float (^cellMaximumZoomHandler)(NSInteger cellIndex);
+/**
+ Handler which is called as zoom is about to start.
+ 
+ @see willBeginZoomingCellAtIndex:fromScale:
+ */
+@property (nonatomic, copy) void (^zoomBeginningHandler)(NSInteger cellIndex, float scale);
+/**
+ Handler which is called as zoom has finished.
+ 
+ @see didEndZoomingCellAtIndex:atScale:
+ */
+@property (nonatomic, copy) void (^zoomCompletionHandler)(NSInteger cellIndex, float scale);
+/**
+ Handler which is called as zoom changes.
+ 
+ @see didZoomCellAtIndex:atScale:
+ */
+@property (nonatomic, copy) void (^zoomHandler)(NSInteger cellIndex, float scale);
 
 
 /** @name Methods */
@@ -217,14 +269,14 @@ typedef enum {
  
  @warning It is possible to see subsequents invocations of this method with
  `MUKGridScrollKindUserDrag` and `MUKGridScrollKindUserDeceleration`: this 
- happens when user make grid decelerate and, then, he stops deceleration putting
- the finger again on the screen.
+ happens when user makes grid to decelerate and, then, he stops deceleration 
+ putting his finger again on the screen.
  */
 - (void)didFinishScrollingOfKind:(MUKGridScrollKind)scrollKind;
 @end
 
 
-@interface MUKGridView (Tap)
+@interface MUKGridView (Taps)
 /**
  Callback which signals when a cell is tapped.
  @param index Cell index in the grid.
@@ -232,4 +284,57 @@ typedef enum {
  Default implementation calls cellTapHandler.
  */
 - (void)didTapCellAtIndex:(NSInteger)index;
+/**
+ Callback which signals when a cell is double tapped.
+ @param index Cell index in the grid.
+ 
+ Default implementation calls cellDoubleTapHandler.
+ */
+- (void)didDoubleTapCellAtIndex:(NSInteger)index;
+@end
+
+
+@interface MUKGridView (Zoom)
+/**
+ Minimum zoom scale for a cell.
+ @param index Cell index in the grid.
+ @return Minimum zoom scale for the cell.
+ 
+ Default implemetation calls cellMinimumZoomHandler or returns `1.0` if 
+ handler is set to `nil`.
+ */
+- (float)minimumZoomScaleForCellAtIndex:(NSInteger)index;
+/**
+ Maximum zoom scale for a cell.
+ @param index Cell index in the grid.
+ @return Maximum zoom scale for the cell.
+ 
+ Default implemetation calls cellMaximumZoomHandler or returns `1.0` if 
+ handler is set to `nil`.
+ */
+- (float)maximumZoomScaleForCellAtIndex:(NSInteger)index;
+/**
+ Callback which signals when zoom of a cell is starting.
+ @param index Cell index in the grid.
+ @param scale Scale of cell before zooming.
+ 
+ Default implementation calls zoomBeginningHandler.
+ */
+- (void)willBeginZoomingCellAtIndex:(NSInteger)index fromScale:(float)scale;
+/**
+ Callback which signals when zoom of a cell ends.
+ @param index Cell index in the grid.
+ @param scale Scale of cell after zooming.
+ 
+ Default implementation calls zoomCompletionHandler.
+ */
+- (void)didEndZoomingCellAtIndex:(NSInteger)index atScale:(float)scale;
+/**
+ Callback which signals when zoom of a cell is happening.
+ @param index Cell index in the grid.
+ @param scale Scale of cell zooming.
+ 
+ Default implementation calls zoomHandler.
+ */
+- (void)didZoomCellAtIndex:(NSInteger)index atScale:(float)scale;
 @end

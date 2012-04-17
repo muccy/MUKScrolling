@@ -26,6 +26,8 @@
 #import "MUKGridViewTests.h"
 
 #import "MUKGridView.h"
+#import "MUKGridView_Layout.h"
+
 #import "MUKDummyRecyclableView.h"
 #import "MUKGridCellView_.h"
 #import "MUKGridCellFixedSize.h"
@@ -425,6 +427,80 @@
     [gridView layoutSubviews]; // Call last to complete animation layout
     STAssertTrue(handlerCalled, @"Animated");
     STAssertEquals(originatedScrollKind, MUKGridScrollKindAnimated, @"Programmatically animated");
+}
+
+- (void)testMinAndMaxZoomScale {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.numberOfCells = 1;
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:CGSizeMake(50, 50)];
+    gridView.cellCreationHandler = ^(NSInteger index) {
+        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        view.recycleIdentifier = @"Foo";
+        return view;
+    };
+    
+    float minZoomScale = 0.5, maxZoomScale = 3.0;
+    __block BOOL minZoomHandlerCalled = NO, maxZoomHandlerCalled = NO;
+    gridView.cellMinimumZoomHandler = ^(NSInteger index) {
+        minZoomHandlerCalled = YES;
+        return minZoomScale;
+    };
+    
+    gridView.cellMaximumZoomHandler = ^(NSInteger index) {
+        maxZoomHandlerCalled = YES;
+        return maxZoomScale;
+    };
+    
+    [gridView reloadData];
+    
+    STAssertTrue(minZoomHandlerCalled, nil);
+    STAssertTrue(maxZoomHandlerCalled, nil);
+    
+    MUKGridCellView_ *cellView = [[gridView visibleHostCellViews_] anyObject];
+    STAssertEqualsWithAccuracy(cellView.minimumZoomScale, minZoomScale, 0.00001, nil);
+    STAssertEqualsWithAccuracy(cellView.maximumZoomScale, maxZoomScale, 0.00001, nil);
+}
+
+- (void)testZoomHandlers {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.numberOfCells = 1;
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:CGSizeMake(50, 50)];
+    
+    gridView.cellCreationHandler = ^(NSInteger index) {
+        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        view.recycleIdentifier = @"Foo";
+        return view;
+    };
+    
+    gridView.cellMinimumZoomHandler = ^(NSInteger index) {
+        return 0.5f;
+    };
+    
+    gridView.cellMaximumZoomHandler = ^(NSInteger index) {
+        return 3.0f;
+    };
+    
+    __block BOOL done = NO;
+    __block NSDate *zoomBeginDate = nil;
+    gridView.zoomBeginningHandler = ^(NSInteger cellIndex, float scale) {
+        zoomBeginDate = [NSDate date];
+    };
+    
+    __block NSDate *zoomEndDate = nil;
+    gridView.zoomCompletionHandler = ^(NSInteger cellIndex, float scale) {
+        zoomEndDate = [NSDate date];
+        done = YES;
+    };
+    
+    [gridView reloadData];
+    MUKGridCellView_ *cellView = [[gridView visibleHostCellViews_] anyObject];
+    [cellView setZoomScale:2.0 animated:YES];
+    
+    [MUK waitForCompletion:&done timeout:1.0 runLoop:nil];
+    
+    STAssertNotNil(zoomBeginDate, nil);
+    STAssertNotNil(zoomEndDate, nil);
+    STAssertTrue([MUK date:zoomBeginDate isEarlierThanDate:zoomEndDate], nil);
 }
 
 @end

@@ -26,8 +26,12 @@
 #import <UIKit/UIKit.h>
 #import "MUKRecyclable.h"
 
-@interface MUKGridCellView_ : UIView <MUKRecyclable>
+@interface MUKGridCellView_ : UIScrollView <MUKRecyclable>
 @property (nonatomic) NSInteger cellIndex;
 @property (nonatomic, strong) UIView<MUKRecyclable> *guestView;
-@property (nonatomic, strong) UITapGestureRecognizer *singleTapGestureRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *singleTapGestureRecognizer, *doubleTapGestureRecognizer;
+@property (nonatomic, getter = isZoomed) BOOL zoomed;
+
+- (BOOL)isZoomingEnabled;
+
 @end

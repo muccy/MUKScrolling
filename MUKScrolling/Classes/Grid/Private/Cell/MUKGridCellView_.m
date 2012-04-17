@@ -28,15 +28,27 @@
 @implementation MUKGridCellView_
 @synthesize cellIndex;
 @synthesize guestView = guestView_;
-@synthesize singleTapGestureRecognizer = singleTapGestureRecognizer_;
+@synthesize singleTapGestureRecognizer = singleTapGestureRecognizer_, doubleTapGestureRecognizer = doubleTapGestureRecognizer_;
+@synthesize zoomed = zoomed_;
 
 - (UITapGestureRecognizer *)singleTapGestureRecognizer {
     if (singleTapGestureRecognizer_ == nil) {
         singleTapGestureRecognizer_ = [[UITapGestureRecognizer alloc] init];
+        [singleTapGestureRecognizer_ requireGestureRecognizerToFail:self.doubleTapGestureRecognizer];
         [self addGestureRecognizer:singleTapGestureRecognizer_];
     }
     
     return singleTapGestureRecognizer_;
+}
+
+- (UITapGestureRecognizer *)doubleTapGestureRecognizer {
+    if (doubleTapGestureRecognizer_ == nil) {
+        doubleTapGestureRecognizer_ = [[UITapGestureRecognizer alloc] init];
+        doubleTapGestureRecognizer_.numberOfTapsRequired = 2;
+        [self addGestureRecognizer:doubleTapGestureRecognizer_];
+    }
+    
+    return doubleTapGestureRecognizer_;
 }
 
 - (void)setRecycleIdentifier:(NSString *)recycleIdentifier {
@@ -51,10 +63,27 @@
     if (guestView != self.guestView) {
         [self.guestView removeFromSuperview];
         guestView_ = guestView;
+        
         self.guestView.frame = self.bounds;
+        self.contentSize = self.guestView.frame.size;
         self.guestView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        
         [self addSubview:self.guestView];
     }
+}
+
+- (void)setZoomScale:(float)scale animated:(BOOL)animated {
+    [super setZoomScale:scale animated:animated];
+    
+    if (animated == NO) {
+        self.zoomed = (ABS(scale - 1.0f) > 0.00001f);
+    }
+}
+
+#pragma mark - 
+
+- (BOOL)isZoomingEnabled {
+    return (ABS(self.minimumZoomScale - self.maximumZoomScale) > 0.00001f);
 }
 
 @end

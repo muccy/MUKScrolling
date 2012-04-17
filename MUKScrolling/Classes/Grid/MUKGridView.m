@@ -36,6 +36,7 @@
 - (void)commonIntialization_;
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate;
 - (void)handleCellTap_:(UITapGestureRecognizer *)recognizer;
+- (void)handleCellDoubleTap_:(UITapGestureRecognizer *)recognizer;
 @end
 
 @implementation MUKGridView {
@@ -45,9 +46,16 @@
 @synthesize direction = direction_;
 @synthesize cellSize = cellSize_;
 @synthesize numberOfCells = numberOfCells_;
+@synthesize doubleTapZoomScale = doubleTapZoomScale_;
 @synthesize cellCreationHandler = cellCreationHandler_;
 @synthesize scrollCompletionHandler = scrollCompletionHandler_;
 @synthesize cellTapHandler = cellTapHandler_;
+@synthesize cellDoubleTapHandler = cellDoubleTapHandler_;
+@synthesize cellMinimumZoomHandler = cellMinimumZoomHandler_;
+@synthesize cellMaximumZoomHandler = cellMaximumZoomHandler_;
+@synthesize zoomBeginningHandler = zoomBeginningHandler_;
+@synthesize zoomCompletionHandler = zoomCompletionHandler_;
+@synthesize zoomHandler = zoomHandler_;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -157,6 +165,18 @@
     return cellView;
 }
 
+- (void)enqueueView:(UIView<MUKRecyclable> *)view {
+    [super enqueueView:view];
+    
+    if ([view isKindOfClass:[MUKGridCellView_ class]]) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)view;
+        
+        // Remove zoom
+        cellView.zoomed = NO;
+        cellView.zoomScale = 1.0;
+    }
+}
+
 #pragma mark - Methods
 
 - (void)reloadData {
@@ -259,10 +279,53 @@
     }
 }
 
+- (void)didDoubleTapCellAtIndex:(NSInteger)index {
+    if (self.cellDoubleTapHandler) {
+        self.cellDoubleTapHandler(index);
+    }
+}
+
+#pragma mark - Zoom
+
+- (float)minimumZoomScaleForCellAtIndex:(NSInteger)index {
+    if (self.cellMinimumZoomHandler) {
+        return self.cellMinimumZoomHandler(index);
+    }
+    
+    return 1.0f;
+}
+
+- (float)maximumZoomScaleForCellAtIndex:(NSInteger)index {
+    if (self.cellMaximumZoomHandler) {
+        return self.cellMaximumZoomHandler(index);
+    }
+    
+    return 1.0f;
+}
+
+- (void)willBeginZoomingCellAtIndex:(NSInteger)index fromScale:(float)scale {
+    if (self.zoomBeginningHandler) {
+        self.zoomBeginningHandler(index, scale);
+    }
+}
+
+- (void)didEndZoomingCellAtIndex:(NSInteger)index atScale:(float)scale {
+    if (self.zoomCompletionHandler) {
+        self.zoomCompletionHandler(index, scale);
+    }
+}
+
+- (void)didZoomCellAtIndex:(NSInteger)index atScale:(float)scale {
+    if (self.zoomHandler) {
+        self.zoomHandler(index, scale);
+    }
+}
+
 #pragma mark - Private
 
 - (void)commonIntialization_ {
     [self setScrollViewDelegate_:self];
+    self.doubleTapZoomScale = 2.0f;
 }
 
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate 
@@ -274,6 +337,30 @@
     if (recognizer.state == UIGestureRecognizerStateEnded) {
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
         [self didTapCellAtIndex:cellView.cellIndex];
+    }
+}
+
+- (void)handleCellDoubleTap_:(UITapGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
+        
+        if (cellView.zoomed) {
+            // Zoom out
+            [cellView zoomToRect:cellView.bounds animated:YES];
+            cellView.zoomed = NO;
+        }
+        
+        else if (ABS(self.doubleTapZoomScale - 1.0f) > 0.0001f) {
+            // Zoom in
+            CGPoint point = [recognizer locationInView:cellView];
+            CGSize size = CGSizeMake(cellView.bounds.size.width/self.doubleTapZoomScale, cellView.bounds.size.height/self.doubleTapZoomScale);
+            CGRect rect = CGRectMake(point.x-size.width/2.0f, point.y-size.height/2.0f, size.width, size.height);
+            
+            [cellView zoomToRect:rect animated:YES];
+            cellView.zoomed = YES;
+        }
+        
+        [self didDoubleTapCellAtIndex:cellView.cellIndex];
     }
 }
 
@@ -336,13 +423,26 @@
         cellView.guestView = guestView;
         cellView.cellIndex = index;
         
+        cellView.delegate = self;
         [cellView.singleTapGestureRecognizer addTarget:self action:@selector(handleCellTap_:)];
+        [cellView.doubleTapGestureRecognizer addTarget:self action:@selector(handleCellDoubleTap_:)];
         
         [self addSubview:cellView];
     }
     else {
         // If found, adjust frame
         cellView.frame = cellFrame;
+    }
+    
+    // In every case set zoom properties
+    cellView.minimumZoomScale = [self minimumZoomScaleForCellAtIndex:index];
+    cellView.maximumZoomScale = [self maximumZoomScaleForCellAtIndex:index];
+
+    if ([cellView isZoomingEnabled]) {
+        cellView.clipsToBounds = NO;
+    }
+    else {
+        cellView.clipsToBounds = YES;
     }
     
     return cellView;
@@ -636,6 +736,48 @@
             scrollKindToSignal_ = MUKGridScrollKindUserScrollToTop;
             signalScrollCompletionInLayoutSubviews_ = YES;
         }
+    }
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
+        
+        if ([cellView isZoomingEnabled]) {
+            return cellView.guestView;
+        }
+    }
+    
+    return nil;
+}
+
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view
+{
+    if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
+        
+        if (cellView.zoomed == NO) {
+            // Start zooming
+            cellView.zoomed = YES;
+        }
+        
+        [self willBeginZoomingCellAtIndex:cellView.cellIndex fromScale:cellView.zoomScale];
+    }
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
+{
+    if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
+        cellView.zoomed = (ABS(scale - 1.0f) > 0.00001f);
+        [self didEndZoomingCellAtIndex:cellView.cellIndex atScale:scale];
+    }
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
+        [self didZoomCellAtIndex:cellView.cellIndex atScale:cellView.zoomScale];
     }
 }
 

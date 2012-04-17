@@ -115,6 +115,12 @@ typedef enum {
  @see didFinishScrollingOfKind:
  */
 @property (nonatomic, copy) void (^scrollCompletionHandler)(MUKGridScrollKind scrollKind);
+/**
+ Callback which signals when a cell is tapped.
+ 
+ @see didTapCellAtIndex:
+ */
+@property (nonatomic, copy) void (^cellTapHandler)(NSInteger cellIndex);
 
 
 /** @name Methods */
@@ -213,4 +219,15 @@ typedef enum {
  the finger again on the screen.
  */
 - (void)didFinishScrollingOfKind:(MUKGridScrollKind)scrollKind;
+@end
+
+
+@interface MUKGridView (Tap)
+/**
+ Callback which signals when a cell is tapped.
+ @param index Cell index in the grid.
+ 
+ Default implementation calls cellTapHandler.
+ */
+- (void)didTapCellAtIndex:(NSInteger)index;
 @end

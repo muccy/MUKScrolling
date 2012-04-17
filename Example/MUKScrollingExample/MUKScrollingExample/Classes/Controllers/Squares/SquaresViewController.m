@@ -85,6 +85,10 @@
         
         NSLog(@"Scrolled with kind %@", kind);
     };
+    
+    self.gridView.cellTapHandler = ^(NSInteger index) {
+        NSLog(@"Cell at index %i tapped", index);
+    };
 }
 
 - (void)verticalSwitchValueChanged:(id)sender {

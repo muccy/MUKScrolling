@@ -29,4 +29,5 @@
 @interface MUKGridCellView_ : UIView <MUKRecyclable>
 @property (nonatomic) NSInteger cellIndex;
 @property (nonatomic, strong) UIView<MUKRecyclable> *guestView;
+@property (nonatomic, strong) UITapGestureRecognizer *singleTapGestureRecognizer;
 @end

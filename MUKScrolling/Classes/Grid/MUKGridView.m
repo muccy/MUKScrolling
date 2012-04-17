@@ -35,6 +35,7 @@
 @interface MUKGridView ()
 - (void)commonIntialization_;
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate;
+- (void)handleCellTap_:(UITapGestureRecognizer *)recognizer;
 @end
 
 @implementation MUKGridView
@@ -43,6 +44,7 @@
 @synthesize numberOfCells = numberOfCells_;
 @synthesize cellCreationHandler = cellCreationHandler_;
 @synthesize scrollCompletionHandler = scrollCompletionHandler_;
+@synthesize cellTapHandler = cellTapHandler_;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -241,6 +243,14 @@
     }
 }
 
+#pragma mark - Tap
+
+- (void)didTapCellAtIndex:(NSInteger)index {
+    if (self.cellTapHandler) {
+        self.cellTapHandler(index);
+    }
+}
+
 #pragma mark - Private
 
 - (void)commonIntialization_ {
@@ -250,6 +260,13 @@
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate 
 {
     [super setDelegate:scrollViewDelegate];
+}
+
+- (void)handleCellTap_:(UITapGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
+        [self didTapCellAtIndex:cellView.cellIndex];
+    }
 }
 
 #pragma mark - Private: Layout
@@ -310,6 +327,8 @@
         cellView = [[MUKGridCellView_ alloc] initWithFrame:cellFrame];
         cellView.guestView = guestView;
         cellView.cellIndex = index;
+        
+        [cellView.singleTapGestureRecognizer addTarget:self action:@selector(handleCellTap_:)];
         
         [self addSubview:cellView];
     }

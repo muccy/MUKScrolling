@@ -28,6 +28,16 @@
 @implementation MUKGridCellView_
 @synthesize cellIndex;
 @synthesize guestView = guestView_;
+@synthesize singleTapGestureRecognizer = singleTapGestureRecognizer_;
+
+- (UITapGestureRecognizer *)singleTapGestureRecognizer {
+    if (singleTapGestureRecognizer_ == nil) {
+        singleTapGestureRecognizer_ = [[UITapGestureRecognizer alloc] init];
+        [self addGestureRecognizer:singleTapGestureRecognizer_];
+    }
+    
+    return singleTapGestureRecognizer_;
+}
 
 - (void)setRecycleIdentifier:(NSString *)recycleIdentifier {
     self.guestView.recycleIdentifier = recycleIdentifier;

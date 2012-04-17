@@ -62,33 +62,6 @@
         cellView.label.text = [NSString stringWithFormat:@"%i", index];
         return cellView;
     };
-    
-    self.gridView.scrollCompletionHandler = ^(MUKGridScrollKind scrollKind) {
-        NSString *kind;
-        switch (scrollKind) {
-            case MUKGridScrollKindAnimated:
-                kind = @"Animated";
-                break;
-            
-            case MUKGridScrollKindUserDrag:
-                kind = @"Drag";
-                break;
-                
-            case MUKGridScrollKindUserDeceleration:
-                kind = @"Deceleration";
-                break;
-                
-            default:
-                kind = @"Unknown";
-                break;
-        }
-        
-        NSLog(@"Scrolled with kind %@", kind);
-    };
-    
-    self.gridView.cellTapHandler = ^(NSInteger index) {
-        NSLog(@"Cell at index %i tapped", index);
-    };
 }
 
 - (void)verticalSwitchValueChanged:(id)sender {
@@ -112,7 +85,7 @@
     return NO;
 }
 
-#pragma mark - 
+#pragma mark - Private
 
 - (MUKGridDirection)chosenDirection_ {
     return (self.verticalSwitch.on ? MUKGridDirectionVertical : MUKGridDirectionHorizontal);

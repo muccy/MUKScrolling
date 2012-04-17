@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #import "SquaresViewController.h"
+#import "PagesViewController.h"
 
 @interface RootViewControllerRow_ : NSObject
 @property (nonatomic, strong) NSString *title, *subtitle;
@@ -48,6 +49,17 @@
         row.selectionHandler = ^{
             SquaresViewController *viewController = [[SquaresViewController alloc] initWithNibName:nil bundle:nil];
             viewController.title = @"Squares";
+            [weakSelf.navigationController pushViewController:viewController animated:YES];
+        };
+        [mutableArray addObject:row];
+        
+        
+        row = [[RootViewControllerRow_ alloc] init];
+        row.title = @"Pages";
+        row.subtitle = @"Grid view with horizontal paging";
+        row.selectionHandler = ^{
+            PagesViewController *viewController = [[PagesViewController alloc] initWithNibName:nil bundle:nil];
+            viewController.title = @"Pages";
             [weakSelf.navigationController pushViewController:viewController animated:YES];
         };
         [mutableArray addObject:row];

@@ -19,6 +19,8 @@
 		0668640415396CD1005D4BC1 /* GridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0668640315396CD1005D4BC1 /* GridViewController.m */; };
 		0668640715396DA6005D4BC1 /* SquaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0668640615396DA6005D4BC1 /* SquaresViewController.m */; };
 		0668640915397583005D4BC1 /* SquaresViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0668640815397583005D4BC1 /* SquaresViewController.xib */; };
+		068CA8C3153DCDD70090E065 /* PagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 068CA8C1153DCDD70090E065 /* PagesViewController.m */; };
+		068CA8C4153DCDD70090E065 /* PagesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 068CA8C2153DCDD70090E065 /* PagesViewController.xib */; };
 		0699888F153C5B6700CBE31E /* libMUKToolkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0699888E153C5B6700CBE31E /* libMUKToolkit.a */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +69,9 @@
 		0668640515396DA6005D4BC1 /* SquaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquaresViewController.h; sourceTree = "<group>"; };
 		0668640615396DA6005D4BC1 /* SquaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquaresViewController.m; sourceTree = "<group>"; };
 		0668640815397583005D4BC1 /* SquaresViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SquaresViewController.xib; sourceTree = "<group>"; };
+		068CA8C0153DCDD70090E065 /* PagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagesViewController.h; sourceTree = "<group>"; };
+		068CA8C1153DCDD70090E065 /* PagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PagesViewController.m; sourceTree = "<group>"; };
+		068CA8C2153DCDD70090E065 /* PagesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PagesViewController.xib; sourceTree = "<group>"; };
 		0699888E153C5B6700CBE31E /* libMUKToolkit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMUKToolkit.a; path = "../../Submodules/MUKToolkit/build/Release-iphoneos/libMUKToolkit.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -168,6 +173,7 @@
 			children = (
 				066863E9153969D9005D4BC1 /* Root */,
 				0668640015396CB9005D4BC1 /* Base Grid */,
+				068CA8BF153DCDC10090E065 /* Pages */,
 				0668640115396CB9005D4BC1 /* Squares */,
 			);
 			path = Controllers;
@@ -208,6 +214,16 @@
 				0668640815397583005D4BC1 /* SquaresViewController.xib */,
 			);
 			path = Squares;
+			sourceTree = "<group>";
+		};
+		068CA8BF153DCDC10090E065 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				068CA8C0153DCDD70090E065 /* PagesViewController.h */,
+				068CA8C1153DCDD70090E065 /* PagesViewController.m */,
+				068CA8C2153DCDD70090E065 /* PagesViewController.xib */,
+			);
+			path = Pages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,6 +302,7 @@
 			files = (
 				06339C4C1535F09200FB07ED /* InfoPlist.strings in Resources */,
 				0668640915397583005D4BC1 /* SquaresViewController.xib in Resources */,
+				068CA8C4153DCDD70090E065 /* PagesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +319,7 @@
 				066863F1153969FA005D4BC1 /* RootViewController.m in Sources */,
 				0668640415396CD1005D4BC1 /* GridViewController.m in Sources */,
 				0668640715396DA6005D4BC1 /* SquaresViewController.m in Sources */,
+				068CA8C3153DCDD70090E065 /* PagesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

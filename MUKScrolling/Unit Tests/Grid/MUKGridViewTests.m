@@ -385,4 +385,19 @@
     STAssertEqualsWithAccuracy(gridView.contentOffset.y, 0.0f, 0.000001, @"Last row");
 }
 
+- (void)testCellViewAtIndex {
+    MUKGridView *gridView = [[MUKGridView alloc] init];
+    STAssertNil([gridView cellViewAtIndex:1], @"No cells");
+    
+    MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] init];
+    cellView.cellIndex = 1;
+    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] init];
+    guestView.recycleIdentifier = @"Foo";
+    cellView.guestView = guestView;
+    
+    [gridView addSubview:cellView];
+    STAssertNil([gridView cellViewAtIndex:0], nil);
+    STAssertEqualObjects([gridView cellViewAtIndex:1], guestView, nil);
+}
+
 @end

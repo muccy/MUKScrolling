@@ -109,6 +109,12 @@ typedef enum {
  @return Indexes of cells which exist and are subviews of the grid.
  */
 - (NSIndexSet *)indexesOfVisibleCells;
+/**
+ View of a cell layed out at this time.
+ @param index Index of the cell in the grid.
+ @return The view of a the cell if visible or `nil`.
+ */
+- (UIView<MUKRecyclable> *)cellViewAtIndex:(NSInteger)index;
 @end
 
 

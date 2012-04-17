@@ -174,6 +174,11 @@
     return indexSet;
 }
 
+- (UIView<MUKRecyclable> *)cellViewAtIndex:(NSInteger)index {
+    MUKGridCellView_ *cellView = [[self class] cellViewWithIndex_:index inViews_:[self visibleHostCellViews_]];
+    return cellView.guestView;
+}
+
 #pragma mark - Layout
 
 - (NSIndexSet *)indexesOfCellsInVisibleBounds:(CGRect)visibleBounds {

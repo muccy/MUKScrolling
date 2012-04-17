@@ -38,7 +38,10 @@
 - (void)handleCellTap_:(UITapGestureRecognizer *)recognizer;
 @end
 
-@implementation MUKGridView
+@implementation MUKGridView {
+    BOOL signalScrollCompletionInLayoutSubviews_;
+    MUKGridScrollKind scrollKindToSignal_;
+}
 @synthesize direction = direction_;
 @synthesize cellSize = cellSize_;
 @synthesize numberOfCells = numberOfCells_;
@@ -87,6 +90,11 @@
     [self adjustContentSize_];
 
     [super layoutSubviews];
+    
+    if (signalScrollCompletionInLayoutSubviews_) {
+        [self didFinishScrollingOfKind:scrollKindToSignal_];
+        signalScrollCompletionInLayoutSubviews_ = NO;
+    }
     
 #if DEBUG_STATS
     NSLog(@"=======");
@@ -584,7 +592,18 @@
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     if (self == scrollView) {
-        [self didFinishScrollingOfKind:MUKGridScrollKindAnimated];
+        NSIndexSet *teoricIndexSet = [self indexesOfCellsInVisibleBounds:self.bounds];
+        NSIndexSet *realIndexSet = [self indexesOfVisibleCells];
+        
+        if ([teoricIndexSet isEqualToIndexSet:realIndexSet]) {
+            [self didFinishScrollingOfKind:MUKGridScrollKindAnimated];
+            signalScrollCompletionInLayoutSubviews_ = NO;
+        }
+        else {
+            // Postpone because last -layoutSubviews has to happen
+            scrollKindToSignal_ = MUKGridScrollKindAnimated;
+            signalScrollCompletionInLayoutSubviews_ = YES;
+        }
     }
 }
 
@@ -600,6 +619,23 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (self == scrollView) {
         [self didFinishScrollingOfKind:MUKGridScrollKindUserDeceleration];
+    }
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    if (self == scrollView) {
+        NSIndexSet *teoricIndexSet = [self indexesOfCellsInVisibleBounds:self.bounds];
+        NSIndexSet *realIndexSet = [self indexesOfVisibleCells];
+        
+        if ([teoricIndexSet isEqualToIndexSet:realIndexSet]) {
+            [self didFinishScrollingOfKind:MUKGridScrollKindUserScrollToTop];
+            signalScrollCompletionInLayoutSubviews_ = NO;
+        }
+        else {
+            // Postpone because last -layoutSubviews has to happen
+            scrollKindToSignal_ = MUKGridScrollKindUserScrollToTop;
+            signalScrollCompletionInLayoutSubviews_ = YES;
+        }
     }
 }
 

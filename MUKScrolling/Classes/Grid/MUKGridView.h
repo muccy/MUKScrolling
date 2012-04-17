@@ -42,7 +42,8 @@ typedef enum {
 typedef enum {
     MUKGridScrollKindAnimated = 0,
     MUKGridScrollKindUserDrag,
-    MUKGridScrollKindUserDeceleration
+    MUKGridScrollKindUserDeceleration,
+    MUKGridScrollKindUserScrollToTop
 } MUKGridScrollKind;
 
 /**
@@ -65,6 +66,7 @@ typedef enum {
  * `- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView`
  * `- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate`
  * `- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView`
+ * `- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView`
  */
 @interface MUKGridView : MUKRecyclingScrollView <UIScrollViewDelegate>
 /** @name Properties */

@@ -158,23 +158,31 @@ typedef enum {
  */
 @property (nonatomic, copy) float (^cellMaximumZoomHandler)(NSInteger cellIndex);
 /**
+ Handler which provides a view to zoom in a cell.
+ 
+ Set handler to `nil` in order to use cell view itself.
+ 
+ @see viewForZoomingCellView:atIndex:
+ */
+@property (nonatomic, copy) UIView* (^cellZoomViewHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
+/**
  Handler which is called as zoom is about to start.
  
- @see willBeginZoomingCellAtIndex:fromScale:
+ @see willBeginZoomingCellView:atIndex:zoomingView:fromScale:
  */
-@property (nonatomic, copy) void (^zoomBeginningHandler)(NSInteger cellIndex, float scale);
+@property (nonatomic, copy) void (^cellZoomBeginningHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale);
 /**
  Handler which is called as zoom has finished.
  
- @see didEndZoomingCellAtIndex:atScale:
+ @see didEndZoomingCellView:atIndex:zoomedView:atScale:
  */
-@property (nonatomic, copy) void (^zoomCompletionHandler)(NSInteger cellIndex, float scale);
+@property (nonatomic, copy) void (^cellZoomCompletionHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale);
 /**
  Handler which is called as zoom changes.
  
- @see didZoomCellAtIndex:atScale:
+ @see didZoomCellView:atIndex:zoomingView:atScale:
  */
-@property (nonatomic, copy) void (^zoomHandler)(NSInteger cellIndex, float scale);
+@property (nonatomic, copy) void (^cellZoomHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale);
 
 
 /** @name Methods */
@@ -196,6 +204,10 @@ typedef enum {
  @return The view of a the cell if visible or `nil`.
  */
 - (UIView<MUKRecyclable> *)cellViewAtIndex:(NSInteger)index;
+/**
+ Shortend to set all handlers to `nil`.
+ */
+- (void)removeAllHandlers;
 @end
 
 
@@ -314,27 +326,44 @@ typedef enum {
  */
 - (float)maximumZoomScaleForCellAtIndex:(NSInteger)index;
 /**
- Callback which signals when zoom of a cell is starting.
+ Provides view for zooming a cell.
+ 
+ Default implementation calls cellZoomViewHandler or returns cellView itself 
+ if handler is not set.
+ 
+ @param cellView Cell view involved in zooming.
  @param index Cell index in the grid.
+ @return View to zoom.
+ */
+- (UIView *)viewForZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index;
+/**
+ Callback which signals when zoom of a cell is starting.
+ @param cellView Cell view involved in zooming.
+ @param index Cell index in the grid.
+ @param zoomedView The view will be zoomed.
  @param scale Scale of cell before zooming.
  
  Default implementation calls zoomBeginningHandler.
  */
-- (void)willBeginZoomingCellAtIndex:(NSInteger)index fromScale:(float)scale;
+- (void)willBeginZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index zoomingView:(UIView *)zoomedView fromScale:(float)scale;
 /**
  Callback which signals when zoom of a cell ends.
+ @param cellView Cell view involved in zooming.
  @param index Cell index in the grid.
+ @param zoomedView The view has been zoomed.
  @param scale Scale of cell after zooming.
  
  Default implementation calls zoomCompletionHandler.
  */
-- (void)didEndZoomingCellAtIndex:(NSInteger)index atScale:(float)scale;
+- (void)didEndZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index zoomedView:(UIView *)zoomedView atScale:(float)scale;
 /**
  Callback which signals when zoom of a cell is happening.
+ @param cellView Cell view involved in zooming.
  @param index Cell index in the grid.
+ @param zoomedView The view is being zoomed.
  @param scale Scale of cell zooming.
  
  Default implementation calls zoomHandler.
  */
-- (void)didZoomCellAtIndex:(NSInteger)index atScale:(float)scale;
+- (void)didZoomCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index zoomingView:(UIView *)zoomedView atScale:(float)scale;
 @end

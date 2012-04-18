@@ -53,9 +53,10 @@
 @synthesize cellDoubleTapHandler = cellDoubleTapHandler_;
 @synthesize cellMinimumZoomHandler = cellMinimumZoomHandler_;
 @synthesize cellMaximumZoomHandler = cellMaximumZoomHandler_;
-@synthesize zoomBeginningHandler = zoomBeginningHandler_;
-@synthesize zoomCompletionHandler = zoomCompletionHandler_;
-@synthesize zoomHandler = zoomHandler_;
+@synthesize cellZoomBeginningHandler = zoomBeginningHandler_;
+@synthesize cellZoomCompletionHandler = zoomCompletionHandler_;
+@synthesize cellZoomHandler = zoomHandler_;
+@synthesize cellZoomViewHandler = cellZoomViewHandler_;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -174,6 +175,7 @@
         // Remove zoom
         cellView.zoomed = NO;
         cellView.zoomScale = 1.0;
+        cellView.zoomView = nil;
     }
 }
 
@@ -205,6 +207,18 @@
 - (UIView<MUKRecyclable> *)cellViewAtIndex:(NSInteger)index {
     MUKGridCellView_ *cellView = [[self class] cellViewWithIndex_:index inViews_:[self visibleHostCellViews_]];
     return cellView.guestView;
+}
+
+- (void)removeAllHandlers {
+    self.scrollCompletionHandler = nil;
+    self.cellTapHandler = nil;
+    self.cellDoubleTapHandler = nil;
+    self.cellMinimumZoomHandler = nil;
+    self.cellMaximumZoomHandler = nil;
+    self.cellZoomViewHandler = nil;
+    self.cellZoomBeginningHandler = nil;
+    self.cellZoomCompletionHandler = nil;
+    self.cellZoomHandler = nil;
 }
 
 #pragma mark - Layout
@@ -303,21 +317,33 @@
     return 1.0f;
 }
 
-- (void)willBeginZoomingCellAtIndex:(NSInteger)index fromScale:(float)scale {
-    if (self.zoomBeginningHandler) {
-        self.zoomBeginningHandler(index, scale);
+- (UIView *)viewForZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
+{
+    if (self.cellZoomViewHandler) {
+        return self.cellZoomViewHandler(cellView, index);
+    }
+    
+    return cellView;
+}
+
+- (void)willBeginZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index zoomingView:(UIView *)zoomedView fromScale:(float)scale
+{
+    if (self.cellZoomBeginningHandler) {
+        self.cellZoomBeginningHandler(cellView, zoomedView, index, scale);
     }
 }
 
-- (void)didEndZoomingCellAtIndex:(NSInteger)index atScale:(float)scale {
-    if (self.zoomCompletionHandler) {
-        self.zoomCompletionHandler(index, scale);
+- (void)didEndZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index zoomedView:(UIView *)zoomedView atScale:(float)scale
+{
+    if (self.cellZoomCompletionHandler) {
+        self.cellZoomCompletionHandler(cellView, zoomedView, index, scale);
     }
 }
 
-- (void)didZoomCellAtIndex:(NSInteger)index atScale:(float)scale {
-    if (self.zoomHandler) {
-        self.zoomHandler(index, scale);
+- (void)didZoomCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index zoomingView:(UIView *)zoomedView atScale:(float)scale
+{
+    if (self.cellZoomHandler) {
+        self.cellZoomHandler(cellView, zoomedView, index, scale);
     }
 }
 
@@ -744,7 +770,9 @@
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
         
         if ([cellView isZoomingEnabled]) {
-            return cellView.guestView;
+            UIView *zoomView = [self viewForZoomingCellView:cellView.guestView atIndex:cellView.cellIndex];
+            cellView.zoomView = zoomView;
+            return zoomView;
         }
     }
     
@@ -761,7 +789,7 @@
             cellView.zoomed = YES;
         }
         
-        [self willBeginZoomingCellAtIndex:cellView.cellIndex fromScale:cellView.zoomScale];
+        [self willBeginZoomingCellView:cellView.guestView atIndex:cellView.cellIndex zoomingView:view fromScale:cellView.zoomScale];
     }
 }
 
@@ -769,15 +797,19 @@
 {
     if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
+        
+        [self didEndZoomingCellView:cellView.guestView atIndex:cellView.cellIndex zoomedView:cellView.zoomView atScale:scale];
+        
         cellView.zoomed = (ABS(scale - 1.0f) > 0.00001f);
-        [self didEndZoomingCellAtIndex:cellView.cellIndex atScale:scale];
+        if (!cellView.zoomView) cellView.zoomView = nil;
     }
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
-        [self didZoomCellAtIndex:cellView.cellIndex atScale:cellView.zoomScale];
+        
+        [self didZoomCellView:cellView.guestView atIndex:cellView.cellIndex zoomingView:cellView.zoomView atScale:cellView.zoomScale];
     }
 }
 

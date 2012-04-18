@@ -28,6 +28,7 @@
 @implementation MUKGridCellView_
 @synthesize cellIndex;
 @synthesize guestView = guestView_;
+@synthesize zoomView = zoomView_;
 @synthesize singleTapGestureRecognizer = singleTapGestureRecognizer_, doubleTapGestureRecognizer = doubleTapGestureRecognizer_;
 @synthesize zoomed = zoomed_;
 
@@ -67,6 +68,7 @@
         self.guestView.frame = self.bounds;
         self.contentSize = self.guestView.frame.size;
         self.guestView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        self.zoomView = nil;
         
         [self addSubview:self.guestView];
     }

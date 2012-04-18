@@ -99,6 +99,15 @@
         [weakSelf updatePageIndexLabel_];
     };
     
+    self.gridView.cellMaximumZoomHandler = ^(NSInteger index) {
+        return 3.0f;
+    };
+    
+    [self.gridView setCellZoomHandler:^(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger index, float scale) 
+    {
+        NSLog(@"Zooming cell at index %i to scale %.3f", index, scale);
+    }];
+    
     [self.gridView reloadData];
     [self updatePageIndexLabel_];
 }

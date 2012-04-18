@@ -482,12 +482,12 @@
     
     __block BOOL done = NO;
     __block NSDate *zoomBeginDate = nil;
-    gridView.zoomBeginningHandler = ^(NSInteger cellIndex, float scale) {
+    gridView.cellZoomBeginningHandler = ^(NSInteger cellIndex, float scale) {
         zoomBeginDate = [NSDate date];
     };
     
     __block NSDate *zoomEndDate = nil;
-    gridView.zoomCompletionHandler = ^(NSInteger cellIndex, float scale) {
+    gridView.cellZoomCompletionHandler = ^(NSInteger cellIndex, float scale) {
         zoomEndDate = [NSDate date];
         done = YES;
     };

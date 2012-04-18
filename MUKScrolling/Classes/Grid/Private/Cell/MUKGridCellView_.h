@@ -29,6 +29,7 @@
 @interface MUKGridCellView_ : UIScrollView <MUKRecyclable>
 @property (nonatomic) NSInteger cellIndex;
 @property (nonatomic, strong) UIView<MUKRecyclable> *guestView;
+@property (nonatomic, unsafe_unretained) UIView *zoomView;
 @property (nonatomic, strong) UITapGestureRecognizer *singleTapGestureRecognizer, *doubleTapGestureRecognizer;
 @property (nonatomic, getter = isZoomed) BOOL zoomed;
 

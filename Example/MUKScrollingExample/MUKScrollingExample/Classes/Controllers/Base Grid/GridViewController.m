@@ -16,9 +16,7 @@
 @synthesize gridView = gridView_;
 
 - (void)dealloc {
-    self.gridView.cellCreationHandler = nil;
-    self.gridView.scrollCompletionHandler = nil;
-    self.gridView.cellTapHandler = nil;
+    [self.gridView removeAllHandlers];
 }
 
 - (void)viewDidLoad

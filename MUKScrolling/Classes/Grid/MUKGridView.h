@@ -187,17 +187,17 @@ typedef enum {
  */
 @property (nonatomic, copy) void (^cellZoomHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale);
 /**
- Handler which is called just before cell view is layed out.
+ Handler which is called just before cell subviews are layed out.
  
- @see willLayoutCellView:atIndex:
+ @see willLayoutSubviewsOfCellView:atIndex:
  */
-@property (nonatomic, copy) void (^cellWillLayoutHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
+@property (nonatomic, copy) void (^cellWillLayoutSubviewsHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
 /**
- Handler which is called just after cell view is layed out.
+ Handler which is called just after cell subviews are layed out.
  
- @see didLayoutCellView:atIndex:
+ @see didLayoutSubviewsOfCellView:atIndex:
  */
-@property (nonatomic, copy) void (^cellDidLayoutHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
+@property (nonatomic, copy) void (^cellDidLayoutSubviewsHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
 /**
  Handler which is called to provide a proper frame to zoomed view at every zoom
  step.
@@ -273,23 +273,23 @@ typedef enum {
  */
 - (MUKGridCellOptions *)optionsOfCellAtIndex:(NSInteger)index;
 /**
- Callback called just before cell view is layed out.
+ Callback invoked at top of `layoutSubviews` implementation of cell.
  
- Default implementation calls cellWillLayoutHandler.
+ Default implementation calls cellWillLayoutSubviewsHandler.
  
  @param cellView Cell view will be layed out.
  @param index Cell index in the grid.
  */
-- (void)willLayoutCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index;
+- (void)willLayoutSubviewsOfCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index;
 /**
- Callback called just after cell view is layed out.
+ Callback invoked at bottom of `layoutSubviews` implementation of cell.
  
- Default implementation calls cellDidLayoutHandler.
+ Default implementation calls cellDidLayoutSubviewsHandler.
  
- @param cellView Cell view will be layed out.
+ @param cellView Cell view layed out.
  @param index Cell index in the grid.
  */
-- (void)didLayoutCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index;
+- (void)didLayoutSubviewsOfCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index;
 @end
 
 

@@ -31,14 +31,23 @@
 @synthesize zoomView = zoomView_;
 @synthesize singleTapGestureRecognizer = singleTapGestureRecognizer_, doubleTapGestureRecognizer = doubleTapGestureRecognizer_;
 @synthesize zoomed = zoomed_;
+@synthesize willLayoutSubviewsHandler = willLayoutSubviewsHandler_;
+@synthesize didLayoutSubviewsHandler = didLayoutSubviewsHandler_;
 
 #pragma mark - Accessors
 
 - (void)layoutSubviews {
-    [super layoutSubviews];
+    if (self.willLayoutSubviewsHandler) {
+        self.willLayoutSubviewsHandler();
+    }
     
+    [super layoutSubviews];
     if (!self.zoomed) {
         self.contentSize = self.zoomView.frame.size;
+    }
+    
+    if (self.didLayoutSubviewsHandler) {
+        self.didLayoutSubviewsHandler();
     }
 }
 

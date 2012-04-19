@@ -10,7 +10,6 @@
 
 @interface ImageCellView : UIView <MUKRecyclable>
 @property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic) BOOL zoomed;
 
 /*
  Cells are stretched to fit their rect.

@@ -71,11 +71,14 @@
         weakSelf.currentImageIndex = [[weakGridView indexesOfVisibleCells] firstIndex];
     };
     
-    self.gridView.cellWillLayoutHandler = ^(UIView<MUKRecyclable> *cellView, NSInteger index)
+    self.gridView.cellDidLayoutSubviewsHandler = ^(UIView<MUKRecyclable> *cellView, NSInteger index)
     {
         ImageCellView *view = (ImageCellView *)cellView;
-        if (!view.zoomed) {
-            [view setNeedsImageCentering];
+        float scale = [weakGridView zoomScaleOfCellAtIndex:index];
+        
+        if (ABS(scale - 1.0f) < 0.00001f) {
+            // Not zoomed
+            [view centerImage];
         }
     };
     

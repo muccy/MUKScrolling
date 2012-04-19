@@ -62,8 +62,8 @@
 @synthesize cellZoomCompletionHandler = zoomCompletionHandler_;
 @synthesize cellZoomHandler = zoomHandler_;
 @synthesize cellZoomViewHandler = cellZoomViewHandler_;
-@synthesize cellWillLayoutHandler = cellWillLayoutHandler_;
-@synthesize cellDidLayoutHandler = cellDidLayoutHandler_;
+@synthesize cellWillLayoutSubviewsHandler = cellWillLayoutSubviewsHandler_;
+@synthesize cellDidLayoutSubviewsHandler = cellDidLayoutSubviewsHandler_;
 @synthesize cellZoomedViewFrameHandler = cellZoomedViewFrameHandler_;
 
 - (id)initWithFrame:(CGRect)frame
@@ -266,8 +266,8 @@
     self.cellZoomBeginningHandler = nil;
     self.cellZoomCompletionHandler = nil;
     self.cellZoomHandler = nil;
-    self.cellWillLayoutHandler = nil;
-    self.cellDidLayoutHandler = nil;
+    self.cellWillLayoutSubviewsHandler = nil;
+    self.cellDidLayoutSubviewsHandler = nil;
     self.cellZoomedViewFrameHandler = nil;
 }
 
@@ -319,17 +319,17 @@
     return (options ?: [[MUKGridCellOptions alloc] init]);
 }
 
-- (void)willLayoutCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
+- (void)willLayoutSubviewsOfCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
 {
-    if (self.cellWillLayoutHandler) {
-        self.cellWillLayoutHandler(cellView, index);
+    if (self.cellWillLayoutSubviewsHandler) {
+        self.cellWillLayoutSubviewsHandler(cellView, index);
     }
 }
 
-- (void)didLayoutCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
+- (void)didLayoutSubviewsOfCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
 {
-    if (self.cellDidLayoutHandler) {
-        self.cellDidLayoutHandler(cellView, index);
+    if (self.cellDidLayoutSubviewsHandler) {
+        self.cellDidLayoutSubviewsHandler(cellView, index);
     }
 }
 
@@ -575,24 +575,30 @@
         cellView.guestView = guestView;
         cellView.cellIndex = index;
         
+        __unsafe_unretained MUKGridView *weakSelf = self;
+        __unsafe_unretained MUKGridCellView_ *weakCellView = cellView;
+        cellView.willLayoutSubviewsHandler = ^{
+            [weakSelf willLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
+        };
+        
+        cellView.didLayoutSubviewsHandler = ^{
+            [weakSelf didLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
+        };
+        
         cellView.delegate = self;
         [cellView.singleTapGestureRecognizer addTarget:self action:@selector(handleCellTap_:)];
         [cellView.doubleTapGestureRecognizer addTarget:self action:@selector(handleCellDoubleTap_:)];
         
-        [self willLayoutCellView:cellView.guestView atIndex:index];
         [self addSubview:cellView];
     }
     else {
         // If found, adjust frame
-        [self willLayoutCellView:cellView.guestView atIndex:index];
         cellView.frame = cellFrame;
     }
     
     // In every case set zoom properties
     [cellView applyOptions:[self optionsOfCellAtIndex:index]];
-    
-    [self didLayoutCellView:cellView.guestView atIndex:index];
-    
+        
     return cellView;
 }
 

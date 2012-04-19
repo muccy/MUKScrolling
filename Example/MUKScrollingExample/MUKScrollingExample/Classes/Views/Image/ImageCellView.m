@@ -14,7 +14,6 @@
 }
 @synthesize recycleIdentifier;
 @synthesize imageView;
-@synthesize zoomed;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -30,10 +29,8 @@
     [super layoutSubviews];
     
     if (centerImage_) {
-        if (!self.zoomed) {
-            centerImage_ = NO;
-            [self centerImage];
-        }
+        centerImage_ = NO;
+        [self centerImage];
     }
 }
 

@@ -34,6 +34,9 @@
 @property (nonatomic, strong) UITapGestureRecognizer *singleTapGestureRecognizer, *doubleTapGestureRecognizer;
 @property (nonatomic, getter = isZoomed) BOOL zoomed;
 
+@property (nonatomic, copy) void (^willLayoutSubviewsHandler)(void);
+@property (nonatomic, copy) void (^didLayoutSubviewsHandler)(void);
+
 - (BOOL)isZoomingEnabled;
 - (void)applyOptions:(MUKGridCellOptions *)options;
 

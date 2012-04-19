@@ -35,7 +35,6 @@
     self.gridView.pagingEnabled = YES;
     self.gridView.showsVerticalScrollIndicator = NO;
     self.gridView.showsHorizontalScrollIndicator = NO;
-    self.gridView.keepsViewCenteredWhileZooming = YES;
     
     __unsafe_unretained MUKGridView *weakGridView = self.gridView;
     __unsafe_unretained ImagesViewController *weakSelf = self;
@@ -79,36 +78,21 @@
             [view setNeedsImageCentering];
         }
     };
-
-    self.gridView.cellZoomHandler = ^(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale)
+    
+    self.gridView.cellZoomedViewFrameHandler = ^(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale, CGSize boundsSize)
     {
-        ImageCellView *view = (ImageCellView *)cellView;
-        view.zoomed = (ABS(scale - 1.0f) > 0.00001f);
-        
-        if (view.zoomed) {
-            // TODO: create a public utility method in MUKGridView.h for this
-            CGSize boundsSize = cellView.frame.size;
-            CGRect contentsFrame = zoomedView.frame;
-            
-            if (contentsFrame.size.width < boundsSize.width) {
-                contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0f;
-            } 
-            else {
-                contentsFrame.origin.x = 0.0f;
-            }
-            
-            if (contentsFrame.size.height < boundsSize.height) {
-                contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0f;
-            } 
-            else {
-                contentsFrame.origin.y = 0.0f;
-            }
-            
-            zoomedView.frame = contentsFrame;
+        CGRect rect;
+        if (ABS(scale - 1.0f) > 0.00001f) {
+            // Zoomed
+            rect = CGRectZero; // Let grid decide automatically
         }
         else {
-            [view centerImage];
+            // Not zoomed
+            ImageCellView *view = (ImageCellView *)cellView;
+            rect = [view centeredImageFrame];
         }
+        
+        return rect;
     };
     
     [self.gridView reloadData];

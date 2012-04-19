@@ -100,13 +100,13 @@ typedef enum {
  */
 @property (nonatomic) float doubleTapZoomScale;
 /**
- Keep view centered in its cell during zooming.
+ It changes zoomed view at every zoom step.
  
- Default is `NO`.
+ Default is `YES`.
  
- @warning It is works only if the zoom viem is the cell view itself.
+ @see frameOfZoomedView:inCellView:atIndex:scale:boundsSize:
  */
-@property (nonatomic) BOOL keepsViewCenteredWhileZooming;
+@property (nonatomic) BOOL changesZoomedViewFrameWhileZooming;
 /**
  Keep `contentOffset` proportional to `contentSize` everytime frame changes.
  
@@ -157,7 +157,7 @@ typedef enum {
 /**
  Handler to set options for a cell.
 
- @see minimumZoomScaleForCellAtIndex:
+ @see optionsOfCellAtIndex:
  */
 @property (nonatomic, copy) MUKGridCellOptions* (^cellOptionsHandler)(NSInteger cellIndex);
 /**
@@ -198,6 +198,13 @@ typedef enum {
  @see didLayoutCellView:atIndex:
  */
 @property (nonatomic, copy) void (^cellDidLayoutHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
+/**
+ Handler which is called to provide a proper frame to zoomed view at every zoom
+ step.
+ 
+ @see frameOfZoomedView:inCellView:atIndex:scale:boundsSize:
+ */
+@property (nonatomic, copy) CGRect (^cellZoomedViewFrameHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale, CGSize boundsSize);
 
 
 /** @name Methods */
@@ -258,8 +265,8 @@ typedef enum {
  You can activate zoom for a cell providing different minimum and maximum
  zoom scales.
  
- Default implementation calls cellOptionsHandler or, if handler is not set,
- returns a standard set of options.
+ Default implementation calls cellOptionsHandler or, if handler is not set or
+ returns `nil`, it returns a standard set of options.
  
  @param index Index of cell into the grid.
  @return Options of the cell.
@@ -354,10 +361,27 @@ typedef enum {
 
 @interface MUKGridView (Zoom)
 /**
+ Provides a valid frame at every zoom step.
+ 
+ Default implementation calls cellZoomedViewFrame or returns a centered frame
+ if handler is not set or if handler returns `CGRectZero`.
+ 
+ Please mind this method is called only if changesZoomedViewFrameWhileZooming is
+ set to `YES`.
+ 
+ @param zoomedView The view will be zoomed.
+ @param cellView Cell view involved in zooming.
+ @param index Cell index in the grid.
+ @param scale Scale of cell before zooming.
+ @param boundsSize Size of cell bounds.
+ @return A frame proper for zoomedView at given scale, with given boundsSize.
+ */
+- (CGRect)frameOfZoomedView:(UIView *)zoomedView inCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index scale:(float)scale boundsSize:(CGSize)boundsSize;
+/**
  Provides view for zooming a cell.
  
  Default implementation calls cellZoomViewHandler or returns cellView itself 
- if handler is not set.
+ if handler is not set or handler returns `nil`.
  
  @param cellView Cell view involved in zooming.
  @param index Cell index in the grid.

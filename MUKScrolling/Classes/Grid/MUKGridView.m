@@ -50,7 +50,7 @@
 @synthesize cellSize = cellSize_;
 @synthesize numberOfCells = numberOfCells_;
 @synthesize doubleTapZoomScale = doubleTapZoomScale_;
-@synthesize keepsViewCenteredWhileZooming = keepsViewCenteredWhileZooming_;
+@synthesize changesZoomedViewFrameWhileZooming = changesZoomedViewFrameWhileZooming_;
 @synthesize autoresizesContentOffset = autoresizesContentOffset_;
 
 @synthesize cellCreationHandler = cellCreationHandler_;
@@ -64,6 +64,7 @@
 @synthesize cellZoomViewHandler = cellZoomViewHandler_;
 @synthesize cellWillLayoutHandler = cellWillLayoutHandler_;
 @synthesize cellDidLayoutHandler = cellDidLayoutHandler_;
+@synthesize cellZoomedViewFrameHandler = cellZoomedViewFrameHandler_;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -267,6 +268,7 @@
     self.cellZoomHandler = nil;
     self.cellWillLayoutHandler = nil;
     self.cellDidLayoutHandler = nil;
+    self.cellZoomedViewFrameHandler = nil;
 }
 
 #pragma mark - Layout
@@ -309,11 +311,12 @@
 }
 
 - (MUKGridCellOptions *)optionsOfCellAtIndex:(NSInteger)index {
+    MUKGridCellOptions *options = nil;
     if (self.cellOptionsHandler) {
-        return self.cellOptionsHandler(index);
+        options = self.cellOptionsHandler(index);
     }
     
-    return [[MUKGridCellOptions alloc] init];
+    return (options ?: [[MUKGridCellOptions alloc] init]);
 }
 
 - (void)willLayoutCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
@@ -371,13 +374,46 @@
 
 #pragma mark - Zoom
 
-- (UIView *)viewForZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
+- (CGRect)frameOfZoomedView:(UIView *)zoomedView inCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index scale:(float)scale boundsSize:(CGSize)boundsSize
 {
-    if (self.cellZoomViewHandler) {
-        return self.cellZoomViewHandler(cellView, index);
+    CGRect rect = CGRectZero;
+    if (self.cellZoomedViewFrameHandler) {
+        rect = self.cellZoomedViewFrameHandler(cellView, zoomedView, index, scale, boundsSize);
     }
     
-    return cellView;
+    if (CGRectEqualToRect(rect, CGRectZero)) {
+        /*
+         Keep centered if contents are smaller than bounds.
+         Otherwise fill.
+         */
+        rect = zoomedView.frame;
+        
+        if (rect.size.width < boundsSize.width) {
+            rect.origin.x = (boundsSize.width - rect.size.width) / 2.0f;
+        } 
+        else {
+            rect.origin.x = 0.0f;
+        }
+        
+        if (rect.size.height < boundsSize.height) {
+            rect.origin.y = (boundsSize.height - rect.size.height) / 2.0f;
+        } 
+        else {
+            rect.origin.y = 0.0f;
+        }
+    }
+    
+    return rect;
+}
+
+- (UIView *)viewForZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
+{
+    UIView *view = nil;
+    if (self.cellZoomViewHandler) {
+        view = self.cellZoomViewHandler(cellView, index);
+    }
+    
+    return (view ?: cellView);
 }
 
 - (void)willBeginZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index zoomingView:(UIView *)zoomedView fromScale:(float)scale
@@ -436,6 +472,7 @@
     [self setScrollViewDelegate_:self];
     self.doubleTapZoomScale = 2.0f;
     self.autoresizesContentOffset = YES;
+    self.changesZoomedViewFrameWhileZooming = YES;
     firstLayout_ = YES;
 }
 
@@ -896,26 +933,8 @@
     if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
         
-        if (self.keepsViewCenteredWhileZooming && 
-            cellView.zoomView == cellView.guestView)
-        {
-            CGSize boundsSize = cellView.bounds.size;
-            CGRect contentsFrame = cellView.zoomView.frame;
-            
-            if (contentsFrame.size.width < boundsSize.width) {
-                contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0f;
-            } 
-            else {
-                contentsFrame.origin.x = 0.0f;
-            }
-            
-            if (contentsFrame.size.height < boundsSize.height) {
-                contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0f;
-            } 
-            else {
-                contentsFrame.origin.y = 0.0f;
-            }
-            
+        if (self.changesZoomedViewFrameWhileZooming) {
+            CGRect contentsFrame = [self frameOfZoomedView:cellView.zoomView inCellView:cellView.guestView atIndex:cellView.cellIndex scale:cellView.zoomScale boundsSize:cellView.bounds.size];
             cellView.zoomView.frame = contentsFrame;
         }
         

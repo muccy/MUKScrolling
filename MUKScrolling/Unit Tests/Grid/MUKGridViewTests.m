@@ -440,21 +440,20 @@
     };
     
     float minZoomScale = 0.5, maxZoomScale = 3.0;
-    __block BOOL minZoomHandlerCalled = NO, maxZoomHandlerCalled = NO;
-    gridView.cellMinimumZoomHandler = ^(NSInteger index) {
-        minZoomHandlerCalled = YES;
-        return minZoomScale;
-    };
-    
-    gridView.cellMaximumZoomHandler = ^(NSInteger index) {
-        maxZoomHandlerCalled = YES;
-        return maxZoomScale;
+    __block BOOL optionsHandlerCalled = NO;
+    gridView.cellOptionsHandler = ^(NSInteger index) {
+        optionsHandlerCalled = YES;
+        
+        MUKGridCellOptions *options = [[MUKGridCellOptions alloc] init];
+        options.minimumZoomScale = minZoomScale;
+        options.maximumZoomScale = maxZoomScale;
+        
+        return options;
     };
     
     [gridView reloadData];
     
-    STAssertTrue(minZoomHandlerCalled, nil);
-    STAssertTrue(maxZoomHandlerCalled, nil);
+    STAssertTrue(optionsHandlerCalled, nil);
     
     MUKGridCellView_ *cellView = [[gridView visibleHostCellViews_] anyObject];
     STAssertEqualsWithAccuracy(cellView.minimumZoomScale, minZoomScale, 0.00001, nil);
@@ -472,22 +471,23 @@
         return view;
     };
     
-    gridView.cellMinimumZoomHandler = ^(NSInteger index) {
-        return 0.5f;
-    };
-    
-    gridView.cellMaximumZoomHandler = ^(NSInteger index) {
-        return 3.0f;
+    gridView.cellOptionsHandler = ^(NSInteger index) {
+        MUKGridCellOptions *options = [[MUKGridCellOptions alloc] init];
+        options.minimumZoomScale = 0.5f;
+        options.maximumZoomScale = 3.0f;
+        return options;
     };
     
     __block BOOL done = NO;
     __block NSDate *zoomBeginDate = nil;
-    gridView.cellZoomBeginningHandler = ^(NSInteger cellIndex, float scale) {
+    gridView.cellZoomBeginningHandler = ^(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale) 
+    {
         zoomBeginDate = [NSDate date];
     };
     
     __block NSDate *zoomEndDate = nil;
-    gridView.cellZoomCompletionHandler = ^(NSInteger cellIndex, float scale) {
+    gridView.cellZoomCompletionHandler = ^(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale) 
+    {
         zoomEndDate = [NSDate date];
         done = YES;
     };

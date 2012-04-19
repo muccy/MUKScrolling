@@ -40,6 +40,9 @@
 @end
 
 @implementation MUKGridView {
+    BOOL firstLayout_;
+    CGSize contentOffsetRatio_;
+    CGSize lastBoundsSize_;
     BOOL signalScrollCompletionInLayoutSubviews_;
     MUKGridScrollKind scrollKindToSignal_;
 }
@@ -47,16 +50,20 @@
 @synthesize cellSize = cellSize_;
 @synthesize numberOfCells = numberOfCells_;
 @synthesize doubleTapZoomScale = doubleTapZoomScale_;
+@synthesize keepsViewCenteredWhileZooming = keepsViewCenteredWhileZooming_;
+@synthesize autoresizesContentOffset = autoresizesContentOffset_;
+
 @synthesize cellCreationHandler = cellCreationHandler_;
 @synthesize scrollCompletionHandler = scrollCompletionHandler_;
 @synthesize cellTapHandler = cellTapHandler_;
 @synthesize cellDoubleTapHandler = cellDoubleTapHandler_;
-@synthesize cellMinimumZoomHandler = cellMinimumZoomHandler_;
-@synthesize cellMaximumZoomHandler = cellMaximumZoomHandler_;
+@synthesize cellOptionsHandler = cellOptionsHandler_;
 @synthesize cellZoomBeginningHandler = zoomBeginningHandler_;
 @synthesize cellZoomCompletionHandler = zoomCompletionHandler_;
 @synthesize cellZoomHandler = zoomHandler_;
 @synthesize cellZoomViewHandler = cellZoomViewHandler_;
+@synthesize cellWillLayoutHandler = cellWillLayoutHandler_;
+@synthesize cellDidLayoutHandler = cellDidLayoutHandler_;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -95,15 +102,41 @@
 }
 
 - (void)layoutSubviews {
-    // Recalculate content size everytime (useful during autorotations)
-    [self adjustContentSize_];
-
+    if (!CGSizeEqualToSize(lastBoundsSize_, self.bounds.size)) {
+        // Recalculate content size everytime bounds changes (useful during autorotations)
+        [self adjustContentSize_];
+        
+        // Calculate new content offset (if needed)
+        if (self.autoresizesContentOffset && !firstLayout_) {
+            CGPoint newContentOffset;
+            if (!isnan(contentOffsetRatio_.width) && !isnan(contentOffsetRatio_.height))
+            {
+                newContentOffset.x = contentOffsetRatio_.width * self.contentSize.width;
+                newContentOffset.y = contentOffsetRatio_.height * self.contentSize.height;
+                
+                self.contentOffset = newContentOffset;
+            }
+        }
+        
+        lastBoundsSize_ = self.bounds.size;
+    }
+    
+    // contentOffsetRatio_ is only used to autoresize content offset
+    if (self.autoresizesContentOffset) {
+        contentOffsetRatio_.width = self.contentOffset.x/self.contentSize.width;
+        contentOffsetRatio_.height = self.contentOffset.y/self.contentSize.height;
+    }
+    
+    // Do enqueue and dequeue dance
     [super layoutSubviews];
     
+    // Signal pending scroll completions
     if (signalScrollCompletionInLayoutSubviews_) {
         [self didFinishScrollingOfKind:scrollKindToSignal_];
         signalScrollCompletionInLayoutSubviews_ = NO;
     }
+    
+    firstLayout_ = NO;
     
 #if DEBUG_STATS
     NSLog(@"=======");
@@ -122,9 +155,6 @@
     /*
      Enqueue visible views not in bounds.
      This may occur after autorotation.
-     
-     This job could be done into -shouldEnqueueView:forVisibleBounds: but
-     I don't want to recalculate cellIndexes again.
      */
     NSMutableSet *filteredVisibleViews = [[NSMutableSet alloc] initWithCapacity:[visibleViews count]];
     [visibleViews enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
@@ -164,6 +194,23 @@
     }
     
     return cellView;
+}
+
+- (BOOL)shouldEnqueueView:(UIView<MUKRecyclable> *)view forVisibleBounds:(CGRect)bounds
+{
+    if ([view isKindOfClass:[MUKGridCellView_ class]]) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)view;
+        
+        // Take involved indexes
+        NSIndexSet *cellIndexes = [self indexesOfCellsInVisibleBounds:bounds];
+        
+        // Is visible, do not enqueue
+        if ([cellIndexes containsIndex:cellView.cellIndex]) {
+            return NO;
+        }
+    }
+    
+    return [super shouldEnqueueView:view forVisibleBounds:bounds];
 }
 
 - (void)enqueueView:(UIView<MUKRecyclable> *)view {
@@ -213,12 +260,13 @@
     self.scrollCompletionHandler = nil;
     self.cellTapHandler = nil;
     self.cellDoubleTapHandler = nil;
-    self.cellMinimumZoomHandler = nil;
-    self.cellMaximumZoomHandler = nil;
+    self.cellOptionsHandler = nil;
     self.cellZoomViewHandler = nil;
     self.cellZoomBeginningHandler = nil;
     self.cellZoomCompletionHandler = nil;
     self.cellZoomHandler = nil;
+    self.cellWillLayoutHandler = nil;
+    self.cellDidLayoutHandler = nil;
 }
 
 #pragma mark - Layout
@@ -258,6 +306,28 @@
     NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:self.frame.size cellSize_:cellSize direction_:self.direction];
     
     return [[self class] frameOfCellAtIndex_:index cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow direction_:self.direction];
+}
+
+- (MUKGridCellOptions *)optionsOfCellAtIndex:(NSInteger)index {
+    if (self.cellOptionsHandler) {
+        return self.cellOptionsHandler(index);
+    }
+    
+    return [[MUKGridCellOptions alloc] init];
+}
+
+- (void)willLayoutCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
+{
+    if (self.cellWillLayoutHandler) {
+        self.cellWillLayoutHandler(cellView, index);
+    }
+}
+
+- (void)didLayoutCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
+{
+    if (self.cellDidLayoutHandler) {
+        self.cellDidLayoutHandler(cellView, index);
+    }
 }
 
 #pragma mark - Scroll
@@ -301,22 +371,6 @@
 
 #pragma mark - Zoom
 
-- (float)minimumZoomScaleForCellAtIndex:(NSInteger)index {
-    if (self.cellMinimumZoomHandler) {
-        return self.cellMinimumZoomHandler(index);
-    }
-    
-    return 1.0f;
-}
-
-- (float)maximumZoomScaleForCellAtIndex:(NSInteger)index {
-    if (self.cellMaximumZoomHandler) {
-        return self.cellMaximumZoomHandler(index);
-    }
-    
-    return 1.0f;
-}
-
 - (UIView *)viewForZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
 {
     if (self.cellZoomViewHandler) {
@@ -347,11 +401,42 @@
     }
 }
 
+- (void)zoomCellAtIndex:(NSInteger)index toRect:(CGRect)zoomRect animated:(BOOL)animated
+{
+    MUKGridCellView_ *cellView = [[self class] cellViewWithIndex_:index inViews_:[self visibleHostCellViews_]];
+    [cellView zoomToRect:zoomRect animated:animated];
+
+    if (!animated) {
+        CGRect cellBounds = cellView.frame;
+        cellBounds.origin = CGPointZero;
+        cellView.zoomed = !CGRectEqualToRect(cellBounds, zoomRect);
+    }
+}
+
+- (void)zoomCellAtIndex:(NSInteger)index toScale:(float)scale animated:(BOOL)animated
+{
+    MUKGridCellView_ *cellView = [[self class] cellViewWithIndex_:index inViews_:[self visibleHostCellViews_]];
+    [cellView setZoomScale:scale animated:animated];
+    
+    if (!animated) {
+        cellView.zoomed = (ABS(scale - 1.0f) > 0.000001f);
+    }
+}
+
+- (float)zoomScaleOfCellAtIndex:(NSInteger)index {
+    MUKGridCellView_ *cellView = [[self class] cellViewWithIndex_:index inViews_:[self visibleHostCellViews_]];
+    
+    if (!cellView) return -1.0f;
+    return cellView.zoomScale;
+}
+
 #pragma mark - Private
 
 - (void)commonIntialization_ {
     [self setScrollViewDelegate_:self];
     self.doubleTapZoomScale = 2.0f;
+    self.autoresizesContentOffset = YES;
+    firstLayout_ = YES;
 }
 
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate 
@@ -370,21 +455,24 @@
     if (recognizer.state == UIGestureRecognizerStateEnded) {
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
         
+        CGRect zoomRect;
+        
         if (cellView.zoomed) {
             // Zoom out
-            [cellView zoomToRect:cellView.bounds animated:YES];
-            cellView.zoomed = NO;
+            zoomRect = cellView.frame;
+            zoomRect.origin = CGPointZero;
         }
-        
         else if (ABS(self.doubleTapZoomScale - 1.0f) > 0.0001f) {
             // Zoom in
-            CGPoint point = [recognizer locationInView:cellView];
-            CGSize size = CGSizeMake(cellView.bounds.size.width/self.doubleTapZoomScale, cellView.bounds.size.height/self.doubleTapZoomScale);
-            CGRect rect = CGRectMake(point.x-size.width/2.0f, point.y-size.height/2.0f, size.width, size.height);
+            zoomRect.size.height = cellView.frame.size.height / self.doubleTapZoomScale;
+            zoomRect.size.width  = cellView.frame.size.width  / self.doubleTapZoomScale;
             
-            [cellView zoomToRect:rect animated:YES];
-            cellView.zoomed = YES;
+            CGPoint center = [recognizer locationInView:cellView.zoomView];
+            zoomRect.origin.x = center.x - (zoomRect.size.width  / 2.0);
+            zoomRect.origin.y = center.y - (zoomRect.size.height / 2.0);
         }
+        
+        [cellView zoomToRect:zoomRect animated:YES];
         
         [self didDoubleTapCellAtIndex:cellView.cellIndex];
     }
@@ -446,6 +534,7 @@
     if (cellView == nil) {
         UIView<MUKRecyclable> *guestView = [self createCellViewAtIndex:index];
         cellView = [[MUKGridCellView_ alloc] initWithFrame:cellFrame];
+        
         cellView.guestView = guestView;
         cellView.cellIndex = index;
         
@@ -453,23 +542,19 @@
         [cellView.singleTapGestureRecognizer addTarget:self action:@selector(handleCellTap_:)];
         [cellView.doubleTapGestureRecognizer addTarget:self action:@selector(handleCellDoubleTap_:)];
         
+        [self willLayoutCellView:cellView.guestView atIndex:index];
         [self addSubview:cellView];
     }
     else {
         // If found, adjust frame
+        [self willLayoutCellView:cellView.guestView atIndex:index];
         cellView.frame = cellFrame;
     }
     
     // In every case set zoom properties
-    cellView.minimumZoomScale = [self minimumZoomScaleForCellAtIndex:index];
-    cellView.maximumZoomScale = [self maximumZoomScaleForCellAtIndex:index];
-
-    if ([cellView isZoomingEnabled]) {
-        cellView.clipsToBounds = NO;
-    }
-    else {
-        cellView.clipsToBounds = YES;
-    }
+    [cellView applyOptions:[self optionsOfCellAtIndex:index]];
+    
+    [self didLayoutCellView:cellView.guestView atIndex:index];
     
     return cellView;
 }
@@ -782,14 +867,14 @@
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view
 {
     if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
-        MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;        
+        [self willBeginZoomingCellView:cellView.guestView atIndex:cellView.cellIndex zoomingView:view fromScale:cellView.zoomScale];
         
         if (cellView.zoomed == NO) {
             // Start zooming
             cellView.zoomed = YES;
+            cellView.contentSize = cellView.zoomView.frame.size;
         }
-        
-        [self willBeginZoomingCellView:cellView.guestView atIndex:cellView.cellIndex zoomingView:view fromScale:cellView.zoomScale];
     }
 }
 
@@ -797,17 +882,42 @@
 {
     if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
-        
         [self didEndZoomingCellView:cellView.guestView atIndex:cellView.cellIndex zoomedView:cellView.zoomView atScale:scale];
         
         cellView.zoomed = (ABS(scale - 1.0f) > 0.00001f);
-        if (!cellView.zoomView) cellView.zoomView = nil;
+        if (cellView.zoomed == NO) {
+            cellView.contentSize = cellView.zoomView.frame.size;
+            cellView.zoomView = nil;
+        }
     }
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     if ([scrollView isKindOfClass:[MUKGridCellView_ class]]) {
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
+        
+        if (self.keepsViewCenteredWhileZooming && 
+            cellView.zoomView == cellView.guestView)
+        {
+            CGSize boundsSize = cellView.bounds.size;
+            CGRect contentsFrame = cellView.zoomView.frame;
+            
+            if (contentsFrame.size.width < boundsSize.width) {
+                contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0f;
+            } 
+            else {
+                contentsFrame.origin.x = 0.0f;
+            }
+            
+            if (contentsFrame.size.height < boundsSize.height) {
+                contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0f;
+            } 
+            else {
+                contentsFrame.origin.y = 0.0f;
+            }
+            
+            cellView.zoomView.frame = contentsFrame;
+        }
         
         [self didZoomCellView:cellView.guestView atIndex:cellView.cellIndex zoomingView:cellView.zoomView atScale:cellView.zoomScale];
     }

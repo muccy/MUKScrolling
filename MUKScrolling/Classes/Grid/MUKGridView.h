@@ -26,6 +26,7 @@
 #import <MUKScrolling/MUKRecyclingScrollView.h>
 #import <MUKScrolling/MUKGridCoordinate.h>
 #import <MUKScrolling/MUKGridCellSize.h>
+#import <MUKScrolling/MUKGridCellOptions.h>
 
 typedef enum {
     MUKGridDirectionHorizontal = 0,
@@ -98,6 +99,20 @@ typedef enum {
  `2.0` is default.
  */
 @property (nonatomic) float doubleTapZoomScale;
+/**
+ Keep view centered in its cell during zooming.
+ 
+ Default is `NO`.
+ 
+ @warning It is works only if the zoom viem is the cell view itself.
+ */
+@property (nonatomic) BOOL keepsViewCenteredWhileZooming;
+/**
+ Keep `contentOffset` proportional to `contentSize` everytime frame changes.
+ 
+ Default is `YES`.
+ */
+@property (nonatomic) BOOL autoresizesContentOffset;
 
 /** @ Handlers */
 /**
@@ -140,23 +155,11 @@ typedef enum {
  */
 @property (nonatomic, copy) void (^cellDoubleTapHandler)(NSInteger cellIndex);
 /**
- Handler to set minimum zoom scale for a cell.
- 
- Do not set an handler or return same value of cellMaximumZoomHandler in order
- to disable zooming.
- 
+ Handler to set options for a cell.
+
  @see minimumZoomScaleForCellAtIndex:
  */
-@property (nonatomic, copy) float (^cellMinimumZoomHandler)(NSInteger cellIndex);
-/**
- Handler to set maximum zoom scale for a cell.
- 
- Do not set an handler or return same value of cellMinimumZoomHandler in order
- to disable zooming.
- 
- @see maximumZoomScaleForCellAtIndex:
- */
-@property (nonatomic, copy) float (^cellMaximumZoomHandler)(NSInteger cellIndex);
+@property (nonatomic, copy) MUKGridCellOptions* (^cellOptionsHandler)(NSInteger cellIndex);
 /**
  Handler which provides a view to zoom in a cell.
  
@@ -183,6 +186,18 @@ typedef enum {
  @see didZoomCellView:atIndex:zoomingView:atScale:
  */
 @property (nonatomic, copy) void (^cellZoomHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale);
+/**
+ Handler which is called just before cell view is layed out.
+ 
+ @see willLayoutCellView:atIndex:
+ */
+@property (nonatomic, copy) void (^cellWillLayoutHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
+/**
+ Handler which is called just after cell view is layed out.
+ 
+ @see didLayoutCellView:atIndex:
+ */
+@property (nonatomic, copy) void (^cellDidLayoutHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
 
 
 /** @name Methods */
@@ -237,6 +252,37 @@ typedef enum {
  @return Frame of the cell.
  */
 - (CGRect)frameOfCellAtIndex:(NSInteger)index;
+/**
+ Options to apply to a cell into the grid.
+ 
+ You can activate zoom for a cell providing different minimum and maximum
+ zoom scales.
+ 
+ Default implementation calls cellOptionsHandler or, if handler is not set,
+ returns a standard set of options.
+ 
+ @param index Index of cell into the grid.
+ @return Options of the cell.
+ */
+- (MUKGridCellOptions *)optionsOfCellAtIndex:(NSInteger)index;
+/**
+ Callback called just before cell view is layed out.
+ 
+ Default implementation calls cellWillLayoutHandler.
+ 
+ @param cellView Cell view will be layed out.
+ @param index Cell index in the grid.
+ */
+- (void)willLayoutCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index;
+/**
+ Callback called just after cell view is layed out.
+ 
+ Default implementation calls cellDidLayoutHandler.
+ 
+ @param cellView Cell view will be layed out.
+ @param index Cell index in the grid.
+ */
+- (void)didLayoutCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index;
 @end
 
 
@@ -308,24 +354,6 @@ typedef enum {
 
 @interface MUKGridView (Zoom)
 /**
- Minimum zoom scale for a cell.
- @param index Cell index in the grid.
- @return Minimum zoom scale for the cell.
- 
- Default implemetation calls cellMinimumZoomHandler or returns `1.0` if 
- handler is set to `nil`.
- */
-- (float)minimumZoomScaleForCellAtIndex:(NSInteger)index;
-/**
- Maximum zoom scale for a cell.
- @param index Cell index in the grid.
- @return Maximum zoom scale for the cell.
- 
- Default implemetation calls cellMaximumZoomHandler or returns `1.0` if 
- handler is set to `nil`.
- */
-- (float)maximumZoomScaleForCellAtIndex:(NSInteger)index;
-/**
  Provides view for zooming a cell.
  
  Default implementation calls cellZoomViewHandler or returns cellView itself 
@@ -366,4 +394,25 @@ typedef enum {
  Default implementation calls zoomHandler.
  */
 - (void)didZoomCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index zoomingView:(UIView *)zoomedView atScale:(float)scale;
+/**
+ Zoom a visible cell to a rect.
+ @param index Cell index in the grid.
+ @param zoomRect Rect used to zoom cell.
+ @param animated `YES` the transition has to be animated.
+ */
+- (void)zoomCellAtIndex:(NSInteger)index toRect:(CGRect)zoomRect animated:(BOOL)animated;
+/**
+ Zoom a visible cell to a scale.
+ @param index Cell index in the grid.
+ @param scale New zoom scale.
+ @param animated `YES` the transition has to be animated.
+ */
+- (void)zoomCellAtIndex:(NSInteger)index toScale:(float)scale animated:(BOOL)animated;
+/**
+ Zoom scale of visible cell.
+ @param index Cell index in the grid.
+ @return Zoom scale of cell if it visible, or a negative value if it is not
+ visible.
+ */
+- (float)zoomScaleOfCellAtIndex:(NSInteger)index;
 @end

@@ -23,18 +23,25 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
-#import "MUKRecyclable.h"
 #import "MUKGridCellOptions.h"
 
-@interface MUKGridCellView_ : UIScrollView <MUKRecyclable>
-@property (nonatomic) NSInteger cellIndex;
-@property (nonatomic, strong) UIView<MUKRecyclable> *guestView;
-@property (nonatomic, strong) UIView *zoomView;
-@property (nonatomic, strong) UITapGestureRecognizer *singleTapGestureRecognizer, *doubleTapGestureRecognizer;
-@property (nonatomic, getter = isZoomed) BOOL zoomed;
+@implementation MUKGridCellOptions
+@synthesize minimumZoomScale = minimumZoomScale_, maximumZoomScale = maximumZoomScale_; 
+@synthesize indicatorStyle = indicatorStyle_;
+@synthesize scrollIndicatorInsets = scrollIndicatorInsets_;
+@synthesize showsHorizontalScrollIndicator = showsHorizontalScrollIndicator_, showsVerticalScrollIndicator = showsVerticalScrollIndicator_;
 
-- (BOOL)isZoomingEnabled;
-- (void)applyOptions:(MUKGridCellOptions *)options;
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.minimumZoomScale = 1.0f;
+        self.maximumZoomScale = 1.0f;
+        self.indicatorStyle = UIScrollViewIndicatorStyleDefault;
+        self.scrollIndicatorInsets = UIEdgeInsetsZero;
+        self.showsVerticalScrollIndicator = YES;
+        self.showsHorizontalScrollIndicator = YES;
+    }
+    return self;
+}
 
 @end

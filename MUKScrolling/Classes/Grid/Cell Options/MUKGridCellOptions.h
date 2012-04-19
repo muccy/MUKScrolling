@@ -23,18 +23,48 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
-#import "MUKRecyclable.h"
-#import "MUKGridCellOptions.h"
+#import <Foundation/Foundation.h>
 
-@interface MUKGridCellView_ : UIScrollView <MUKRecyclable>
-@property (nonatomic) NSInteger cellIndex;
-@property (nonatomic, strong) UIView<MUKRecyclable> *guestView;
-@property (nonatomic, strong) UIView *zoomView;
-@property (nonatomic, strong) UITapGestureRecognizer *singleTapGestureRecognizer, *doubleTapGestureRecognizer;
-@property (nonatomic, getter = isZoomed) BOOL zoomed;
-
-- (BOOL)isZoomingEnabled;
-- (void)applyOptions:(MUKGridCellOptions *)options;
-
+/**
+ A wrapper to options you can assign to a grid cell.
+ */
+@interface MUKGridCellOptions : NSObject
+/**
+ Minimum zoom scale for the cell.
+ 
+ Default is `1.0`.
+ */
+@property (nonatomic) float minimumZoomScale;
+/**
+ Maximum zoom scale for the cell.
+ 
+ Default is `1.0`.
+ */
+@property (nonatomic) float maximumZoomScale;
+/**
+ The style of the scroll indicators.
+ 
+ The default style is `UIScrollViewIndicatorStyleDefault`.
+ */
+@property (nonatomic) UIScrollViewIndicatorStyle indicatorStyle;
+/**
+ The distance the scroll indicators are inset from the edge of the cell.
+ 
+ The default value is `UIEdgeInsetsZero`.
+ */
+@property(nonatomic) UIEdgeInsets scrollIndicatorInsets;
+/**
+ A Boolean value that controls whether the horizontal scroll indicator is 
+ visible.
+ 
+ The default value is `YES`.
+ */
+ @property(nonatomic) BOOL showsHorizontalScrollIndicator;
+/**
+ A Boolean value that controls whether the vertical scroll indicator is 
+ visible.
+ 
+ The default value is `YES`.
+ */
+@property(nonatomic) BOOL showsVerticalScrollIndicator;
 @end

@@ -14,7 +14,6 @@
 		06339C4E1535F09200FB07ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C4D1535F09200FB07ED /* main.m */; };
 		066863CF15388A17005D4BC1 /* libMUKScrolling.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C681535F0BF00FB07ED /* libMUKScrolling.a */; };
 		066863ED153969D9005D4BC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863E7153969D9005D4BC1 /* AppDelegate.m */; };
-		066863EE153969D9005D4BC1 /* LabelCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863EC153969D9005D4BC1 /* LabelCellView.m */; };
 		066863F1153969FA005D4BC1 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863F0153969FA005D4BC1 /* RootViewController.m */; };
 		0668640415396CD1005D4BC1 /* GridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0668640315396CD1005D4BC1 /* GridViewController.m */; };
 		0668640715396DA6005D4BC1 /* SquaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0668640615396DA6005D4BC1 /* SquaresViewController.m */; };
@@ -22,6 +21,14 @@
 		068CA8C3153DCDD70090E065 /* PagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 068CA8C1153DCDD70090E065 /* PagesViewController.m */; };
 		068CA8C4153DCDD70090E065 /* PagesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 068CA8C2153DCDD70090E065 /* PagesViewController.xib */; };
 		0699888F153C5B6700CBE31E /* libMUKToolkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0699888E153C5B6700CBE31E /* libMUKToolkit.a */; };
+		06BCEFF6153EC23E0065D11C /* ImagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BCEFF5153EC23E0065D11C /* ImagesViewController.m */; };
+		06BCEFFD153EC49E0065D11C /* autumn.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 06BCEFF8153EC49E0065D11C /* autumn.jpg */; };
+		06BCEFFE153EC49E0065D11C /* building.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 06BCEFF9153EC49E0065D11C /* building.jpg */; };
+		06BCEFFF153EC49E0065D11C /* cat.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 06BCEFFA153EC49E0065D11C /* cat.jpg */; };
+		06BCF000153EC49E0065D11C /* colors.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 06BCEFFB153EC49E0065D11C /* colors.jpg */; };
+		06BCF001153EC49E0065D11C /* garden.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 06BCEFFC153EC49E0065D11C /* garden.jpg */; };
+		06BCF006153EC5640065D11C /* LabelCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BCF005153EC5640065D11C /* LabelCellView.m */; };
+		06BCF009153EC57A0065D11C /* ImageCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BCF008153EC57A0065D11C /* ImageCellView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,8 +67,6 @@
 		06339C5E1535F0BE00FB07ED /* MUKScrolling.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MUKScrolling.xcodeproj; path = ../../MUKScrolling.xcodeproj; sourceTree = "<group>"; };
 		066863E6153969D9005D4BC1 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		066863E7153969D9005D4BC1 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		066863EB153969D9005D4BC1 /* LabelCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelCellView.h; sourceTree = "<group>"; };
-		066863EC153969D9005D4BC1 /* LabelCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelCellView.m; sourceTree = "<group>"; };
 		066863EF153969FA005D4BC1 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		066863F0153969FA005D4BC1 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		0668640215396CD1005D4BC1 /* GridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridViewController.h; sourceTree = "<group>"; };
@@ -73,6 +78,17 @@
 		068CA8C1153DCDD70090E065 /* PagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PagesViewController.m; sourceTree = "<group>"; };
 		068CA8C2153DCDD70090E065 /* PagesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PagesViewController.xib; sourceTree = "<group>"; };
 		0699888E153C5B6700CBE31E /* libMUKToolkit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMUKToolkit.a; path = "../../Submodules/MUKToolkit/build/Release-iphoneos/libMUKToolkit.a"; sourceTree = "<group>"; };
+		06BCEFF4153EC23E0065D11C /* ImagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagesViewController.h; sourceTree = "<group>"; };
+		06BCEFF5153EC23E0065D11C /* ImagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagesViewController.m; sourceTree = "<group>"; };
+		06BCEFF8153EC49E0065D11C /* autumn.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = autumn.jpg; sourceTree = "<group>"; };
+		06BCEFF9153EC49E0065D11C /* building.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = building.jpg; sourceTree = "<group>"; };
+		06BCEFFA153EC49E0065D11C /* cat.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat.jpg; sourceTree = "<group>"; };
+		06BCEFFB153EC49E0065D11C /* colors.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colors.jpg; sourceTree = "<group>"; };
+		06BCEFFC153EC49E0065D11C /* garden.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = garden.jpg; sourceTree = "<group>"; };
+		06BCF004153EC5640065D11C /* LabelCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelCellView.h; sourceTree = "<group>"; };
+		06BCF005153EC5640065D11C /* LabelCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelCellView.m; sourceTree = "<group>"; };
+		06BCF007153EC57A0065D11C /* ImageCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCellView.h; sourceTree = "<group>"; };
+		06BCF008153EC57A0065D11C /* ImageCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCellView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +189,7 @@
 			children = (
 				066863E9153969D9005D4BC1 /* Root */,
 				0668640015396CB9005D4BC1 /* Base Grid */,
+				06BCEFF3153EC2160065D11C /* Images */,
 				068CA8BF153DCDC10090E065 /* Pages */,
 				0668640115396CB9005D4BC1 /* Squares */,
 			);
@@ -191,8 +208,8 @@
 		066863EA153969D9005D4BC1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				066863EB153969D9005D4BC1 /* LabelCellView.h */,
-				066863EC153969D9005D4BC1 /* LabelCellView.m */,
+				06BCF002153EC5640065D11C /* Image */,
+				06BCF003153EC5640065D11C /* Label */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -224,6 +241,46 @@
 				068CA8C2153DCDD70090E065 /* PagesViewController.xib */,
 			);
 			path = Pages;
+			sourceTree = "<group>";
+		};
+		06BCEFF3153EC2160065D11C /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				06BCEFF7153EC49E0065D11C /* Images */,
+				06BCEFF4153EC23E0065D11C /* ImagesViewController.h */,
+				06BCEFF5153EC23E0065D11C /* ImagesViewController.m */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		06BCEFF7153EC49E0065D11C /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				06BCEFF8153EC49E0065D11C /* autumn.jpg */,
+				06BCEFF9153EC49E0065D11C /* building.jpg */,
+				06BCEFFA153EC49E0065D11C /* cat.jpg */,
+				06BCEFFB153EC49E0065D11C /* colors.jpg */,
+				06BCEFFC153EC49E0065D11C /* garden.jpg */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		06BCF002153EC5640065D11C /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				06BCF007153EC57A0065D11C /* ImageCellView.h */,
+				06BCF008153EC57A0065D11C /* ImageCellView.m */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
+		06BCF003153EC5640065D11C /* Label */ = {
+			isa = PBXGroup;
+			children = (
+				06BCF004153EC5640065D11C /* LabelCellView.h */,
+				06BCF005153EC5640065D11C /* LabelCellView.m */,
+			);
+			path = Label;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +360,11 @@
 				06339C4C1535F09200FB07ED /* InfoPlist.strings in Resources */,
 				0668640915397583005D4BC1 /* SquaresViewController.xib in Resources */,
 				068CA8C4153DCDD70090E065 /* PagesViewController.xib in Resources */,
+				06BCEFFD153EC49E0065D11C /* autumn.jpg in Resources */,
+				06BCEFFE153EC49E0065D11C /* building.jpg in Resources */,
+				06BCEFFF153EC49E0065D11C /* cat.jpg in Resources */,
+				06BCF000153EC49E0065D11C /* colors.jpg in Resources */,
+				06BCF001153EC49E0065D11C /* garden.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,11 +377,13 @@
 			files = (
 				06339C4E1535F09200FB07ED /* main.m in Sources */,
 				066863ED153969D9005D4BC1 /* AppDelegate.m in Sources */,
-				066863EE153969D9005D4BC1 /* LabelCellView.m in Sources */,
 				066863F1153969FA005D4BC1 /* RootViewController.m in Sources */,
 				0668640415396CD1005D4BC1 /* GridViewController.m in Sources */,
 				0668640715396DA6005D4BC1 /* SquaresViewController.m in Sources */,
 				068CA8C3153DCDD70090E065 /* PagesViewController.m in Sources */,
+				06BCEFF6153EC23E0065D11C /* ImagesViewController.m in Sources */,
+				06BCF006153EC5640065D11C /* LabelCellView.m in Sources */,
+				06BCF009153EC57A0065D11C /* ImageCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

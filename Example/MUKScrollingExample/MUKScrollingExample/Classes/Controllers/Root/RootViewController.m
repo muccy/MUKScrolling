@@ -7,8 +7,10 @@
 //
 
 #import "RootViewController.h"
+
 #import "SquaresViewController.h"
 #import "PagesViewController.h"
+#import "ImagesViewController.h"
 
 @interface RootViewControllerRow_ : NSObject
 @property (nonatomic, strong) NSString *title, *subtitle;
@@ -60,6 +62,17 @@
         row.selectionHandler = ^{
             PagesViewController *viewController = [[PagesViewController alloc] initWithNibName:nil bundle:nil];
             viewController.title = @"Pages";
+            [weakSelf.navigationController pushViewController:viewController animated:YES];
+        };
+        [mutableArray addObject:row];
+        
+        
+        row = [[RootViewControllerRow_ alloc] init];
+        row.title = @"Images";
+        row.subtitle = @"Grid view with images carousel";
+        row.selectionHandler = ^{
+            ImagesViewController *viewController = [[ImagesViewController alloc] initWithNibName:nil bundle:nil];
+            viewController.title = @"Images";
             [weakSelf.navigationController pushViewController:viewController animated:YES];
         };
         [mutableArray addObject:row];

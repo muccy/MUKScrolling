@@ -4,3 +4,4 @@
 #import <MUKScrolling/MUKGridCoordinate.h>
 #import <MUKScrolling/MUKGridCellSize.h>
 #import <MUKScrolling/MUKGridCellFixedSize.h>
+#import <MUKScrolling/MUKGridCellOptions.h>

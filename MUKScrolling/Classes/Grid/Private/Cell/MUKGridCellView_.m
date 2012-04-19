@@ -32,6 +32,16 @@
 @synthesize singleTapGestureRecognizer = singleTapGestureRecognizer_, doubleTapGestureRecognizer = doubleTapGestureRecognizer_;
 @synthesize zoomed = zoomed_;
 
+#pragma mark - Accessors
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    if (!self.zoomed) {
+        self.contentSize = self.zoomView.frame.size;
+    }
+}
+
 - (UITapGestureRecognizer *)singleTapGestureRecognizer {
     if (singleTapGestureRecognizer_ == nil) {
         singleTapGestureRecognizer_ = [[UITapGestureRecognizer alloc] init];
@@ -66,11 +76,16 @@
         guestView_ = guestView;
         
         self.guestView.frame = self.bounds;
-        self.contentSize = self.guestView.frame.size;
         self.guestView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         self.zoomView = nil;
         
         [self addSubview:self.guestView];
+    }
+}
+
+- (void)setZoomView:(UIView *)zoomView {
+    if (zoomView != zoomView_) {
+        zoomView_ = zoomView;
     }
 }
 
@@ -86,6 +101,22 @@
 
 - (BOOL)isZoomingEnabled {
     return (ABS(self.minimumZoomScale - self.maximumZoomScale) > 0.00001f);
+}
+
+- (void)applyOptions:(MUKGridCellOptions *)options {
+    self.minimumZoomScale = options.minimumZoomScale;
+    self.maximumZoomScale = options.maximumZoomScale;
+    if ([self isZoomingEnabled]) {
+        self.clipsToBounds = NO;
+    }
+    else {
+        self.clipsToBounds = YES;
+    }
+    
+    self.scrollIndicatorInsets = options.scrollIndicatorInsets;
+    self.indicatorStyle = options.indicatorStyle;
+    self.showsHorizontalScrollIndicator = options.showsHorizontalScrollIndicator;
+    self.showsVerticalScrollIndicator = options.showsVerticalScrollIndicator;
 }
 
 @end

@@ -42,9 +42,6 @@
     }
     
     [super layoutSubviews];
-    if (!self.zoomed) {
-        self.contentSize = self.zoomView.frame.size;
-    }
     
     if (self.didLayoutSubviewsHandler) {
         self.didLayoutSubviewsHandler();
@@ -114,14 +111,7 @@
 
 - (void)applyOptions:(MUKGridCellOptions *)options {
     self.minimumZoomScale = options.minimumZoomScale;
-    self.maximumZoomScale = options.maximumZoomScale;
-    if ([self isZoomingEnabled]) {
-        self.clipsToBounds = NO;
-    }
-    else {
-        self.clipsToBounds = YES;
-    }
-    
+    self.maximumZoomScale = options.maximumZoomScale;    
     self.scrollIndicatorInsets = options.scrollIndicatorInsets;
     self.indicatorStyle = options.indicatorStyle;
     self.showsHorizontalScrollIndicator = options.showsHorizontalScrollIndicator;

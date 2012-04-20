@@ -65,6 +65,7 @@
 @synthesize cellWillLayoutSubviewsHandler = cellWillLayoutSubviewsHandler_;
 @synthesize cellDidLayoutSubviewsHandler = cellDidLayoutSubviewsHandler_;
 @synthesize cellZoomedViewFrameHandler = cellZoomedViewFrameHandler_;
+@synthesize cellZoomedViewContentSizeHandler = cellZoomedViewContentSizeHandler_;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -277,6 +278,7 @@
     self.cellWillLayoutSubviewsHandler = nil;
     self.cellDidLayoutSubviewsHandler = nil;
     self.cellZoomedViewFrameHandler = nil;
+    self.cellZoomedViewContentSizeHandler = nil;
 }
 
 #pragma mark - Layout
@@ -390,28 +392,47 @@
     }
     
     if (CGRectEqualToRect(rect, CGRectZero)) {
-        /*
-         Keep centered if contents are smaller than bounds.
-         Otherwise fill.
-         */
-        rect = zoomedView.frame;
-        
-        if (rect.size.width < boundsSize.width) {
-            rect.origin.x = (boundsSize.width - rect.size.width) / 2.0f;
-        } 
-        else {
-            rect.origin.x = 0.0f;
-        }
-        
-        if (rect.size.height < boundsSize.height) {
-            rect.origin.y = (boundsSize.height - rect.size.height) / 2.0f;
-        } 
-        else {
-            rect.origin.y = 0.0f;
-        }
+        rect = [[self class] centeredZoomedViewFrame:zoomedView.frame boundsSize:boundsSize];
     }
     
     return rect;
+}
+
++ (CGRect)centeredZoomedViewFrame:(CGRect)zoomedViewFrame boundsSize:(CGSize)boundsSize
+{    
+    /*
+     Keep centered if contents are smaller than bounds.
+     Otherwise fill.
+     */
+    if (zoomedViewFrame.size.width < boundsSize.width) {
+        zoomedViewFrame.origin.x = (boundsSize.width - zoomedViewFrame.size.width) / 2.0f;
+    } 
+    else {
+        zoomedViewFrame.origin.x = 0.0f;
+    }
+    
+    if (zoomedViewFrame.size.height < boundsSize.height) {
+        zoomedViewFrame.origin.y = (boundsSize.height - zoomedViewFrame.size.height) / 2.0f;
+    } 
+    else {
+        zoomedViewFrame.origin.y = 0.0f;
+    }
+    
+    return zoomedViewFrame;
+}
+
+- (CGSize)contentSizeOfZoomedView:(UIView *)zoomedView inCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index scale:(float)scale boundsSize:(CGSize)boundsSize
+{
+    CGSize size = CGSizeZero;
+    if (self.cellZoomedViewContentSizeHandler) {
+        size = self.cellZoomedViewContentSizeHandler(cellView, zoomedView, index, scale, boundsSize);
+    }
+    
+    if (CGSizeEqualToSize(size, CGSizeZero)) {
+        size = zoomedView.frame.size;
+    }
+    
+    return size;
 }
 
 - (UIView *)viewForZoomingCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
@@ -579,6 +600,7 @@
     if (cellView == nil) {
         UIView<MUKRecyclable> *guestView = [self createCellViewAtIndex:index];
         cellView = [[MUKGridCellView_ alloc] initWithFrame:cellFrame];
+        cellView.clipsToBounds = YES;
         
         cellView.guestView = guestView;
         cellView.cellIndex = index;
@@ -924,7 +946,6 @@
         if (cellView.zoomed == NO) {
             // Start zooming
             cellView.zoomed = YES;
-            cellView.contentSize = cellView.zoomView.frame.size;
         }
     }
 }
@@ -937,7 +958,6 @@
         
         cellView.zoomed = (ABS(scale - 1.0f) > 0.00001f);
         if (cellView.zoomed == NO) {
-            cellView.contentSize = cellView.zoomView.frame.size;
             cellView.zoomView = nil;
         }
     }
@@ -948,9 +968,10 @@
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
         
         if (self.changesZoomedViewFrameWhileZooming) {
-            CGRect contentsFrame = [self frameOfZoomedView:cellView.zoomView inCellView:cellView.guestView atIndex:cellView.cellIndex scale:cellView.zoomScale boundsSize:cellView.bounds.size];
-            cellView.zoomView.frame = contentsFrame;
+            cellView.zoomView.frame = [self frameOfZoomedView:cellView.zoomView inCellView:cellView.guestView atIndex:cellView.cellIndex scale:cellView.zoomScale boundsSize:cellView.bounds.size];
         }
+
+        cellView.contentSize = [self contentSizeOfZoomedView:cellView.zoomView inCellView:cellView.guestView atIndex:cellView.cellIndex scale:cellView.zoomScale boundsSize:cellView.bounds.size];
         
         [self didZoomCellView:cellView.guestView atIndex:cellView.cellIndex zoomingView:cellView.zoomView atScale:cellView.zoomScale];
     }

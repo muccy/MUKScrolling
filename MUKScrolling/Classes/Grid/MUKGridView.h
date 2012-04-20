@@ -199,6 +199,10 @@ typedef enum {
  */
 @property (nonatomic, copy) CGRect (^cellZoomedViewFrameHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale, CGSize boundsSize);
 /**
+ */
+
+@property (nonatomic, copy) CGSize (^cellZoomedViewContentSizeHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale, CGSize boundsSize);
+/**
  Handler which is called just before cell subviews are layed out.
  
  @see willLayoutSubviewsOfCellView:atIndex:
@@ -369,8 +373,8 @@ typedef enum {
 /**
  Provides a valid frame at every zoom step.
  
- Default implementation calls cellZoomedViewFrame or returns a centered frame
- if handler is not set or if handler returns `CGRectZero`.
+ Default implementation calls cellZoomedViewFrameHandler or returns a centered
+ frame if handler is not set or if handler returns `CGRectZero`.
  
  Please mind this method is called only if changesZoomedViewFrameWhileZooming is
  set to `YES`.
@@ -383,6 +387,32 @@ typedef enum {
  @return A frame proper for zoomedView at given scale, with given boundsSize.
  */
 - (CGRect)frameOfZoomedView:(UIView *)zoomedView inCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index scale:(float)scale boundsSize:(CGSize)boundsSize;
+/**
+ Utility method to calculate frame of zoomed view centered in bounds size.
+ 
+ It is used by frameOfZoomedView:inCellView:atIndex:scale:boundsSize: when
+ cellZoomedViewFrameHandler is not set or if handler returns `CGRectZero`.
+ 
+ @param zoomedViewFrame Frame of zoomed view.
+ @param boundsSize Size of cell bounds.
+ @return A centered frame if contents are smaller than bounds; otherwhise
+ returned rect fills bounds.
+ */
++ (CGRect)centeredZoomedViewFrame:(CGRect)zoomedViewFrame boundsSize:(CGSize)boundsSize;
+/**
+ Provides a valid content size at every zoom step.
+ 
+ Default implementation calls cellZoomedViewContentSizeHandler or returns 
+ zoomedView frame size if handler is not set or if handler returns `CGSizeZero`.
+ 
+ @param zoomedView The view will be zoomed.
+ @param cellView Cell view involved in zooming.
+ @param index Cell index in the grid.
+ @param scale Scale of cell before zooming.
+ @param boundsSize Size of cell bounds.
+ @return Content size of zoomedView in cell bounds.
+ */
+- (CGSize)contentSizeOfZoomedView:(UIView *)zoomedView inCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index scale:(float)scale boundsSize:(CGSize)boundsSize;
 /**
  Provides view for zooming a cell.
  

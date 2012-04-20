@@ -24,6 +24,13 @@
     self.view.backgroundColor = [UIColor blackColor];
     self.gridView.backgroundColor = [UIColor blackColor];
     
+    // Space between photos
+    CGFloat const kOffset = 10.0f;
+    CGRect gridFrame = self.gridView.frame;
+    gridFrame.origin.x -= kOffset;
+    gridFrame.size.width += kOffset * 2.0f;
+    self.gridView.frame = gridFrame;
+    
     self.gridView.cellSize = [[MUKGridCellSize alloc] initWithSizeHandler:^ (CGSize containerSize)
     {
         // Full page
@@ -43,10 +50,10 @@
         ImageCellView *cellView = (ImageCellView *)[weakGridView dequeueViewWithIdentifier:@"Cell"];
         
         if (cellView == nil) {
-            CGRect cellRect = CGRectMake(0, 0, 200, 200);
-            cellView = [[ImageCellView alloc] initWithFrame:cellRect];
+            cellView = [[ImageCellView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
             cellView.recycleIdentifier = @"Cell";
             cellView.backgroundColor = weakSelf.view.backgroundColor;
+            cellView.insets = UIEdgeInsetsMake(0, kOffset, 0, kOffset);
         }
         
         UIImage *image = [weakSelf.images_ objectAtIndex:index];
@@ -57,7 +64,9 @@
     
     self.gridView.cellOptionsHandler = ^(NSInteger index) {
         MUKGridCellOptions *options = [[MUKGridCellOptions alloc] init];
-        options.maximumZoomScale = 3.0f;
+        options.maximumZoomScale = 30.0f;
+        options.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+        options.scrollIndicatorInsets = UIEdgeInsetsMake(0, kOffset, 0, kOffset);
         return options;
     };
     
@@ -87,7 +96,10 @@
         CGRect rect;
         if (ABS(scale - 1.0f) > 0.00001f) {
             // Zoomed
-            rect = CGRectZero; // Let grid decide automatically
+            // Pay attention to offset: don't show left black space
+            boundsSize.width -= kOffset * 2.0f;
+            rect = [MUKGridView centeredZoomedViewFrame:zoomedView.frame boundsSize:boundsSize];
+            rect.origin.x += kOffset;          
         }
         else {
             // Not zoomed
@@ -98,6 +110,14 @@
         return rect;
     };
     
+    self.gridView.cellZoomedViewContentSizeHandler = ^(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale, CGSize boundsSize)
+    {
+        // Pay attention to offset: compensate origin shifting
+        CGSize size = zoomedView.frame.size;
+        size.width += kOffset * 2.0f;
+        return size;
+    };
+    
     [self.gridView reloadData];
 }
 
@@ -106,10 +126,10 @@
 - (NSArray *)images_ {
     if (images__ == nil) {        
         images__ = [[NSArray alloc] initWithObjects:
+                    [UIImage imageNamed:@"colors.jpg"],
                     [UIImage imageNamed:@"autumn.jpg"],
                     [UIImage imageNamed:@"building.jpg"],
                     [UIImage imageNamed:@"cat.jpg"],
-                    [UIImage imageNamed:@"colors.jpg"],
                     [UIImage imageNamed:@"garden.jpg"],
                     nil];
     }

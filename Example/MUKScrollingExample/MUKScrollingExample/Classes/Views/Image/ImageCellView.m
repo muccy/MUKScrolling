@@ -14,6 +14,7 @@
 }
 @synthesize recycleIdentifier;
 @synthesize imageView;
+@synthesize insets;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -47,7 +48,10 @@
 - (CGRect)centeredImageFrame {
     CGRect imageRect = CGRectZero;
     imageRect.size = self.imageView.image.size;    
-    CGRect fittedRect = [MUK rect:imageRect transform:MUKGeometryTransformScaleAspectFit respectToRect:self.bounds];
+    
+    CGRect bounds = UIEdgeInsetsInsetRect(self.bounds, self.insets);
+    
+    CGRect fittedRect = [MUK rect:imageRect transform:MUKGeometryTransformScaleAspectFit respectToRect:bounds];
     return fittedRect;
 }
 

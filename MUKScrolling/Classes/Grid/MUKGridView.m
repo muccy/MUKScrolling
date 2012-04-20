@@ -102,6 +102,14 @@
     // Disabled setter
 }
 
+- (void)setMaximumZoomScale:(float)maximumZoomScale {
+    // Disabled setter
+}
+
+- (void)setMinimumZoomScale:(float)minimumZoomScale {
+    // Disabled setter
+}
+
 - (void)layoutSubviews {
     if (!CGSizeEqualToSize(lastBoundsSize_, self.bounds.size)) {
         // Recalculate content size everytime bounds changes (useful during autorotations)

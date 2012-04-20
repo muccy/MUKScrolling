@@ -465,8 +465,13 @@
     gridView.numberOfCells = 1;
     gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:CGSizeMake(50, 50)];
     
+    static NSInteger const kZoomViewTag = 99;
+    UIView *zoomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    zoomView.tag = kZoomViewTag;
+    
     gridView.cellCreationHandler = ^(NSInteger index) {
         MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        [view addSubview:zoomView];
         view.recycleIdentifier = @"Foo";
         return view;
     };
@@ -478,29 +483,47 @@
         return options;
     };
     
+    static float const kZoomTargetScale = 2.0;
     __block BOOL done = NO;
+    
+    __block BOOL zoomViewHandlerCalled = NO;
+    gridView.cellZoomViewHandler = ^(UIView<MUKRecyclable> *cellView, NSInteger cellIndex)
+    {
+        zoomViewHandlerCalled = YES;
+        return zoomView;
+    };
+    
     __block NSDate *zoomBeginDate = nil;
     gridView.cellZoomBeginningHandler = ^(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale) 
     {
+        STAssertEqualObjects(zoomedView, zoomView, nil);
         zoomBeginDate = [NSDate date];
     };
     
     __block NSDate *zoomEndDate = nil;
     gridView.cellZoomCompletionHandler = ^(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale) 
     {
+        STAssertEqualObjects(zoomedView, zoomView, nil);
         zoomEndDate = [NSDate date];
         done = YES;
     };
     
+    /*
+     Other handlers are untestable because -scrollViewDidZoom: is not called
+     */
+    
     [gridView reloadData];
     MUKGridCellView_ *cellView = [[gridView visibleHostCellViews_] anyObject];
-    [cellView setZoomScale:2.0 animated:YES];
+    [cellView setZoomScale:kZoomTargetScale animated:YES];
     
     [MUK waitForCompletion:&done timeout:1.0 runLoop:nil];
     
     STAssertNotNil(zoomBeginDate, nil);
     STAssertNotNil(zoomEndDate, nil);
+    STAssertTrue(zoomViewHandlerCalled, nil);
+
     STAssertTrue([MUK date:zoomBeginDate isEarlierThanDate:zoomEndDate], nil);
 }
+
 
 @end

@@ -72,6 +72,9 @@ typedef enum {
  * `- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view`
  * `- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale`
  * `- (void)scrollViewDidZoom:(UIScrollView *)scrollView`
+ 
+ Zoom is not available at this time for the whole grid: you can zoom only inside
+ single cells.
  */
 @interface MUKGridView : MUKRecyclingScrollView <UIScrollViewDelegate>
 /** @name Properties */
@@ -114,7 +117,9 @@ typedef enum {
  */
 @property (nonatomic) BOOL autoresizesContentOffset;
 
-/** @ Handlers */
+
+
+/** @name Handlers */
 /**
  Creates cells to be displayed by the grid.
  
@@ -187,6 +192,13 @@ typedef enum {
  */
 @property (nonatomic, copy) void (^cellZoomHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale);
 /**
+ Handler which is called to provide a proper frame to zoomed view at every zoom
+ step.
+ 
+ @see frameOfZoomedView:inCellView:atIndex:scale:boundsSize:
+ */
+@property (nonatomic, copy) CGRect (^cellZoomedViewFrameHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale, CGSize boundsSize);
+/**
  Handler which is called just before cell subviews are layed out.
  
  @see willLayoutSubviewsOfCellView:atIndex:
@@ -198,13 +210,7 @@ typedef enum {
  @see didLayoutSubviewsOfCellView:atIndex:
  */
 @property (nonatomic, copy) void (^cellDidLayoutSubviewsHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
-/**
- Handler which is called to provide a proper frame to zoomed view at every zoom
- step.
- 
- @see frameOfZoomedView:inCellView:atIndex:scale:boundsSize:
- */
-@property (nonatomic, copy) CGRect (^cellZoomedViewFrameHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale, CGSize boundsSize);
+
 
 
 /** @name Methods */

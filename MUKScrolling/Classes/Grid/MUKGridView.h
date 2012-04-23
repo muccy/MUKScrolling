@@ -116,7 +116,20 @@ typedef enum {
  Default is `YES`.
  */
 @property (nonatomic) BOOL autoresizesContentOffset;
-
+/**
+ View displayed at grid head, before cells.
+ 
+ View's frame is stretched to fit grid's width (in vertical grids) or grid's
+ height (in horizontal grids). The other size component is respected.
+ */
+@property (nonatomic, strong) UIView *headView;
+/**
+ View displayed at grid tail, before after cells.
+ 
+ View's frame is stretched to fit grid's width (in vertical grids) or grid's
+ height (in horizontal grids). The other size component is respected.
+ */
+@property (nonatomic, strong) UIView *tailView;
 
 
 /** @name Handlers */

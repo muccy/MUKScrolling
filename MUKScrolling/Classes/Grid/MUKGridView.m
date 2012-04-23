@@ -43,6 +43,7 @@
     BOOL firstLayout_;
     CGSize contentOffsetRatio_;
     CGSize lastBoundsSize_;
+    CGSize lastHeadViewSize_, lastTailViewSize_;
     BOOL signalScrollCompletionInLayoutSubviews_;
     MUKGridScrollKind scrollKindToSignal_;
 }
@@ -52,6 +53,7 @@
 @synthesize doubleTapZoomScale = doubleTapZoomScale_;
 @synthesize changesZoomedViewFrameWhileZooming = changesZoomedViewFrameWhileZooming_;
 @synthesize autoresizesContentOffset = autoresizesContentOffset_;
+@synthesize headView = headView_, tailView = tailView_;
 
 @synthesize cellCreationHandler = cellCreationHandler_;
 @synthesize scrollCompletionHandler = scrollCompletionHandler_;
@@ -66,6 +68,7 @@
 @synthesize cellDidLayoutSubviewsHandler = cellDidLayoutSubviewsHandler_;
 @synthesize cellZoomedViewFrameHandler = cellZoomedViewFrameHandler_;
 @synthesize cellZoomedViewContentSizeHandler = cellZoomedViewContentSizeHandler_;
+
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -97,6 +100,32 @@
     [self setScrollViewDelegate_:nil];
 }
 
+#pragma mark - Accessors
+
+- (void)setHeadView:(UIView *)headView {
+    if (headView_ != headView) {
+        [headView_ removeFromSuperview];
+        headView_ = headView;
+        
+        // Do not participate to enqueue/dequeue dance
+        if ([headView conformsToProtocol:@protocol(MUKRecyclable)]) {
+            [(UIView<MUKRecyclable> *)headView setRecycleIdentifier:nil];
+        }
+    }
+}
+
+- (void)setTailView:(UIView *)tailView {
+    if (tailView_ != tailView) {
+        [tailView_ removeFromSuperview];
+        tailView_ = tailView;
+        
+        // Do not participate to enqueue/dequeue dance
+        if ([tailView conformsToProtocol:@protocol(MUKRecyclable)]) {
+            [(UIView<MUKRecyclable> *)tailView setRecycleIdentifier:nil];
+        }
+    }
+}
+
 #pragma mark - Overrides
 
 - (void)setDelegate:(id<UIScrollViewDelegate>)delegate {
@@ -111,8 +140,15 @@
     // Disabled setter
 }
 
-- (void)layoutSubviews {
-    if (!CGSizeEqualToSize(lastBoundsSize_, self.bounds.size)) {
+- (void)layoutSubviews {    
+    BOOL shouldAdjustContentSize = !CGSizeEqualToSize(lastBoundsSize_, self.bounds.size);
+    
+    // Consider also head view and tail view changes
+    if (shouldAdjustContentSize == NO) {
+        shouldAdjustContentSize = (!CGSizeEqualToSize(lastHeadViewSize_, self.headView.frame.size) || !CGSizeEqualToSize(lastTailViewSize_, self.tailView.frame.size));
+    }
+    
+    if (shouldAdjustContentSize) {
         // Recalculate content size everytime bounds changes (useful during autorotations)
         [self adjustContentSize_];
         
@@ -126,7 +162,10 @@
             }
         }
         
+        // Save last values
         lastBoundsSize_ = self.bounds.size;
+        lastHeadViewSize_ = self.headView.frame.size;
+        lastTailViewSize_ = self.tailView.frame.size;
     }
         
     // contentOffsetRatio_ is only used to autoresize content offset
@@ -156,6 +195,14 @@
 - (void)layoutViews:(NSSet *)visibleViews forVisibleBounds:(CGRect)bounds {
     [super layoutViews:visibleViews forVisibleBounds:bounds];
     
+    /*
+     I layout head and tail views after new content size is calculated,
+     so tail view could be properly placed at tail.
+     Don't change call order, because tail uses head size indirectly.
+     */
+    [self layoutHeadViewIfNeeded_:self.headView];
+    [self layoutTailViewIfNeeded_:self.tailView];
+        
     // Take involved indexes
     NSIndexSet *cellIndexes = [self indexesOfCellsInVisibleBounds:bounds];
     
@@ -215,6 +262,10 @@
         if ([cellIndexes containsIndex:cellView.cellIndex]) {
             return NO;
         }
+    }
+    
+    else if (view == self.headView || view == self.tailView) {
+        return NO;
     }
     
     return [super shouldEnqueueView:view forVisibleBounds:bounds];
@@ -281,12 +332,19 @@
 #pragma mark - Layout
 
 - (NSIndexSet *)indexesOfCellsInVisibleBounds:(CGRect)visibleBounds {
-    // Take coordinates
-    CGSize cellSize = [self.cellSize sizeRespectSize:self.bounds.size];
-    NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:self.frame.size cellSize_:cellSize direction_:self.direction];
-    NSArray *coordinates = [[self class] coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:visibleBounds direction_:self.direction];
+    // Normalize bounds of cells
+    CGRect normalizedBounds = [self normalizedVisibleBounds_];
     
-    // Convert to indexes
+    // Take coordinates
+    CGSize cellSize = [self.cellSize sizeRespectSize:normalizedBounds.size];
+    NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:normalizedBounds.size cellSize_:cellSize direction_:self.direction];
+    NSArray *coordinates = [[self class] coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:normalizedBounds direction_:self.direction];
+    
+    /*
+     Convert to indexes
+     Some coordinates could be out of bounds (e.g.: scroll bouncing, content
+     insets, ...)
+     */
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     [coordinates enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) 
     {
@@ -298,7 +356,7 @@
             [indexSet addIndex:index];
         }
     }];
-    
+
     return indexSet;
 }
 
@@ -311,10 +369,16 @@
 }
 
 - (CGRect)frameOfCellAtIndex:(NSInteger)index {
-    CGSize cellSize = [self.cellSize sizeRespectSize:self.bounds.size];
-    NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:self.frame.size cellSize_:cellSize direction_:self.direction];
+    // Normalize bounds of cells
+    CGRect normalizedBounds = [self normalizedVisibleBounds_];
     
-    return [[self class] frameOfCellAtIndex_:index cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow direction_:self.direction];
+    CGSize cellSize = [self.cellSize sizeRespectSize:normalizedBounds.size];
+    NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:normalizedBounds.size cellSize_:cellSize direction_:self.direction];
+    
+    CGRect cellFrame = [[self class] frameOfCellAtIndex_:index cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow direction_:self.direction];
+    
+    // Consider head view
+    return [[self class] rect_:cellFrame shiftingByHeadView_:self.headView direction_:self.direction];
 }
 
 - (MUKGridCellOptions *)optionsOfCellAtIndex:(NSInteger)index {
@@ -347,16 +411,27 @@
     if (index < 0 || index >= self.numberOfCells) return;
     
     CGRect cellFrame = [self frameOfCellAtIndex:index];    
-    MUKGeometryTransform transform = [[self class] geometryTransformForScrollPosition_:position direction_:self.direction cellFrame_:cellFrame visibleBounds_:self.bounds];
+    
+    // Normalize bounds of cells
+    CGRect normalizedBounds = [self normalizedVisibleBounds_];
+
+    // Normalize content size
+    CGSize normalizedContentSize = [[self class] size_:self.contentSize subtractingHeadView_:self.headView tailView_:self.tailView direction_:self.direction];
+    
+    // Get geometric transformation
+    MUKGeometryTransform transform = [[self class] geometryTransformForScrollPosition_:position direction_:self.direction cellFrame_:cellFrame visibleBounds_:normalizedBounds];
     
     // Move bounds to contain cell
-    CGRect alignedBounds = [MUK rect:self.bounds transform:transform respectToRect:cellFrame];
+    CGRect alignedBounds = [MUK rect:normalizedBounds transform:transform respectToRect:cellFrame];
     
     // Fix aligned bounds
-    CGRect fixedBounds = [[self class] bounds_:alignedBounds inContainerSize_:self.contentSize direction_:self.direction];
+    CGRect fixedBounds = [[self class] bounds_:alignedBounds inContainerSize_:normalizedContentSize direction_:self.direction];
+    
+    // Re-shift considering head view
+    CGRect boundsWithHeadView = [[self class] rect_:fixedBounds shiftingByHeadView_:self.headView direction_:self.direction]; 
     
     // Perform scroll
-    [self setContentOffset:fixedBounds.origin animated:animated];
+    [self setContentOffset:boundsWithHeadView.origin animated:animated];
 }
 
 - (void)didFinishScrollingOfKind:(MUKGridScrollKind)scrollKind {
@@ -716,16 +791,93 @@
     return size;
 }
 
+- (CGRect)normalizedVisibleBounds_ {   
+    CGRect normalizedBounds = self.bounds;
+    
+    /*
+     Change only if there is an head view.
+     Ignore insets, because insets produce negative origin, which is ok because
+     negative coordinates are translated into 0 indexes.
+     
+     Do not consider tail because the more space is translated into cell indexes
+     greater than self.numberOfCells
+     */
+    if (self.headView) {
+        /*
+         Perform calculations without insets
+         */
+        normalizedBounds.origin.x += self.contentInset.left;
+        normalizedBounds.origin.y += self.contentInset.top;
+        
+        /*
+         How much is head view visible?
+         */
+        CGFloat visibleDimension;
+        if (MUKGridDirectionHorizontal == self.direction) {
+            visibleDimension = self.headView.frame.size.width - normalizedBounds.origin.x;
+        }
+        else {
+            // Vertical
+            visibleDimension = self.headView.frame.size.height - normalizedBounds.origin.y;
+        } // if direction 
+        
+        /*
+         If head view is visible, substract size and force origin to (0,0)
+         */
+        if (visibleDimension > 0.0f) {
+            // Head is visible
+            if (MUKGridDirectionHorizontal == self.direction) {
+                normalizedBounds.origin.x = 0.0f;
+                normalizedBounds.size.width -= visibleDimension;
+            }
+            else {
+                // Vertical
+                normalizedBounds.origin.y = 0.0f;
+                normalizedBounds.size.height -= visibleDimension;
+            } // if direction 
+        } 
+        
+        /*
+         If head is hidden, do not calculate head view size anymore
+         */
+        else {
+            // Head is hidden
+            if (MUKGridDirectionHorizontal == self.direction) {
+                normalizedBounds.origin.x -= self.headView.frame.size.width;
+            }
+            else {
+                // Vertical
+                normalizedBounds.origin.y -= self.headView.frame.size.height;
+            } // if direction 
+        }
+        // if visible dimension
+        
+        /*
+         Insets have to be ignored
+         */
+        normalizedBounds.origin.x -= self.contentInset.left;
+        normalizedBounds.origin.y -= self.contentInset.top;
+    } // if headView
+    
+    return normalizedBounds;
+}
+
 - (void)adjustContentSize_ {
-    CGSize cellSize = [self.cellSize sizeRespectSize:self.bounds.size];
-    NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:self.frame.size cellSize_:cellSize direction_:self.direction];
+    // Normalize bounds of cells
+    CGRect normalizedBounds = [self normalizedVisibleBounds_];
+    
+    CGSize cellSize = [self.cellSize sizeRespectSize:normalizedBounds.size];
+    NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:normalizedBounds.size cellSize_:cellSize direction_:self.direction];
     NSInteger maxRows = [[self class] maxRowsForCellsCount_:self.numberOfCells maxCellsPerRow_:maxCellsPerRow direction_:self.direction];
     
     CGSize newContentSize = [[self class] contentSizeForDirection_:self.direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow numberOfCells_:self.numberOfCells];
     
+    // Consider head view and tail view
+    CGSize extendedContentSize = [[self class] size_:newContentSize addingHeadView_:self.headView tailView_:self.tailView direction_:self.direction];
+    
     // This comparison is done for performance
-    if (!CGSizeEqualToSize(newContentSize, self.contentSize)) {
-        self.contentSize = newContentSize;
+    if (!CGSizeEqualToSize(extendedContentSize, self.contentSize)) {
+        self.contentSize = extendedContentSize;
     }
 }
 
@@ -799,6 +951,7 @@
     return transform;
 }
 
+
 + (CGRect)bounds_:(CGRect)bounds inContainerSize_:(CGSize)containerSize direction_:(MUKGridDirection)direction
 {
     CGRect alignedBounds = bounds;
@@ -844,6 +997,115 @@
     }
     
     return alignedBounds;
+}
+
++ (CGRect)rect_:(CGRect)rect shiftingByHeadView_:(UIView *)headView direction_:(MUKGridDirection)direction
+{
+    if (MUKGridDirectionVertical == direction) {
+        rect.origin.y += headView.frame.size.height;
+    }
+    else {
+        // Horizontal
+        rect.origin.x += headView.frame.size.width;
+    }
+    
+    return rect;
+}
+
++ (CGSize)size_:(CGSize)size subtractingHeadView_:(UIView *)headView tailView_:(UIView *)tailView direction_:(MUKGridDirection)direction
+{
+    if (MUKGridDirectionVertical == direction) {
+        size.height -= headView.frame.size.height + tailView.frame.size.height;
+    }
+    else {
+        // Horizontal
+        size.width -= headView.frame.size.width + tailView.frame.size.width;
+    }
+    
+    return size;
+}
+
++ (CGSize)size_:(CGSize)size addingHeadView_:(UIView *)headView tailView_:(UIView *)tailView direction_:(MUKGridDirection)direction
+{
+    if (MUKGridDirectionVertical == direction) {
+        size.height += headView.frame.size.height + tailView.frame.size.height;
+    }
+    else {
+        // Horizontal
+        size.width += headView.frame.size.width + tailView.frame.size.width;
+    }
+    
+    return size;
+}
+
++ (CGRect)headView_:(UIView *)headView frameInBoundsSize_:(CGSize)boundsSize direction_:(MUKGridDirection)direction
+{
+    CGRect frame = headView.frame;
+    frame.origin = CGPointZero;
+    
+    if (MUKGridDirectionVertical == direction) {
+        frame.size.width = boundsSize.width;
+    }
+    else {
+        // Horizontal
+        frame.size.height = boundsSize.height;
+    }
+    
+    return frame;
+}
+
+- (void)layoutHeadViewIfNeeded_:(UIView *)headView {
+    if (headView) {
+        // Add to grid if needed
+        if (headView.superview != self) {
+            [headView removeFromSuperview];
+            [self addSubview:headView];
+        }
+        
+        // Adjust frame
+        CGRect frame = [[self class] headView_:headView frameInBoundsSize_:self.bounds.size direction_:self.direction];
+        
+        if (!CGRectEqualToRect(frame, headView.frame)) {
+            headView.frame = frame;
+        }
+    }
+}
+
++ (CGRect)tailView_:(UIView *)tailView frameInBoundsSize_:(CGSize)boundsSize lastCellFrame:(CGRect)lastCellFrame direction_:(MUKGridDirection)direction
+{
+    CGRect frame = tailView.frame;
+    
+    if (MUKGridDirectionVertical == direction) {
+        frame.origin.x = 0.0f;
+        frame.origin.y = CGRectGetMaxY(lastCellFrame);
+        frame.size.width = boundsSize.width;
+    }
+    else {
+        // Horizontal
+        frame.origin.x = CGRectGetMaxX(lastCellFrame);
+        frame.origin.y = 0.0f;
+        frame.size.height = boundsSize.height;
+    }
+    
+    return frame;
+}
+
+- (void)layoutTailViewIfNeeded_:(UIView *)tailView {
+    if (tailView) {
+        // Add to grid if needed
+        if (tailView.superview != self) {
+            [tailView removeFromSuperview];
+            [self addSubview:tailView];
+        }
+        
+        // Adjust frame
+        CGRect lastCellFrame = [self frameOfCellAtIndex:self.numberOfCells-1];
+        CGRect frame = [[self class] tailView_:tailView frameInBoundsSize_:self.bounds.size lastCellFrame:lastCellFrame direction_:self.direction];
+        
+        if (!CGRectEqualToRect(frame, tailView.frame)) {
+            tailView.frame = frame;
+        }
+    }
 }
 
 #pragma mark - Private: Rows & Columns

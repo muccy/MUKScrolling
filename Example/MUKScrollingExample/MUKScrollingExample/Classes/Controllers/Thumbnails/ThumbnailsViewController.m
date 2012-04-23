@@ -68,6 +68,22 @@
         return cellView;
     };
     
+    UILabel *headLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
+    headLabel.backgroundColor = [UIColor lightGrayColor];
+    headLabel.font = [UIFont boldSystemFontOfSize:18.0];
+    headLabel.textAlignment = UITextAlignmentCenter;
+    headLabel.textColor = [UIColor darkGrayColor];
+    headLabel.text = @"Colorful";
+    self.gridView.headView = headLabel;
+    
+    UILabel *tailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 65)];
+    tailLabel.backgroundColor = [UIColor whiteColor];
+    tailLabel.font = [UIFont systemFontOfSize:18.0];
+    tailLabel.textAlignment = UITextAlignmentCenter;
+    tailLabel.textColor = [UIColor darkGrayColor];
+    tailLabel.text = [NSString stringWithFormat:@"%i photos", [self.images_ count]];
+    self.gridView.tailView = tailLabel;
+    
     [self.gridView reloadData];
 }
 
@@ -197,7 +213,6 @@
     }
     
     insets.top = statusBarHeight + self.navigationController.navigationBar.frame.size.height;
-    insets.bottom = insets.top;
     
     return insets;
 }

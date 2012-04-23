@@ -88,4 +88,28 @@
  */
 + (CGRect)bounds_:(CGRect)bounds inContainerSize_:(CGSize)containerSize direction_:(MUKGridDirection)direction;
 
+/*
+ Normalized dimensions, without head/tail views
+ */
+- (CGRect)normalizedVisibleBounds_;
+
+/*
+ Methods to calculate dimensions considering head/tail views
+ */
++ (CGRect)rect_:(CGRect)rect shiftingByHeadView_:(UIView *)headView direction_:(MUKGridDirection)direction;
++ (CGSize)size_:(CGSize)size subtractingHeadView_:(UIView *)headView tailView_:(UIView *)tailView direction_:(MUKGridDirection)direction;
++ (CGSize)size_:(CGSize)size addingHeadView_:(UIView *)headView tailView_:(UIView *)tailView direction_:(MUKGridDirection)direction;
+
+/*
+ Head view layout
+ */
++ (CGRect)headView_:(UIView *)headView frameInBoundsSize_:(CGSize)boundsSize direction_:(MUKGridDirection)direction;
+- (void)layoutHeadViewIfNeeded_:(UIView *)headView;
+
+/*
+ Tail view layout
+ */
++ (CGRect)tailView_:(UIView *)tailView frameInBoundsSize_:(CGSize)boundsSize lastCellFrame:(CGRect)lastCellFrame direction_:(MUKGridDirection)direction;
+- (void)layoutTailViewIfNeeded_:(UIView *)tailView;
+
 @end

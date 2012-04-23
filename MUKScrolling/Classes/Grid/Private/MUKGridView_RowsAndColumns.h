@@ -53,6 +53,9 @@
  Returns coordinates for cells in a rect in a rect
  */
 + (NSArray *)coordinatesOfCellsOfSize_:(CGSize)cellSize inVisibleBounds_:(CGRect)visibleBounds direction_:(MUKGridDirection)direction;
-
+/*
+ Indexes of cells which should be layed out for given bounds.
+ */
+- (NSIndexSet *)indexesOfCellsInBounds_:(CGRect)bounds cellSize_:(CGSize)cellSize maxCellsPerRow_:(NSInteger)maxCellsPerRow;
 
 @end

@@ -204,7 +204,7 @@
     [self layoutTailViewIfNeeded_:self.tailView];
         
     // Take involved indexes
-    NSIndexSet *cellIndexes = [self indexesOfCellsInVisibleBounds:bounds];
+    NSIndexSet *cellIndexes = [self indexesOfCellsInVisibleBounds];
     
     /*
      Enqueue visible views not in bounds.
@@ -256,7 +256,7 @@
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)view;
         
         // Take involved indexes
-        NSIndexSet *cellIndexes = [self indexesOfCellsInVisibleBounds:bounds];
+        NSIndexSet *cellIndexes = [self indexesOfCellsInVisibleBounds];
         
         // Is visible, do not enqueue
         if ([cellIndexes containsIndex:cellView.cellIndex]) {
@@ -331,33 +331,13 @@
 
 #pragma mark - Layout
 
-- (NSIndexSet *)indexesOfCellsInVisibleBounds:(CGRect)visibleBounds {
+- (NSIndexSet *)indexesOfCellsInVisibleBounds {
     // Normalize bounds of cells
     CGRect normalizedBounds = [self normalizedVisibleBounds_];
-    
-    // Take coordinates
     CGSize cellSize = [self.cellSize sizeRespectSize:normalizedBounds.size];
     NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:normalizedBounds.size cellSize_:cellSize direction_:self.direction];
-    NSArray *coordinates = [[self class] coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:normalizedBounds direction_:self.direction];
-    
-    /*
-     Convert to indexes
-     Some coordinates could be out of bounds (e.g.: scroll bouncing, content
-     insets, ...)
-     */
-    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-    [coordinates enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) 
-    {
-        MUKGridCoordinate *coordinate = obj;
-        NSInteger index = [coordinate cellIndexWithMaxCellsPerRow:maxCellsPerRow];
-        
-        // Validate index
-        if (index >= 0 && index < self.numberOfCells) {
-            [indexSet addIndex:index];
-        }
-    }];
 
-    return indexSet;
+    return [self indexesOfCellsInBounds_:normalizedBounds cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow];
 }
 
 - (UIView<MUKRecyclable> *)createCellViewAtIndex:(NSInteger)index {
@@ -1202,11 +1182,39 @@
     return [MUKGridCoordinate coordinatesInRectangleBetweenCoordinate:firstCellCoordinate andCoordinate:lastCellCoordinate];
 }
 
+- (NSIndexSet *)indexesOfCellsInBounds_:(CGRect)bounds cellSize_:(CGSize)cellSize maxCellsPerRow_:(NSInteger)maxCellsPerRow
+{
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+
+    @autoreleasepool {
+        // Take coordinates
+        NSArray *coordinates = [[self class] coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:self.direction];
+        
+        /*
+         Convert to indexes
+         Some coordinates could be out of bounds (e.g.: scroll bouncing, content
+         insets, ...)
+         */
+        [coordinates enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) 
+         {
+             MUKGridCoordinate *coordinate = obj;
+             NSInteger index = [coordinate cellIndexWithMaxCellsPerRow:maxCellsPerRow];
+             
+             // Validate index
+             if (index >= 0 && index < self.numberOfCells) {
+                 [indexSet addIndex:index];
+             }
+         }];
+    }
+    
+    return indexSet;
+}
+
 #pragma mark - <UIScrollViewDelegate>
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     if (self == scrollView) {
-        NSIndexSet *teoricIndexSet = [self indexesOfCellsInVisibleBounds:self.bounds];
+        NSIndexSet *teoricIndexSet = [self indexesOfCellsInVisibleBounds];
         NSIndexSet *realIndexSet = [self indexesOfVisibleCells];
         
         if ([teoricIndexSet isEqualToIndexSet:realIndexSet]) {
@@ -1238,7 +1246,7 @@
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
     if (self == scrollView) {
-        NSIndexSet *teoricIndexSet = [self indexesOfCellsInVisibleBounds:self.bounds];
+        NSIndexSet *teoricIndexSet = [self indexesOfCellsInVisibleBounds];
         NSIndexSet *realIndexSet = [self indexesOfVisibleCells];
         
         if ([teoricIndexSet isEqualToIndexSet:realIndexSet]) {

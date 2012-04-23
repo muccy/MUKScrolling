@@ -28,6 +28,7 @@
 #import "MUKGridView_Layout.h"
 #import "MUKGridView_RowsAndColumns.h"
 
+#import "MUKGridCellFixedSize.h"
 #import "MUKGridView.h"
 #import "MUKGridCellView_.h"
 #import "MUKDummyRecyclableView.h"
@@ -245,6 +246,53 @@
     STAssertTrue([coordinates containsObject:coordinate], nil);
     coordinate.row = 2;     coordinate.column = 0;
     STAssertTrue([coordinates containsObject:coordinate], nil);
+}
+
+- (void)testIndexesOfCellsInGivenBounds {
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    gridView.direction = MUKGridDirectionVertical;
+    gridView.numberOfCells = 16; // 4 rows
+    
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    
+    NSInteger maxCellsPerRow = [MUKGridView maxCellsPerRowInContainerSize_:gridView.frame.size cellSize_:cellSize direction_:gridView.direction];
+    
+    CGRect bounds = CGRectMake(0, 0, 200, 100);
+    NSIndexSet *indexSet = [gridView indexesOfCellsInBounds_:bounds cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow];
+    NSRange expectedRange = NSMakeRange(0, 8);
+    STAssertEquals((NSUInteger)8, [indexSet count], @"Two rows");
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        STAssertTrue(NSLocationInRange(idx, expectedRange), @"%i in first two rows", idx);
+    }];
+    
+    bounds = CGRectMake(0, -100, 200, 100);
+    indexSet = [gridView indexesOfCellsInBounds_:bounds cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow];
+    expectedRange = NSMakeRange(0, 4);
+    STAssertEquals((NSUInteger)4, [indexSet count], @"One row");
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        STAssertTrue(NSLocationInRange(idx, expectedRange), @"%i in first row", idx);
+    }];
+    
+    bounds = CGRectMake(0, 50, 200, 100);
+    indexSet = [gridView indexesOfCellsInBounds_:bounds cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow];
+    expectedRange = NSMakeRange(4, 8);
+    STAssertEquals((NSUInteger)8, [indexSet count], @"Two rows");
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        STAssertTrue(NSLocationInRange(idx, expectedRange), @"%i in second and third row", idx);
+    }];
+    
+    bounds = CGRectMake(0, 150, 200, 100);
+    indexSet = [gridView indexesOfCellsInBounds_:bounds cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow];
+    expectedRange = NSMakeRange(12, 4);
+    STAssertEquals((NSUInteger)4, [indexSet count], @"One row");
+    [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        STAssertTrue(NSLocationInRange(idx, expectedRange), @"%i in last row", idx);
+    }];
+    
+    bounds = CGRectMake(0, 1500, 200, 100);
+    indexSet = [gridView indexesOfCellsInBounds_:bounds cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow];
+    STAssertEquals((NSUInteger)0, [indexSet count], @"No rows");
 }
 
 #pragma mark - Layout
@@ -511,6 +559,118 @@
     {
         STAssertTrue([obj isMemberOfClass:[MUKGridCellView_ class]], nil);
     }];
+}
+
+- (void)testNormalizedVisibleBounds {
+    CGRect gridFrame = CGRectMake(0, 0, 200, 200);
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:gridFrame];
+    gridView.direction = MUKGridDirectionVertical;
+    
+    CGRect naturalBounds = gridView.bounds;
+    CGRect normalizedBounds = [gridView normalizedVisibleBounds_];
+    STAssertTrue(CGRectEqualToRect(normalizedBounds, naturalBounds), nil);
+    
+    gridView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    naturalBounds = gridView.bounds;
+    normalizedBounds = [gridView normalizedVisibleBounds_];
+    STAssertTrue(CGRectEqualToRect(normalizedBounds, naturalBounds), @"Insets are ignored");
+    
+    UIView *tailView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
+    gridView.tailView = tailView;
+    naturalBounds = gridView.bounds;
+    normalizedBounds = [gridView normalizedVisibleBounds_];
+    STAssertTrue(CGRectEqualToRect(normalizedBounds, naturalBounds), @"Tail view is ignored");
+    
+    /*
+     Head view is subtracted, so all cell calculations are done without it
+     */
+    CGFloat origin = -gridView.contentInset.top;
+    CGRect headViewFrame = CGRectMake(0, 0, 200, 50);
+    UIView *headView = [[UIView alloc] initWithFrame:headViewFrame];
+    gridView.headView = headView;
+    CGFloat scrollTarget = origin;
+    [gridView setContentOffset:CGPointMake(0, scrollTarget) animated:NO]; // Scroll to top
+    [gridView layoutSubviews];
+    naturalBounds = gridView.bounds;
+    normalizedBounds = [gridView normalizedVisibleBounds_];
+    STAssertFalse(CGRectEqualToRect(normalizedBounds, naturalBounds), @"Head view is not ignored");
+    STAssertEqualsWithAccuracy(naturalBounds.origin.x, normalizedBounds.origin.x, 0.0000001f, nil);
+    STAssertEqualsWithAccuracy(origin, normalizedBounds.origin.y, 0.0000001f, @"Shifted to origin");
+    STAssertEqualsWithAccuracy(naturalBounds.size.width, normalizedBounds.size.width, 0.0000001f, nil);
+    STAssertEqualsWithAccuracy(naturalBounds.size.height-headViewFrame.size.height, normalizedBounds.size.height, 0.0000001f, @"All head is shown");
+    
+    /*
+     Scroll down a bit
+     */
+    CGFloat scrollDistance = headViewFrame.size.height/2.0f;
+    scrollTarget = origin + scrollDistance;
+    [gridView setContentOffset:CGPointMake(0, scrollTarget) animated:NO]; // Scroll a bit down
+    [gridView layoutSubviews];
+    naturalBounds = gridView.bounds;
+    normalizedBounds = [gridView normalizedVisibleBounds_];
+    STAssertFalse(CGRectEqualToRect(normalizedBounds, naturalBounds), @"Head view is not ignored");
+    STAssertEqualsWithAccuracy(naturalBounds.origin.x, normalizedBounds.origin.x, 0.0000001f, nil);
+    STAssertEqualsWithAccuracy(origin, normalizedBounds.origin.y, 0.0000001f, @"Shifted to scroll point");
+    STAssertEqualsWithAccuracy(naturalBounds.size.width, normalizedBounds.size.width, 0.0000001f, nil);
+    STAssertEqualsWithAccuracy(naturalBounds.size.height-scrollDistance, normalizedBounds.size.height, 0.0000001f, @"A piece of head is shown");
+    
+    /*
+     Scroll down another bit, hiding head
+     */
+    scrollDistance = headViewFrame.size.height * 1.1f;;
+    scrollTarget = origin + scrollDistance;
+    [gridView setContentOffset:CGPointMake(0, scrollTarget) animated:NO]; // Scroll a bit down
+    [gridView layoutSubviews];
+    naturalBounds = gridView.bounds;
+    normalizedBounds = [gridView normalizedVisibleBounds_];
+    STAssertFalse(CGRectEqualToRect(normalizedBounds, naturalBounds), @"Head view is not ignored");
+    STAssertEqualsWithAccuracy(naturalBounds.origin.x, normalizedBounds.origin.x, 0.0000001f, nil);
+    STAssertEqualsWithAccuracy(naturalBounds.origin.y-headViewFrame.size.height, normalizedBounds.origin.y, 0.0000001f, @"Head is hidden");
+    STAssertEqualsWithAccuracy(naturalBounds.size.width, normalizedBounds.size.width, 0.0000001f, nil);
+    STAssertEqualsWithAccuracy(naturalBounds.size.height, normalizedBounds.size.height, 0.0000001f, @"Head is hidden");
+}
+
+- (void)testHeadViewFrame {
+    CGRect gridFrame = CGRectMake(0, 0, 200, 200);
+    CGRect headViewOriginalFrame = CGRectMake(20, 20, 300, 100);
+    UIView *headView = [[UIView alloc] initWithFrame:headViewOriginalFrame];
+    
+    CGRect headFrame = [MUKGridView headView_:headView frameInBoundsSize_:gridFrame.size direction_:MUKGridDirectionVertical];
+    STAssertTrue(CGPointEqualToPoint(CGPointZero, headFrame.origin), nil);
+    STAssertEqualsWithAccuracy(headFrame.size.width, gridFrame.size.width, 0.00001f, @"Width to fill grid");
+    STAssertEqualsWithAccuracy(headFrame.size.height, headViewOriginalFrame.size.height, 0.000001f, @"Height preserved");
+    
+    // Horizontal
+    headViewOriginalFrame = CGRectMake(20, 20, 100, 300);
+    headView = [[UIView alloc] initWithFrame:headViewOriginalFrame];
+    
+    headFrame = [MUKGridView headView_:headView frameInBoundsSize_:gridFrame.size direction_:MUKGridDirectionHorizontal];
+    STAssertTrue(CGPointEqualToPoint(CGPointZero, headFrame.origin), nil);
+    STAssertEqualsWithAccuracy(headFrame.size.width, headViewOriginalFrame.size.width, 0.00001f, @"Width preserved");
+    STAssertEqualsWithAccuracy(headFrame.size.height, gridFrame.size.height, 0.000001f, @"Height to fill grid");
+}
+
+- (void)testTailViewFrame {
+    CGRect gridFrame = CGRectMake(0, 0, 200, 200);
+    CGRect tailViewOriginalFrame = CGRectMake(20, 20, 300, 100);
+    UIView *tailView = [[UIView alloc] initWithFrame:tailViewOriginalFrame];
+    CGRect lastCellFrame = CGRectMake(20, 20, 20, 20);
+    
+    CGRect tailFrame = [MUKGridView tailView_:tailView frameInBoundsSize_:gridFrame.size lastCellFrame:lastCellFrame direction_:MUKGridDirectionVertical];
+    STAssertEqualsWithAccuracy(tailFrame.origin.x, 0.0f, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(tailFrame.origin.y, CGRectGetMaxY(lastCellFrame), 0.00001f, @"Under last cell");
+    STAssertEqualsWithAccuracy(tailFrame.size.width, gridFrame.size.width, 0.00001f, @"Width to fill grid");
+    STAssertEqualsWithAccuracy(tailFrame.size.height, tailViewOriginalFrame.size.height, 0.000001f, @"Height preserved");
+    
+    // Horizontal
+    tailViewOriginalFrame = CGRectMake(20, 20, 100, 300);
+    tailView = [[UIView alloc] initWithFrame:tailViewOriginalFrame];
+    
+    tailFrame = [MUKGridView tailView_:tailView frameInBoundsSize_:gridFrame.size lastCellFrame:lastCellFrame direction_:MUKGridDirectionHorizontal];
+    STAssertEqualsWithAccuracy(tailFrame.origin.y, 0.0f, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(tailFrame.origin.x, CGRectGetMaxX(lastCellFrame), 0.00001f, @"At last cell right");
+    STAssertEqualsWithAccuracy(tailFrame.size.width, tailViewOriginalFrame.size.width, 0.00001f, @"Width preserved");
+    STAssertEqualsWithAccuracy(tailFrame.size.height, gridFrame.size.height, 0.000001f, @"Height to fill grid");
 }
 
 #pragma mark - Cell View

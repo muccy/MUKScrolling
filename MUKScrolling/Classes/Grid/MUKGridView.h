@@ -258,12 +258,14 @@ typedef enum {
 
 @interface MUKGridView (Layout)
 /**
- Indexes of cells which should be layed out for given bounds.
- @param visibleBounds Bounds where cells wants to be displayed.
+ Indexes of cells which should be layed out for visible bounds.
  @return Indexes of cells to display. Those indexes are less than numberOfCells
  and are greater than `0`.
+ 
+ @warning This method may not use `self.bounds` if you set content inset, headView
+ or tailView.
  */
-- (NSIndexSet *)indexesOfCellsInVisibleBounds:(CGRect)visibleBounds;
+- (NSIndexSet *)indexesOfCellsInVisibleBounds;
 /**
  Create a cell for given index.
  

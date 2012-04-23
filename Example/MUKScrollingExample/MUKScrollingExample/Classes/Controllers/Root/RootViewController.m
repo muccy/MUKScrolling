@@ -11,6 +11,7 @@
 #import "SquaresViewController.h"
 #import "PagesViewController.h"
 #import "ImagesViewController.h"
+#import "ThumbnailsViewController.h"
 
 @interface RootViewControllerRow_ : NSObject
 @property (nonatomic, strong) NSString *title, *subtitle;
@@ -73,6 +74,17 @@
         row.selectionHandler = ^{
             ImagesViewController *viewController = [[ImagesViewController alloc] initWithNibName:nil bundle:nil];
             viewController.title = @"Images";
+            [weakSelf.navigationController pushViewController:viewController animated:YES];
+        };
+        [mutableArray addObject:row];
+        
+        
+        row = [[RootViewControllerRow_ alloc] init];
+        row.title = @"Thumbnails";
+        row.subtitle = @"Thumbnails grid";
+        row.selectionHandler = ^{
+            ThumbnailsViewController *viewController = [[ThumbnailsViewController alloc] initWithNibName:nil bundle:nil];
+            viewController.title = @"Thumbnails";
             [weakSelf.navigationController pushViewController:viewController animated:YES];
         };
         [mutableArray addObject:row];

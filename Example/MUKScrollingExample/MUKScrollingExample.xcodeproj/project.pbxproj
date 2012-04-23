@@ -12,6 +12,8 @@
 		06339C461535F09200FB07ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C451535F09200FB07ED /* CoreGraphics.framework */; };
 		06339C4C1535F09200FB07ED /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06339C4A1535F09200FB07ED /* InfoPlist.strings */; };
 		06339C4E1535F09200FB07ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C4D1535F09200FB07ED /* main.m */; };
+		06383F1B1543F38300423A3A /* ThumbnailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06383F1A1543F38300423A3A /* ThumbnailsViewController.m */; };
+		06383F1F1543F44700423A3A /* ThumbnailCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06383F1E1543F44700423A3A /* ThumbnailCellView.m */; };
 		066863CF15388A17005D4BC1 /* libMUKScrolling.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C681535F0BF00FB07ED /* libMUKScrolling.a */; };
 		066863ED153969D9005D4BC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863E7153969D9005D4BC1 /* AppDelegate.m */; };
 		066863F1153969FA005D4BC1 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863F0153969FA005D4BC1 /* RootViewController.m */; };
@@ -65,6 +67,10 @@
 		06339C4D1535F09200FB07ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		06339C4F1535F09200FB07ED /* MUKScrollingExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MUKScrollingExample-Prefix.pch"; sourceTree = "<group>"; };
 		06339C5E1535F0BE00FB07ED /* MUKScrolling.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MUKScrolling.xcodeproj; path = ../../MUKScrolling.xcodeproj; sourceTree = "<group>"; };
+		06383F191543F38300423A3A /* ThumbnailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailsViewController.h; sourceTree = "<group>"; };
+		06383F1A1543F38300423A3A /* ThumbnailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailsViewController.m; sourceTree = "<group>"; };
+		06383F1D1543F44700423A3A /* ThumbnailCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailCellView.h; sourceTree = "<group>"; };
+		06383F1E1543F44700423A3A /* ThumbnailCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailCellView.m; sourceTree = "<group>"; };
 		066863E6153969D9005D4BC1 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		066863E7153969D9005D4BC1 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		066863EF153969FA005D4BC1 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
@@ -165,6 +171,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		06383F181543F36700423A3A /* Thumbnails */ = {
+			isa = PBXGroup;
+			children = (
+				06383F191543F38300423A3A /* ThumbnailsViewController.h */,
+				06383F1A1543F38300423A3A /* ThumbnailsViewController.m */,
+			);
+			path = Thumbnails;
+			sourceTree = "<group>";
+		};
+		06383F1C1543F43600423A3A /* Thumbnail */ = {
+			isa = PBXGroup;
+			children = (
+				06383F1D1543F44700423A3A /* ThumbnailCellView.h */,
+				06383F1E1543F44700423A3A /* ThumbnailCellView.m */,
+			);
+			path = Thumbnail;
+			sourceTree = "<group>";
+		};
 		066863E4153969D9005D4BC1 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +216,7 @@
 				06BCEFF3153EC2160065D11C /* Images */,
 				068CA8BF153DCDC10090E065 /* Pages */,
 				0668640115396CB9005D4BC1 /* Squares */,
+				06383F181543F36700423A3A /* Thumbnails */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -208,6 +233,7 @@
 		066863EA153969D9005D4BC1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				06383F1C1543F43600423A3A /* Thumbnail */,
 				06BCF002153EC5640065D11C /* Image */,
 				06BCF003153EC5640065D11C /* Label */,
 			);
@@ -384,6 +410,8 @@
 				06BCEFF6153EC23E0065D11C /* ImagesViewController.m in Sources */,
 				06BCF006153EC5640065D11C /* LabelCellView.m in Sources */,
 				06BCF009153EC57A0065D11C /* ImageCellView.m in Sources */,
+				06383F1B1543F38300423A3A /* ThumbnailsViewController.m in Sources */,
+				06383F1F1543F44700423A3A /* ThumbnailCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

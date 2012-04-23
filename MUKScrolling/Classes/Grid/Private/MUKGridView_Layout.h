@@ -30,6 +30,22 @@
 @interface MUKGridView ()
 
 /*
+ Creates dimensions to calculate content offset ration
+ */
++ (CGSize)contentSize_:(CGSize)contentSize extendedByContentInset_:(UIEdgeInsets)contentInset;
++ (CGPoint)contentOffset_:(CGPoint)contentOffset shiftedByContentInset_:(UIEdgeInsets)contentInset;
+
+/*
+ Calculates ratio (which is defined positive)
+ */
++ (CGSize)contentOffsetRatioForContentOffset_:(CGPoint)contentOffset contentSize_:(CGSize)contentSize contentInset_:(UIEdgeInsets)contentInset;
+
+/*
+ This method autoresizes content offset
+ */
++ (CGPoint)autoresizedContentOffsetWithRatio_:(CGSize)contentOffsetRatio updatedContentSize_:(CGSize)contentSize visibleBoundsSize_:(CGSize)boundsSize contentInset_:(UIEdgeInsets)contentInset;
+
+/*
  This method returns content size given a list of params
  */
 + (CGSize)contentSizeForDirection_:(MUKGridDirection)direction cellSize_:(CGSize)cellSize maxRows_:(NSInteger)maxRows maxCellsPerRow_:(NSInteger)maxCellsPerRow numberOfCells_:(NSInteger)numberOfCells;

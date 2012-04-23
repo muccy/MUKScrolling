@@ -118,23 +118,20 @@
         
         // Calculate new content offset (if needed)
         if (self.autoresizesContentOffset && !firstLayout_) {
-            CGPoint newContentOffset;
-            if (!isnan(contentOffsetRatio_.width) && !isnan(contentOffsetRatio_.height))
-            {
-                newContentOffset.x = contentOffsetRatio_.width * self.contentSize.width;
-                newContentOffset.y = contentOffsetRatio_.height * self.contentSize.height;
-                
+            CGPoint newContentOffset = [[self class] autoresizedContentOffsetWithRatio_:contentOffsetRatio_ updatedContentSize_:self.contentSize visibleBoundsSize_:self.bounds.size contentInset_:self.contentInset];
+            
+            // This comparison is done for performance
+            if (!CGPointEqualToPoint(self.contentOffset, newContentOffset)) {
                 self.contentOffset = newContentOffset;
             }
         }
         
         lastBoundsSize_ = self.bounds.size;
     }
-    
+        
     // contentOffsetRatio_ is only used to autoresize content offset
     if (self.autoresizesContentOffset) {
-        contentOffsetRatio_.width = self.contentOffset.x/self.contentSize.width;
-        contentOffsetRatio_.height = self.contentOffset.y/self.contentSize.height;
+        contentOffsetRatio_ = [[self class] contentOffsetRatioForContentOffset_:self.contentOffset contentSize_:self.contentSize contentInset_:self.contentInset];
     }
     
     // Do enqueue and dequeue dance
@@ -621,8 +618,10 @@
         
         [self addSubview:cellView];
     }
-    else {
-        // If found, adjust frame
+    
+    // If found, adjust frame
+    // This comparison is done for performance
+    else if (!CGRectEqualToRect(cellFrame, cellView.frame)) {
         cellView.frame = cellFrame;
     }
     
@@ -630,6 +629,70 @@
     [cellView applyOptions:[self optionsOfCellAtIndex:index]];
         
     return cellView;
+}
+
++ (CGSize)contentSize_:(CGSize)contentSize extendedByContentInset_:(UIEdgeInsets)contentInset 
+{
+    contentSize.width += contentInset.left + contentInset.right;
+    contentSize.height += contentInset.top + contentInset.bottom;
+    return contentSize;
+}
+
++ (CGPoint)contentOffset_:(CGPoint)contentOffset shiftedByContentInset_:(UIEdgeInsets)contentInset
+{
+    contentOffset.x += contentInset.left;
+    contentOffset.y += contentInset.top;
+    return contentOffset;
+}
+
++ (CGSize)contentOffsetRatioForContentOffset_:(CGPoint)contentOffset contentSize_:(CGSize)contentSize contentInset_:(UIEdgeInsets)contentInset
+{
+    CGSize extendedContentSize = [self contentSize_:contentSize extendedByContentInset_:contentInset];
+    CGPoint shiftedContentOffset = [self contentOffset_:contentOffset shiftedByContentInset_:contentInset];
+    
+    CGSize ratio = CGSizeMake(shiftedContentOffset.x/extendedContentSize.width, shiftedContentOffset.y/extendedContentSize.height);
+    return ratio;
+}
+
++ (CGPoint)autoresizedContentOffsetWithRatio_:(CGSize)contentOffsetRatio updatedContentSize_:(CGSize)contentSize visibleBoundsSize_:(CGSize)boundsSize contentInset_:(UIEdgeInsets)contentInset
+{
+    CGPoint newContentOffset;
+    if (!isnan(contentOffsetRatio.width) && !isnan(contentOffsetRatio.height))
+    {
+        CGSize extendedContentSize = [self contentSize_:contentSize extendedByContentInset_:contentInset];
+        
+        newContentOffset.x = contentOffsetRatio.width * extendedContentSize.width;
+        newContentOffset.y = contentOffsetRatio.height * extendedContentSize.height;
+        
+        // Shift back content offset
+        newContentOffset.x -= contentInset.left;
+        newContentOffset.y -= contentInset.top;
+        
+        // Don't go under the tail
+        CGFloat maxX = newContentOffset.x + boundsSize.width;
+        CGFloat maxY = newContentOffset.y + boundsSize.height;
+        
+        CGFloat maxContainerX = contentSize.width + contentInset.right;
+        CGFloat maxContainerY = contentSize.height + contentInset.bottom;
+        
+        if (maxX > maxContainerX) {
+            newContentOffset.x -= (maxX - maxContainerX);
+        }
+        
+        if (maxY > maxContainerY) {
+            newContentOffset.y -= (maxY - maxContainerY);
+        }
+        
+        // Don't go over the head
+        // (also if it means to go under the tail)
+        newContentOffset.x = MAX(-contentInset.left, newContentOffset.x);
+        newContentOffset.y = MAX(-contentInset.top, newContentOffset.y);
+    }
+    else {
+        newContentOffset = CGPointMake(-1.0f, -1.0f);
+    }
+    
+    return newContentOffset;
 }
 
 + (CGSize)contentSizeForDirection_:(MUKGridDirection)direction cellSize_:(CGSize)cellSize maxRows_:(NSInteger)maxRows maxCellsPerRow_:(NSInteger)maxCellsPerRow numberOfCells_:(NSInteger)numberOfCells
@@ -658,7 +721,12 @@
     NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:self.frame.size cellSize_:cellSize direction_:self.direction];
     NSInteger maxRows = [[self class] maxRowsForCellsCount_:self.numberOfCells maxCellsPerRow_:maxCellsPerRow direction_:self.direction];
     
-    self.contentSize = [[self class] contentSizeForDirection_:self.direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow numberOfCells_:self.numberOfCells];
+    CGSize newContentSize = [[self class] contentSizeForDirection_:self.direction cellSize_:cellSize maxRows_:maxRows maxCellsPerRow_:maxCellsPerRow numberOfCells_:self.numberOfCells];
+    
+    // This comparison is done for performance
+    if (!CGSizeEqualToSize(newContentSize, self.contentSize)) {
+        self.contentSize = newContentSize;
+    }
 }
 
 - (NSSet *)visibleHostCellViews_ {
@@ -968,10 +1036,20 @@
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)scrollView;
         
         if (self.changesZoomedViewFrameWhileZooming) {
-            cellView.zoomView.frame = [self frameOfZoomedView:cellView.zoomView inCellView:cellView.guestView atIndex:cellView.cellIndex scale:cellView.zoomScale boundsSize:cellView.bounds.size];
+            CGRect newFrame = [self frameOfZoomedView:cellView.zoomView inCellView:cellView.guestView atIndex:cellView.cellIndex scale:cellView.zoomScale boundsSize:cellView.bounds.size];
+            
+            // This comparison is done for performance
+            if (!CGRectEqualToRect(newFrame, cellView.zoomView.frame)) {
+                cellView.zoomView.frame = newFrame;
+            }
         }
-
-        cellView.contentSize = [self contentSizeOfZoomedView:cellView.zoomView inCellView:cellView.guestView atIndex:cellView.cellIndex scale:cellView.zoomScale boundsSize:cellView.bounds.size];
+        
+        CGSize newContentSize = [self contentSizeOfZoomedView:cellView.zoomView inCellView:cellView.guestView atIndex:cellView.cellIndex scale:cellView.zoomScale boundsSize:cellView.bounds.size];
+        
+        // This comparison is done for performance
+        if (!CGSizeEqualToSize(newContentSize, cellView.contentSize)) {
+            cellView.contentSize = newContentSize;
+        }
         
         [self didZoomCellView:cellView.guestView atIndex:cellView.cellIndex zoomingView:cellView.zoomView atScale:cellView.zoomScale];
     }

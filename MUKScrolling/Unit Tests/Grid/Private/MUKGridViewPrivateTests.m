@@ -31,7 +31,7 @@
 #import "MUKGridCellFixedSize.h"
 #import "MUKGridView.h"
 #import "MUKGridCellView_.h"
-#import "MUKDummyRecyclableView.h"
+#import "MUKRecyclableView.h"
 
 #import "MUKRecyclingScrollView_Storage.h"
 
@@ -451,7 +451,7 @@
      but is fed by the handler
      */
     __block BOOL creationHandlerCalled = NO;
-    MUKDummyRecyclableView *cellView = [[MUKDummyRecyclableView alloc] init];
+    MUKRecyclableView *cellView = [[MUKRecyclableView alloc] init];
     cellView.recycleIdentifier = @"Foo";
     [gridView setCellCreationHandler:^UIView<MUKRecyclable> *(NSInteger index)
     {
@@ -478,7 +478,7 @@
      so is reused from visibleViews set
      */
     creationHandlerCalled = NO;
-    cellView = [[MUKDummyRecyclableView alloc] init];
+    cellView = [[MUKRecyclableView alloc] init];
     cellView.recycleIdentifier = @"Foo";
     [gridView setCellCreationHandler:^UIView<MUKRecyclable> *(NSInteger index)
      {
@@ -505,7 +505,7 @@
      so is recycled from enqueued views
      */
     creationHandlerCalled = NO;
-    cellView = [[MUKDummyRecyclableView alloc] init];
+    cellView = [[MUKRecyclableView alloc] init];
     cellView.recycleIdentifier = @"Foo";
     
     __block BOOL recycledCell = NO;
@@ -538,7 +538,7 @@
 }
 
 - (void)testHostCellViews {
-    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] init];
+    MUKRecyclableView *guestView = [[MUKRecyclableView alloc] init];
     guestView.recycleIdentifier = @"Foo";
     
     MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] init];
@@ -678,7 +678,7 @@
 - (void)testCellViewIdentifier {
     NSString *identifier = @"Foo";
     
-    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] init];
+    MUKRecyclableView *guestView = [[MUKRecyclableView alloc] init];
     guestView.recycleIdentifier = identifier;
     
     MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] init];
@@ -694,7 +694,7 @@
     CGRect guestFrame = CGRectMake(10, 10, 100, 100);
     CGRect cellFrame = CGRectMake(20, 20, 200, 158);
     
-    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] initWithFrame:guestFrame];
+    MUKRecyclableView *guestView = [[MUKRecyclableView alloc] initWithFrame:guestFrame];
     MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] initWithFrame:cellFrame];
     cellView.guestView = guestView;
     

@@ -28,7 +28,7 @@
 #import "MUKGridView.h"
 #import "MUKGridView_Layout.h"
 
-#import "MUKDummyRecyclableView.h"
+#import "MUKRecyclableView.h"
 #import "MUKGridCellView_.h"
 #import "MUKGridCellFixedSize.h"
 
@@ -37,7 +37,7 @@
 @implementation MUKGridViewTests
 
 - (void)testEnqueuedViewClass {
-    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] init];
+    MUKRecyclableView *guestView = [[MUKRecyclableView alloc] init];
     guestView.recycleIdentifier = @"Foo";
     
     MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] init];
@@ -47,11 +47,11 @@
     [gridView enqueueView:cellView];
     
     id enqueuedView = [[gridView enqueuedViews] anyObject];
-    STAssertTrue([enqueuedView isMemberOfClass:[MUKDummyRecyclableView class]], nil);
+    STAssertTrue([enqueuedView isMemberOfClass:[MUKRecyclableView class]], nil);
 }
 
 - (void)testVisibleViewClass {
-    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] init];
+    MUKRecyclableView *guestView = [[MUKRecyclableView alloc] init];
     guestView.recycleIdentifier = @"Foo";
     
     MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] init];
@@ -61,11 +61,11 @@
     [gridView addSubview:cellView];
     
     id visibleView = [[gridView visibleViews] anyObject];
-    STAssertTrue([visibleView isMemberOfClass:[MUKDummyRecyclableView class]], nil);
+    STAssertTrue([visibleView isMemberOfClass:[MUKRecyclableView class]], nil);
 }
                   
 - (void)testDequeuedViewClass {
-    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] init];
+    MUKRecyclableView *guestView = [[MUKRecyclableView alloc] init];
     guestView.recycleIdentifier = @"Foo";
     
     MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] init];
@@ -75,7 +75,7 @@
     [gridView enqueueView:cellView];
     
     id dequeuedView = [gridView dequeueViewWithIdentifier:@"Foo"];
-    STAssertTrue([dequeuedView isMemberOfClass:[MUKDummyRecyclableView class]], nil);
+    STAssertTrue([dequeuedView isMemberOfClass:[MUKRecyclableView class]], nil);
 }
 
 - (void)testDirection {
@@ -109,7 +109,7 @@
     CGSize cellSize = CGSizeMake(50, 50);
     gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
     gridView.cellCreationHandler = ^(NSInteger index) {
-        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        MUKRecyclableView *view = [[MUKRecyclableView alloc] init];
         view.recycleIdentifier = @"Foo";
         return view;
     };
@@ -151,9 +151,9 @@
     gridView.cellCreationHandler = ^(NSInteger index) {
         handlerCallsCount++;
         
-        MUKDummyRecyclableView *view = (MUKDummyRecyclableView *)[weakGridView dequeueViewWithIdentifier:@"Foo"];
+        MUKRecyclableView *view = (MUKRecyclableView *)[weakGridView dequeueViewWithIdentifier:@"Foo"];
         if (view == nil) {
-            view = [[MUKDummyRecyclableView alloc] init];
+            view = [[MUKRecyclableView alloc] init];
             view.recycleIdentifier = @"Foo";
         }
         else {
@@ -185,7 +185,7 @@
     gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
     gridView.numberOfCells = 2;
     gridView.cellCreationHandler = ^(NSInteger index) {
-        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        MUKRecyclableView *view = [[MUKRecyclableView alloc] init];
         view.recycleIdentifier = @"Foo";
         return view;
     };
@@ -363,7 +363,7 @@
     CGSize cellSize = CGSizeMake(50, 50);
     gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
     gridView.cellCreationHandler = ^(NSInteger index) {
-        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        MUKRecyclableView *view = [[MUKRecyclableView alloc] init];
         view.recycleIdentifier = @"Foo";
         return view;
     };
@@ -511,7 +511,7 @@
     
     MUKGridCellView_ *cellView = [[MUKGridCellView_ alloc] init];
     cellView.cellIndex = 1;
-    MUKDummyRecyclableView *guestView = [[MUKDummyRecyclableView alloc] init];
+    MUKRecyclableView *guestView = [[MUKRecyclableView alloc] init];
     guestView.recycleIdentifier = @"Foo";
     cellView.guestView = guestView;
     
@@ -551,7 +551,7 @@
     gridView.numberOfCells = 1;
     gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:CGSizeMake(50, 50)];
     gridView.cellCreationHandler = ^(NSInteger index) {
-        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        MUKRecyclableView *view = [[MUKRecyclableView alloc] init];
         view.recycleIdentifier = @"Foo";
         return view;
     };
@@ -587,7 +587,7 @@
     zoomView.tag = kZoomViewTag;
     
     gridView.cellCreationHandler = ^(NSInteger index) {
-        MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+        MUKRecyclableView *view = [[MUKRecyclableView alloc] init];
         [view addSubview:zoomView];
         view.recycleIdentifier = @"Foo";
         return view;

@@ -35,11 +35,12 @@
 		06339C1615358A5300FB07ED /* MUKRecyclingScrollView_Storage.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339C1515358A5300FB07ED /* MUKRecyclingScrollView_Storage.h */; };
 		06339C1915358BB200FB07ED /* MUKRecyclable.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339C1815358BB200FB07ED /* MUKRecyclable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06339C27153599CA00FB07ED /* MUKRecyclingScrollViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C26153599CA00FB07ED /* MUKRecyclingScrollViewTests.m */; };
-		06339C2B15359A8000FB07ED /* MUKDummyRecyclableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C2A15359A8000FB07ED /* MUKDummyRecyclableView.m */; };
 		06339C3015359C3F00FB07ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C2F15359C3F00FB07ED /* CoreGraphics.framework */; };
 		06339C3115359C4C00FB07ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C2F15359C3F00FB07ED /* CoreGraphics.framework */; };
 		06339C6F1535F13100FB07ED /* MUKGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339C6D1535F13100FB07ED /* MUKGridView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06339C701535F13100FB07ED /* MUKGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C6E1535F13100FB07ED /* MUKGridView.m */; };
+		0665B4141547FF640001E1E1 /* MUKRecyclableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0665B4121547FF640001E1E1 /* MUKRecyclableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0665B4151547FF640001E1E1 /* MUKRecyclableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0665B4131547FF640001E1E1 /* MUKRecyclableView.m */; };
 		066863A4153726CC005D4BC1 /* MUKGridCoordinate.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863A2153726CC005D4BC1 /* MUKGridCoordinate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		066863A5153726CC005D4BC1 /* MUKGridCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863A3153726CC005D4BC1 /* MUKGridCoordinate.m */; };
 		066863A715384013005D4BC1 /* MUKGridView_Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863A615384013005D4BC1 /* MUKGridView_Layout.h */; };
@@ -116,11 +117,11 @@
 		06339C1815358BB200FB07ED /* MUKRecyclable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKRecyclable.h; sourceTree = "<group>"; };
 		06339C25153599CA00FB07ED /* MUKRecyclingScrollViewTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKRecyclingScrollViewTests.h; sourceTree = "<group>"; };
 		06339C26153599CA00FB07ED /* MUKRecyclingScrollViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKRecyclingScrollViewTests.m; sourceTree = "<group>"; };
-		06339C2915359A8000FB07ED /* MUKDummyRecyclableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKDummyRecyclableView.h; sourceTree = "<group>"; };
-		06339C2A15359A8000FB07ED /* MUKDummyRecyclableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKDummyRecyclableView.m; sourceTree = "<group>"; };
 		06339C2F15359C3F00FB07ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		06339C6D1535F13100FB07ED /* MUKGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView.h; sourceTree = "<group>"; };
 		06339C6E1535F13100FB07ED /* MUKGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridView.m; sourceTree = "<group>"; };
+		0665B4121547FF640001E1E1 /* MUKRecyclableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKRecyclableView.h; sourceTree = "<group>"; };
+		0665B4131547FF640001E1E1 /* MUKRecyclableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKRecyclableView.m; sourceTree = "<group>"; };
 		066863A2153726CC005D4BC1 /* MUKGridCoordinate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCoordinate.h; sourceTree = "<group>"; };
 		066863A3153726CC005D4BC1 /* MUKGridCoordinate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCoordinate.m; sourceTree = "<group>"; };
 		066863A615384013005D4BC1 /* MUKGridView_Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView_Layout.h; sourceTree = "<group>"; };
@@ -211,6 +212,7 @@
 			children = (
 				06339C6B1535F10700FB07ED /* Grid */,
 				06339C1715358B9D00FB07ED /* Types */,
+				0665B4111547FF530001E1E1 /* Recyclable View */,
 				06339C09153587BF00FB07ED /* Recycling Scroll View */,
 			);
 			name = Classes;
@@ -223,7 +225,6 @@
 				06339BFF153585E000FB07ED /* InfoPlist.strings */,
 				06339C01153585E000FB07ED /* MUKScrollingTests-Info.plist */,
 				06D0FCBE1535F925008E652E /* Grid */,
-				06339C2815359A6600FB07ED /* Recyclable View */,
 				06339C24153599B700FB07ED /* Recycling Scroll View */,
 			);
 			name = "Unit Tests";
@@ -266,15 +267,6 @@
 			path = "Recycling Scroll View";
 			sourceTree = "<group>";
 		};
-		06339C2815359A6600FB07ED /* Recyclable View */ = {
-			isa = PBXGroup;
-			children = (
-				06339C2915359A8000FB07ED /* MUKDummyRecyclableView.h */,
-				06339C2A15359A8000FB07ED /* MUKDummyRecyclableView.m */,
-			);
-			path = "Recyclable View";
-			sourceTree = "<group>";
-		};
 		06339C6B1535F10700FB07ED /* Grid */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,6 +288,15 @@
 				066863A615384013005D4BC1 /* MUKGridView_Layout.h */,
 			);
 			path = Private;
+			sourceTree = "<group>";
+		};
+		0665B4111547FF530001E1E1 /* Recyclable View */ = {
+			isa = PBXGroup;
+			children = (
+				0665B4121547FF640001E1E1 /* MUKRecyclableView.h */,
+				0665B4131547FF640001E1E1 /* MUKRecyclableView.m */,
+			);
+			path = "Recyclable View";
 			sourceTree = "<group>";
 		};
 		066863A0153726BB005D4BC1 /* Coordinate */ = {
@@ -412,6 +413,7 @@
 				066863B015384AFB005D4BC1 /* MUKGridCellSize.h in Headers */,
 				066863D715396690005D4BC1 /* MUKGridCellFixedSize.h in Headers */,
 				06A5525F153EC9AD0086A526 /* MUKGridCellOptions.h in Headers */,
+				0665B4141547FF640001E1E1 /* MUKRecyclableView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,6 +575,7 @@
 				066863B115384AFB005D4BC1 /* MUKGridCellSize.m in Sources */,
 				066863D815396690005D4BC1 /* MUKGridCellFixedSize.m in Sources */,
 				06A55260153EC9AD0086A526 /* MUKGridCellOptions.m in Sources */,
+				0665B4151547FF640001E1E1 /* MUKRecyclableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,7 +584,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				06339C27153599CA00FB07ED /* MUKRecyclingScrollViewTests.m in Sources */,
-				06339C2B15359A8000FB07ED /* MUKDummyRecyclableView.m in Sources */,
 				06D0FCC21535F932008E652E /* MUKGridViewTests.m in Sources */,
 				066863B6153853A7005D4BC1 /* MUKGridCoordinateTests.m in Sources */,
 				066863B915385DBA005D4BC1 /* MUKGridCellSizeTests.m in Sources */,

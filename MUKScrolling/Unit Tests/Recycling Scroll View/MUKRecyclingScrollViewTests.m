@@ -29,13 +29,13 @@
 #import "MUKRecyclingScrollView_Memory.h"
 #import "MUKRecyclingScrollView_Storage.h"
 
-#import "MUKDummyRecyclableView.h"
+#import "MUKRecyclableView.h"
 
 @implementation MUKRecyclingScrollViewTests
 
 - (void)testViewEnqueueingCondition {
     CGRect viewRect = CGRectMake(0, 0, 200, 200);
-    MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
+    MUKRecyclableView *view = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:nil];
     
     CGRect scrollViewRect = viewRect;
     MUKRecyclingScrollView *scrollView = [[MUKRecyclingScrollView alloc] initWithFrame:scrollViewRect];
@@ -54,7 +54,7 @@
 - (void)testViewEnqueueing {
     static NSString *const kIdentifier = @"Dummy";
     
-    MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] init];
+    MUKRecyclableView *view = [[MUKRecyclableView alloc] init];
     view.recycleIdentifier = kIdentifier;
     
     MUKRecyclingScrollView *scrollView = [[MUKRecyclingScrollView alloc] init];
@@ -76,20 +76,16 @@
      tests view positioning.
      */
     CGRect viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *view0 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view0.recycleIdentifier = @"Dummy";
+    MUKRecyclableView *view0 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Dummy"];
     
     viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *view1 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view1.recycleIdentifier = @"Foo";
+    MUKRecyclableView *view1 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Foo"];
     
     viewRect = CGRectMake(0, 0, 200, 200);
-    MUKDummyRecyclableView *view2 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view2.recycleIdentifier = @"Dummy";
+    MUKRecyclableView *view2 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Dummy"];
     
     viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *view3 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view3.recycleIdentifier = @"Dummy";
+    MUKRecyclableView *view3 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Dummy"];
     
     CGRect scrollViewRect = viewRect;
     MUKRecyclingScrollView *scrollView = [[MUKRecyclingScrollView alloc] initWithFrame:scrollViewRect];
@@ -116,20 +112,16 @@
      tests view positioning.
      */
     CGRect viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *view0 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view0.recycleIdentifier = @"Dummy";
+    MUKRecyclableView *view0 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Dummy"];
     
     viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *view1 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view1.recycleIdentifier = @"Foo";
+    MUKRecyclableView *view1 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Foo"];
     
     viewRect = CGRectMake(0, 0, 200, 200);
-    MUKDummyRecyclableView *view2 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view2.recycleIdentifier = @"Dummy";
+    MUKRecyclableView *view2 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Dummy"];
     
     viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *view3 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view3.recycleIdentifier = @"Dummy";
+    MUKRecyclableView *view3 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Dummy"];
     
     CGRect scrollViewRect = viewRect;
     MUKRecyclingScrollView *scrollView = [[MUKRecyclingScrollView alloc] initWithFrame:scrollViewRect];
@@ -161,20 +153,16 @@
      tests view positioning.
      */
     CGRect viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *view0 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view0.recycleIdentifier = @"Dummy";
+    MUKRecyclableView *view0 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Dummy"];
     
     viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *view1 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view1.recycleIdentifier = @"Foo";
+    MUKRecyclableView *view1 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Foo"];
     
     viewRect = CGRectMake(0, 0, 200, 200);
-    MUKDummyRecyclableView *view2 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view2.recycleIdentifier = @"Dummy";
+    MUKRecyclableView *view2 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Dummy"];
     
     viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *view3 = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view3.recycleIdentifier = @"Dummy";
+    MUKRecyclableView *view3 = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Dummy"];
     
     CGRect scrollViewRect = viewRect;
     MUKRecyclingScrollView *scrollView = [[MUKRecyclingScrollView alloc] initWithFrame:scrollViewRect];
@@ -190,8 +178,7 @@
 
 - (void)testAddSubview {
     CGRect viewRect = CGRectMake(0, 0, 200, 200);
-    MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view.recycleIdentifier = @"Foo";
+    MUKRecyclableView *view = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Foo"];
     
     CGRect scrollViewRect = viewRect;
     MUKRecyclingScrollView *scrollView = [[MUKRecyclingScrollView alloc] initWithFrame:scrollViewRect];
@@ -201,15 +188,14 @@
     STAssertTrue([[scrollView subviews] containsObject:view], @"Subview added");
     
     viewRect = CGRectMake(1000, 0, 200, 200);
-    MUKDummyRecyclableView *outsideView = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    outsideView.recycleIdentifier = @"Foo";
+    MUKRecyclableView *outsideView = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Foo"];
     
     [scrollView addSubview:outsideView];
     STAssertFalse([[scrollView visibleViews] containsObject:outsideView], @"Recyclable view not added because is not visible");
     STAssertFalse([[scrollView subviews] containsObject:outsideView], @"Subview not added because is not visible");
     STAssertTrue([[scrollView enqueuedViews] containsObject:outsideView], @"Subview enqueued");
     
-    MUKDummyRecyclableView *unnamedView = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
+    MUKRecyclableView *unnamedView = [[MUKRecyclableView alloc] initWithFrame:viewRect];
 
     [scrollView addSubview:unnamedView];
     STAssertFalse([[scrollView visibleViews] containsObject:unnamedView], @"Recyclable view not added because it has not an identifier");
@@ -224,8 +210,7 @@
 
 - (void)testAutomaticDequeuingAfterMoving {
     CGRect viewRect = CGRectMake(0, 0, 200, 200);
-    MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view.recycleIdentifier = @"Foo";
+    MUKRecyclableView *view = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Foo"];
     
     CGRect scrollViewRect = viewRect;
     MUKRecyclingScrollView *scrollView = [[MUKRecyclingScrollView alloc] initWithFrame:scrollViewRect];
@@ -246,8 +231,7 @@
 
 - (void)testAutomaticDequeuingAfterScrolling {
     CGRect viewRect = CGRectMake(0, 0, 200, 200);
-    MUKDummyRecyclableView *view = [[MUKDummyRecyclableView alloc] initWithFrame:viewRect];
-    view.recycleIdentifier = @"Foo";
+    MUKRecyclableView *view = [[MUKRecyclableView alloc] initWithFrame:viewRect recycleIdentifier:@"Foo"];
     
     CGRect scrollViewRect = viewRect;
     MUKRecyclingScrollView *scrollView = [[MUKRecyclingScrollView alloc] initWithFrame:scrollViewRect];

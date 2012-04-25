@@ -34,6 +34,7 @@
 
 @interface MUKGridView ()
 - (void)commonIntialization_;
+
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate;
 - (void)handleCellTap_:(UITapGestureRecognizer *)recognizer;
 - (void)handleCellDoubleTap_:(UITapGestureRecognizer *)recognizer;
@@ -141,37 +142,7 @@
 }
 
 - (void)layoutSubviews {    
-    BOOL shouldAdjustContentSize = !CGSizeEqualToSize(lastBoundsSize_, self.bounds.size);
-    
-    // Consider also head view and tail view changes
-    if (shouldAdjustContentSize == NO) {
-        shouldAdjustContentSize = (!CGSizeEqualToSize(lastHeadViewSize_, self.headView.frame.size) || !CGSizeEqualToSize(lastTailViewSize_, self.tailView.frame.size));
-    }
-    
-    if (shouldAdjustContentSize) {
-        // Recalculate content size everytime bounds changes (useful during autorotations)
-        [self adjustContentSize_];
-        
-        // Calculate new content offset (if needed)
-        if (self.autoresizesContentOffset && !firstLayout_) {
-            CGPoint newContentOffset = [[self class] autoresizedContentOffsetWithRatio_:contentOffsetRatio_ updatedContentSize_:self.contentSize visibleBoundsSize_:self.bounds.size contentInset_:self.contentInset];
-            
-            // This comparison is done for performance
-            if (!CGPointEqualToPoint(self.contentOffset, newContentOffset)) {
-                self.contentOffset = newContentOffset;
-            }
-        }
-        
-        // Save last values
-        lastBoundsSize_ = self.bounds.size;
-        lastHeadViewSize_ = self.headView.frame.size;
-        lastTailViewSize_ = self.tailView.frame.size;
-    }
-        
-    // contentOffsetRatio_ is only used to autoresize content offset
-    if (self.autoresizesContentOffset) {
-        contentOffsetRatio_ = [[self class] contentOffsetRatioForContentOffset_:self.contentOffset contentSize_:self.contentSize contentInset_:self.contentInset];
-    }
+    [self adjustContentSizeAndContentOffsetIfNeededOrForcing_:NO];
     
     // Do enqueue and dequeue dance
     [super layoutSubviews];
@@ -286,8 +257,9 @@
 
 #pragma mark - Methods
 
-- (void)reloadData {
-    [self adjustContentSize_];
+- (void)reloadData {    
+    // Adjust content size and content offset
+    [self adjustContentSizeAndContentOffsetIfNeededOrForcing_:YES];
     
     // Empty view and enqueue subviews for reuse
     [[self visibleHostCellViews_] enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
@@ -594,6 +566,42 @@
         
         [self didDoubleTapCellAtIndex:cellView.cellIndex];
     }
+}
+
+- (BOOL)adjustContentSizeAndContentOffsetIfNeededOrForcing_:(BOOL)force {
+    BOOL shouldAdjustContentSize = (force || !CGSizeEqualToSize(lastBoundsSize_, self.bounds.size));
+    
+    // Consider also head view and tail view changes
+    if (shouldAdjustContentSize == NO) {
+        shouldAdjustContentSize = (!CGSizeEqualToSize(lastHeadViewSize_, self.headView.frame.size) || !CGSizeEqualToSize(lastTailViewSize_, self.tailView.frame.size));
+    }
+    
+    if (shouldAdjustContentSize) {
+        // Recalculate content size everytime bounds changes (useful during autorotations)
+        [self adjustContentSize_];
+        
+        // Calculate new content offset (if needed)
+        if (self.autoresizesContentOffset && !firstLayout_) {
+            CGPoint newContentOffset = [[self class] autoresizedContentOffsetWithRatio_:contentOffsetRatio_ updatedContentSize_:self.contentSize visibleBoundsSize_:self.bounds.size contentInset_:self.contentInset];
+            
+            // This comparison is done for performance
+            if (!CGPointEqualToPoint(self.contentOffset, newContentOffset)) {
+                self.contentOffset = newContentOffset;
+            }
+        }
+        
+        // Save last values
+        lastBoundsSize_ = self.bounds.size;
+        lastHeadViewSize_ = self.headView.frame.size;
+        lastTailViewSize_ = self.tailView.frame.size;
+    }
+    
+    // contentOffsetRatio_ is only used to autoresize content offset
+    if (self.autoresizesContentOffset) {
+        contentOffsetRatio_ = [[self class] contentOffsetRatioForContentOffset_:self.contentOffset contentSize_:self.contentSize contentInset_:self.contentInset];
+    }
+    
+    return shouldAdjustContentSize;
 }
 
 #pragma mark - Private: Layout

@@ -194,6 +194,99 @@
     STAssertEquals((NSUInteger)gridView.numberOfCells, [[gridView visibleViews] count], @"2 cells layed out");
 }
 
+- (void)testContentOffsetAutoresizing {
+    CGRect portraitFrame = CGRectMake(0, 0, 320, 480);
+    CGRect landscapeFrame = CGRectMake(0, 0, 480, 320);
+    
+    MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:portraitFrame];
+    gridView.numberOfCells = 160;
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
+    gridView.direction = MUKGridDirectionVertical;
+    gridView.autoresizesContentOffset = YES;
+    
+    [gridView layoutSubviews];
+    STAssertTrue(CGPointEqualToPoint(CGPointZero, gridView.contentOffset), @"On top");
+    
+    // Simulate rotation to landscape
+    gridView.frame = landscapeFrame;
+    [gridView layoutSubviews];
+    STAssertTrue(CGPointEqualToPoint(CGPointZero, gridView.contentOffset), @"On top");
+    
+    // Simulate rotation to portrait
+    gridView.frame = portraitFrame;
+    [gridView layoutSubviews];
+    STAssertTrue(CGPointEqualToPoint(CGPointZero, gridView.contentOffset), @"On top");
+    
+    
+    // Go to 30%
+    float scroll = 0.3f;
+    CGFloat expectedOffset = gridView.contentSize.height * scroll;
+    [gridView setContentOffset:CGPointMake(0.0f, expectedOffset)];
+    [gridView layoutSubviews]; // update content offset ratio
+    STAssertEqualsWithAccuracy(0.0f, gridView.contentOffset.x, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(expectedOffset, gridView.contentOffset.y, 0.001f, @"At %i%%, offset (%f) should be equal to expected one (%f)", scroll*100, gridView.contentOffset.y, expectedOffset);
+    
+    // Simulate rotation to landscape
+    gridView.frame = landscapeFrame;
+    [gridView layoutSubviews];
+    expectedOffset = gridView.contentSize.height * scroll;
+    STAssertEqualsWithAccuracy(0.0f, gridView.contentOffset.x, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(expectedOffset, gridView.contentOffset.y, 0.001f, @"At %i%%, offset (%f) should be equal to expected one (%f)", scroll*100, gridView.contentOffset.y, expectedOffset);
+    
+    // Simulate rotation to portrait
+    gridView.frame = portraitFrame;
+    [gridView layoutSubviews];
+    expectedOffset = gridView.contentSize.height * scroll;
+    STAssertEqualsWithAccuracy(0.0f, gridView.contentOffset.x, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(expectedOffset, gridView.contentOffset.y, 0.001f, @"At %i%%, offset (%f) should be equal to expected one (%f)", scroll*100, gridView.contentOffset.y, expectedOffset);
+    
+    
+    // Go to 50%
+    scroll = 0.5f;
+    expectedOffset = gridView.contentSize.height * scroll;
+    [gridView setContentOffset:CGPointMake(0.0f, expectedOffset)];
+    [gridView layoutSubviews]; // update content offset ratio
+    STAssertEqualsWithAccuracy(0.0f, gridView.contentOffset.x, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(expectedOffset, gridView.contentOffset.y, 0.001f, @"At %i%%, offset (%f) should be equal to expected one (%f)", scroll*100, gridView.contentOffset.y, expectedOffset);
+    
+    // Simulate rotation to landscape
+    gridView.frame = landscapeFrame;
+    [gridView layoutSubviews];
+    expectedOffset = gridView.contentSize.height * scroll;
+    STAssertEqualsWithAccuracy(0.0f, gridView.contentOffset.x, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(expectedOffset, gridView.contentOffset.y, 0.001f, @"At %i%%, offset (%f) should be equal to expected one (%f)", scroll*100, gridView.contentOffset.y, expectedOffset);
+    
+    // Simulate rotation to portrait
+    gridView.frame = portraitFrame;
+    [gridView layoutSubviews];
+    expectedOffset = gridView.contentSize.height * scroll;
+    STAssertEqualsWithAccuracy(0.0f, gridView.contentOffset.x, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(expectedOffset, gridView.contentOffset.y, 0.001f, @"At %i%%, offset (%f) should be equal to expected one (%f)", scroll*100, gridView.contentOffset.y, expectedOffset);
+    
+    
+    // Go to bottom
+    expectedOffset = gridView.contentSize.height - gridView.frame.size.height; // Don't go under the tail, but to last cell
+    [gridView setContentOffset:CGPointMake(0.0f, expectedOffset)];
+    [gridView layoutSubviews]; // update content offset ratio
+    STAssertEqualsWithAccuracy(0.0f, gridView.contentOffset.x, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(expectedOffset, gridView.contentOffset.y, 0.001f, @"At bottom, offset (%f) should be equal to expected one (%f)", gridView.contentOffset.y, expectedOffset);
+    
+    // Simulate rotation to landscape
+    gridView.frame = landscapeFrame;
+    [gridView layoutSubviews];
+    expectedOffset = gridView.contentSize.height - gridView.frame.size.height; // Don't go under the tail, but to last cell
+    STAssertEqualsWithAccuracy(0.0f, gridView.contentOffset.x, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(expectedOffset, gridView.contentOffset.y, 0.001f, @"At bottom, offset (%f) should be equal to expected one (%f)", gridView.contentOffset.y, expectedOffset);
+    
+    // Simulate rotation to portrait
+    gridView.frame = portraitFrame;
+    [gridView layoutSubviews];
+    expectedOffset = gridView.contentSize.height - gridView.frame.size.height; // Don't go under the tail, but to last cell
+    STAssertEqualsWithAccuracy(0.0f, gridView.contentOffset.x, 0.00001f, nil);
+    STAssertEqualsWithAccuracy(expectedOffset, gridView.contentOffset.y, 0.001f, @"At bottom, offset (%f) should be equal to expected one (%f)", gridView.contentOffset.y, expectedOffset);
+}
+
 - (void)testIndexesOfCellsInVisibleBounds {
     MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
     gridView.direction = MUKGridDirectionVertical;
@@ -430,7 +523,8 @@
 - (void)testScrollCompletionHandler {
     MUKGridView *gridView = [[MUKGridView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
     gridView.numberOfCells = 100;
-    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:CGSizeMake(50, 50)];
+    CGSize cellSize = CGSizeMake(50, 50);
+    gridView.cellSize = [[MUKGridCellFixedSize alloc] initWithSize:cellSize];
     [gridView reloadData];
     
     __block MUKGridScrollKind originatedScrollKind = -1;

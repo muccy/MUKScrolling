@@ -53,6 +53,7 @@
  Shortend to apply content size calculated in previous method
  */
 - (void)adjustContentSize_;
+- (BOOL)adjustContentSizeAndContentOffsetIfNeededOrForcing_:(BOOL)force;
 
 /*
  This method returns a cell view in a set searching for an index

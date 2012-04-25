@@ -34,6 +34,14 @@
 @synthesize willLayoutSubviewsHandler = willLayoutSubviewsHandler_;
 @synthesize didLayoutSubviewsHandler = didLayoutSubviewsHandler_;
 
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.scrollsToTop = NO;
+    }
+    return self;
+}
+
 #pragma mark - Accessors
 
 - (void)layoutSubviews {

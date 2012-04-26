@@ -14,6 +14,9 @@
 		06339C4E1535F09200FB07ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C4D1535F09200FB07ED /* main.m */; };
 		06383F1B1543F38300423A3A /* ThumbnailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06383F1A1543F38300423A3A /* ThumbnailsViewController.m */; };
 		06383F1F1543F44700423A3A /* ThumbnailCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06383F1E1543F44700423A3A /* ThumbnailCellView.m */; };
+		0665B4051547FC660001E1E1 /* CoversViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0665B4031547FC660001E1E1 /* CoversViewController.m */; };
+		0665B4061547FC660001E1E1 /* CoversViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0665B4041547FC660001E1E1 /* CoversViewController.xib */; };
+		0665B42815480C820001E1E1 /* CoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0665B42715480C820001E1E1 /* CoverView.m */; };
 		066863CF15388A17005D4BC1 /* libMUKScrolling.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C681535F0BF00FB07ED /* libMUKScrolling.a */; };
 		066863ED153969D9005D4BC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863E7153969D9005D4BC1 /* AppDelegate.m */; };
 		066863F1153969FA005D4BC1 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863F0153969FA005D4BC1 /* RootViewController.m */; };
@@ -71,6 +74,11 @@
 		06383F1A1543F38300423A3A /* ThumbnailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailsViewController.m; sourceTree = "<group>"; };
 		06383F1D1543F44700423A3A /* ThumbnailCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailCellView.h; sourceTree = "<group>"; };
 		06383F1E1543F44700423A3A /* ThumbnailCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailCellView.m; sourceTree = "<group>"; };
+		0665B4021547FC660001E1E1 /* CoversViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoversViewController.h; sourceTree = "<group>"; };
+		0665B4031547FC660001E1E1 /* CoversViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoversViewController.m; sourceTree = "<group>"; };
+		0665B4041547FC660001E1E1 /* CoversViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CoversViewController.xib; sourceTree = "<group>"; };
+		0665B42615480C820001E1E1 /* CoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverView.h; sourceTree = "<group>"; };
+		0665B42715480C820001E1E1 /* CoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverView.m; sourceTree = "<group>"; };
 		066863E6153969D9005D4BC1 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		066863E7153969D9005D4BC1 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		066863EF153969FA005D4BC1 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
@@ -189,6 +197,25 @@
 			path = Thumbnail;
 			sourceTree = "<group>";
 		};
+		0665B4011547FC4C0001E1E1 /* Covers */ = {
+			isa = PBXGroup;
+			children = (
+				0665B4021547FC660001E1E1 /* CoversViewController.h */,
+				0665B4031547FC660001E1E1 /* CoversViewController.m */,
+				0665B4041547FC660001E1E1 /* CoversViewController.xib */,
+			);
+			path = Covers;
+			sourceTree = "<group>";
+		};
+		0665B42515480C700001E1E1 /* Cover */ = {
+			isa = PBXGroup;
+			children = (
+				0665B42615480C820001E1E1 /* CoverView.h */,
+				0665B42715480C820001E1E1 /* CoverView.m */,
+			);
+			path = Cover;
+			sourceTree = "<group>";
+		};
 		066863E4153969D9005D4BC1 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +240,7 @@
 			children = (
 				066863E9153969D9005D4BC1 /* Root */,
 				0668640015396CB9005D4BC1 /* Base Grid */,
+				0665B4011547FC4C0001E1E1 /* Covers */,
 				06BCEFF3153EC2160065D11C /* Images */,
 				068CA8BF153DCDC10090E065 /* Pages */,
 				0668640115396CB9005D4BC1 /* Squares */,
@@ -233,6 +261,7 @@
 		066863EA153969D9005D4BC1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0665B42515480C700001E1E1 /* Cover */,
 				06383F1C1543F43600423A3A /* Thumbnail */,
 				06BCF002153EC5640065D11C /* Image */,
 				06BCF003153EC5640065D11C /* Label */,
@@ -391,6 +420,7 @@
 				06BCEFFF153EC49E0065D11C /* cat.jpg in Resources */,
 				06BCF000153EC49E0065D11C /* colors.jpg in Resources */,
 				06BCF001153EC49E0065D11C /* garden.jpg in Resources */,
+				0665B4061547FC660001E1E1 /* CoversViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +442,8 @@
 				06BCF009153EC57A0065D11C /* ImageCellView.m in Sources */,
 				06383F1B1543F38300423A3A /* ThumbnailsViewController.m in Sources */,
 				06383F1F1543F44700423A3A /* ThumbnailCellView.m in Sources */,
+				0665B4051547FC660001E1E1 /* CoversViewController.m in Sources */,
+				0665B42815480C820001E1E1 /* CoverView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,7 +475,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Muccinelli (959P8R4D7Z)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -459,6 +491,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_LDFLAGS = "-ObjC";
+				PROVISIONING_PROFILE = "29A718E1-5F0E-4F78-BCCB-BD08AC04BC69";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -469,7 +502,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Muccinelli (959P8R4D7Z)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -479,6 +512,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-ObjC";
+				PROVISIONING_PROFILE = "29A718E1-5F0E-4F78-BCCB-BD08AC04BC69";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

@@ -12,6 +12,7 @@
 #import "PagesViewController.h"
 #import "ImagesViewController.h"
 #import "ThumbnailsViewController.h"
+#import "CoversViewController.h"
 
 @interface RootViewControllerRow_ : NSObject
 @property (nonatomic, strong) NSString *title, *subtitle;
@@ -85,6 +86,17 @@
         row.selectionHandler = ^{
             ThumbnailsViewController *viewController = [[ThumbnailsViewController alloc] initWithNibName:nil bundle:nil];
             viewController.title = @"Thumbnails";
+            [weakSelf.navigationController pushViewController:viewController animated:YES];
+        };
+        [mutableArray addObject:row];
+        
+        
+        row = [[RootViewControllerRow_ alloc] init];
+        row.title = @"Covers";
+        row.subtitle = @"Carousel of cover views";
+        row.selectionHandler = ^{
+            CoversViewController *viewController = [[CoversViewController alloc] initWithNibName:nil bundle:nil];
+            viewController.title = @"Covers";
             [weakSelf.navigationController pushViewController:viewController animated:YES];
         };
         [mutableArray addObject:row];

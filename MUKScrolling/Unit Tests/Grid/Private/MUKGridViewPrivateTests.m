@@ -89,7 +89,7 @@
     CGFloat row, column;
     
     CGPoint point = CGPointZero;
-    MUKGridCoordinate *coordinate = [MUKGridView coordinateOfCellOfSize_:cellSize atPoint:point direction_:MUKGridDirectionHorizontal decimalRow_:&row decimalColumn_:&column];
+    MUKGridCoordinate coordinate = [MUKGridView coordinateOfCellOfSize_:cellSize atPoint:point direction_:MUKGridDirectionHorizontal decimalRow_:&row decimalColumn_:&column];
     STAssertEquals(0, coordinate.row, @"Origin");
     STAssertEquals(0, coordinate.column, @"Origin");
     STAssertEqualsWithAccuracy(0.0f, row - (CGFloat)coordinate.row, 0.0000001, @"No carry");
@@ -142,110 +142,6 @@
     STAssertEquals(1, coordinate.column, nil);
     STAssertEqualsWithAccuracy(0.7f, row - (CGFloat)coordinate.row, 0.0000001, nil);
     STAssertEqualsWithAccuracy(0.8f, column - (CGFloat)coordinate.column, 0.0000001, nil);
-}
-
-- (void)testCoordinatesInBounds {
-    CGSize cellSize = CGSizeMake(50, 50);
-    CGRect bounds = CGRectMake(0, 0, 40, 40);
-    
-    MUKGridCoordinate *coordinate = [[MUKGridCoordinate alloc] init];
-    
-    NSArray *coordinates = [MUKGridView coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:MUKGridDirectionHorizontal];
-    STAssertEquals((NSUInteger)1, [coordinates count], @"Bounds smaller than full cell");
-    coordinate.row = 0;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], @"Origin");
-    
-    coordinates = [MUKGridView coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:MUKGridDirectionVertical];
-    STAssertEquals((NSUInteger)1, [coordinates count], @"Bounds smaller than full cell");
-    coordinate.row = 0;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], @"Origin");
-    
-    bounds = CGRectMake(20, 20, 40, 40);
-    coordinates = [MUKGridView coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:MUKGridDirectionHorizontal];
-    STAssertEquals((NSUInteger)4, [coordinates count], @"Bounds smaller than full cell, but between four cells");
-    coordinate.row = 0;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], @"Origin");
-    coordinate.row = 1;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = 1;     coordinate.column = 1;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = 0;     coordinate.column = 1;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    
-    bounds = CGRectMake(20, 20, 40, 40);
-    coordinates = [MUKGridView coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:MUKGridDirectionVertical];
-    STAssertEquals((NSUInteger)4, [coordinates count], @"Bounds smaller than full cell, but between four cells");
-    coordinate.row = 0;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], @"Origin");
-    coordinate.row = 1;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = 1;     coordinate.column = 1;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = 0;     coordinate.column = 1;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    
-    bounds = CGRectMake(20, -30, 40, 40);
-    coordinates = [MUKGridView coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:MUKGridDirectionVertical];
-    STAssertEquals((NSUInteger)4, [coordinates count], @"Bounds smaller than full cell, but between four cells");
-    coordinate.row = 0;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], @"Origin");
-    coordinate.row = -1;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = -1;     coordinate.column = 1;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = 0;     coordinate.column = 1;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    
-    bounds = CGRectMake(-30, 20, 40, 40);
-    coordinates = [MUKGridView coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:MUKGridDirectionHorizontal];
-    STAssertEquals((NSUInteger)4, [coordinates count], @"Bounds smaller than full cell, but between four cells");
-    coordinate.row = 0;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], @"Origin");
-    coordinate.row = -1;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = -1;     coordinate.column = 1;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = 0;     coordinate.column = 1;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    
-    /*
-     7 horizontal rows (1-7; 1, 7 partially visible; 0 hidden)
-     4 cells per row
-     28 cells
-     */
-    bounds = CGRectMake(0, 60, 200, 320);
-    coordinates = [MUKGridView coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:MUKGridDirectionVertical];
-    STAssertEquals((NSUInteger)28, [coordinates count], nil);
-    coordinate.row = 0;     coordinate.column = 1;
-    STAssertFalse([coordinates containsObject:coordinate], nil);
-    coordinate.row = 1;     coordinate.column = 4;
-    STAssertFalse([coordinates containsObject:coordinate], nil);
-    coordinate.row = 8;     coordinate.column = 4;
-    STAssertFalse([coordinates containsObject:coordinate], nil);
-    coordinate.row = 2;     coordinate.column = 2;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = 7;     coordinate.column = 3;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    
-    /*
-     Horizontal grid with a single column (a sort of page view)
-     Looking at page 1 and a piece of page 2 (0 hidden)
-     
-     Note: Rows are horizontal!!!
-     */
-    bounds = CGRectMake(60, 0, 50, 50);
-    coordinates = [MUKGridView coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:MUKGridDirectionHorizontal];
-    STAssertEquals((NSUInteger)2, [coordinates count], nil);
-    coordinate.row = 0;     coordinate.column = 0;
-    STAssertFalse([coordinates containsObject:coordinate], nil);
-    coordinate.row = 0;     coordinate.column = 1;
-    STAssertFalse([coordinates containsObject:coordinate], nil);
-    coordinate.row = 4;     coordinate.column = 0;
-    STAssertFalse([coordinates containsObject:coordinate], nil);
-    coordinate.row = 1;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
-    coordinate.row = 2;     coordinate.column = 0;
-    STAssertTrue([coordinates containsObject:coordinate], nil);
 }
 
 - (void)testIndexesOfCellsInGivenBounds {

@@ -25,68 +25,67 @@
 
 #import "MUKGridCoordinate.h"
 
-@implementation MUKGridCoordinate
-@synthesize row = row_, column = column_;
+MUKGridCoordinate const MUKGridCoordinateZero = {0, 0};
 
-- (id)initWithRow:(NSInteger)row column:(NSInteger)column {
-    self = [super init];
-    if (self) {
-        self.row = row;
-        self.column = column;
-    }
-    return self;
+MUKGridCoordinate MUKGridCoordinateMake(NSInteger row, NSInteger column) {
+    MUKGridCoordinate coordinate;
+    coordinate.row = row;
+    coordinate.column = column;
+    return coordinate;
 }
 
-+ (id)coordinateWithRow:(NSInteger)row column:(NSInteger)column {
-    return [[self alloc] initWithRow:row column:column];
-}
+#pragma mark - Methods
 
-- (BOOL)isEqual:(id)object {
-    BOOL equals = [super isEqual:object];
-    
-    if (!equals && [object isKindOfClass:[self class]]) {
-        MUKGridCoordinate *coordinate = object;
-        equals = (coordinate.row == self.row && coordinate.column == self.column);
-    }
-    
-    return equals;
-}
-
-#pragma mark - 
-
-+ (NSArray *)coordinatesInRectangleBetweenCoordinate:(MUKGridCoordinate *)coord1 andCoordinate:(MUKGridCoordinate *)coord2
+NSInteger MUKGridCoordinatesCountBetweenCoordinates(MUKGridCoordinate coord1, MUKGridCoordinate coord2)
 {
-    if (!coord1 || !coord2) return nil;
-    NSMutableArray *coordinates = [NSMutableArray array];
+    NSInteger rows = coord2.row - coord1.row + 1;
+    NSInteger cols = coord2.column - coord1.column + 1;
+    return rows * cols;
+}
+
+void MUKGridCoordinatesBetweenCoordinates(MUKGridCoordinate coord1, MUKGridCoordinate coord2, MUKGridCoordinate **coordinates, NSInteger maxCount)
+{
+    if (maxCount <= 0) {
+        *coordinates = NULL;
+        return;
+    }
     
-    @autoreleasepool {
+    NSInteger index = 0;
+    for (NSInteger r = coord1.row; r <= coord2.row; r++) {
         for (NSInteger c = coord1.column; c <= coord2.column; c++) {
-            for (NSInteger r = coord1.row; r <= coord2.row; r++) {
-                MUKGridCoordinate *coordinate = [MUKGridCoordinate coordinateWithRow:r column:c];
-                if (coordinate) {
-                    [coordinates addObject:coordinate];
-                }
-            } // for r
+            MUKGridCoordinate coordinate = MUKGridCoordinateMake(r, c);
+            (*coordinates)[index] = coordinate;
+            index++;
+            
+            if (index >= maxCount) {
+                return;
+            }
         } // for column
-    }
-    
-    return coordinates;
+    } // for r
 }
 
-#pragma mark - Cell
-
-- (void)setCellIndex:(NSInteger)index withMaxCellsPerRow:(NSInteger)maxCellsPerRow
+BOOL MUKGridCoordinateEqualToCoordinate(MUKGridCoordinate coord1, MUKGridCoordinate coord2)
 {
-    index = (index < 0 ? 0 : index);
-    
-    self.row = index / maxCellsPerRow;
-    self.column = index % maxCellsPerRow;
+    return (coord1.row == coord2.row && coord1.column == coord2.column);
 }
 
-- (NSInteger)cellIndexWithMaxCellsPerRow:(NSInteger)maxCellsPerRow {
-    NSInteger row = (self.row < 0 ? 0 : self.row);
-    NSInteger column = (self.column < 0 ? 0 : self.column);
+#pragma mark - Cell Methods
+
+MUKGridCoordinate MUKGridCoordinateFromCellIndex(NSInteger cellIndex, NSInteger maxCellsPerRow)
+{
+    cellIndex = (cellIndex < 0 ? 0 : cellIndex);
+    
+    MUKGridCoordinate coordinate;
+    coordinate.row = cellIndex / maxCellsPerRow;
+    coordinate.column = cellIndex % maxCellsPerRow;
+    
+    return coordinate;
+}
+
+NSInteger MUKGridCoordinateCellIndex(MUKGridCoordinate coordinate, NSInteger maxCellsPerRow)
+{
+    NSInteger row = (coordinate.row < 0 ? 0 : coordinate.row);
+    NSInteger column = (coordinate.column < 0 ? 0 : coordinate.column);
     return (row * maxCellsPerRow) + column;
 }
 
-@end

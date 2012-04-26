@@ -665,8 +665,7 @@
     CGRect cellFrame;
     cellFrame.size = cellSize;
     
-    MUKGridCoordinate *coordinate = [[MUKGridCoordinate alloc] init];
-    [coordinate setCellIndex:index withMaxCellsPerRow:maxCellsPerRow];
+    MUKGridCoordinate coordinate = MUKGridCoordinateFromCellIndex(index, maxCellsPerRow);
     
     if (MUKGridDirectionVertical == direction) {
         cellFrame.origin.x = coordinate.column * cellSize.width;
@@ -1182,9 +1181,9 @@
     return rows;
 }
 
-+ (MUKGridCoordinate *)coordinateOfCellOfSize_:(CGSize)cellSize atPoint:(CGPoint)point direction_:(MUKGridDirection)direction decimalRow_:(CGFloat *)decimalRow decimalColumn_:(CGFloat *)decimalColumn
++ (MUKGridCoordinate)coordinateOfCellOfSize_:(CGSize)cellSize atPoint:(CGPoint)point direction_:(MUKGridDirection)direction decimalRow_:(CGFloat *)decimalRow decimalColumn_:(CGFloat *)decimalColumn
 {
-    MUKGridCoordinate *coordinate;
+    MUKGridCoordinate coordinate;
     
     switch (direction) {
         case MUKGridDirectionVertical: {
@@ -1192,7 +1191,6 @@
             CGFloat r = point.y/cellSize.height;
             CGFloat c = point.x/cellSize.width;
             
-            coordinate = [[MUKGridCoordinate alloc] init];
             coordinate.row = floorf(r);
             coordinate.column = floorf(c);
             
@@ -1207,7 +1205,6 @@
             CGFloat r = point.x/cellSize.width;
             CGFloat c = point.y/cellSize.height;
             
-            coordinate = [[MUKGridCoordinate alloc] init];
             coordinate.row = floorf(r);
             coordinate.column = floorf(c);
             
@@ -1218,20 +1215,20 @@
         }
             
         default:
-            coordinate = nil;
+            coordinate = MUKGridCoordinateMake(0, 0);
             break;
     }
     
     return coordinate;
 }
 
-+ (NSArray *)coordinatesOfCellsOfSize_:(CGSize)cellSize inVisibleBounds_:(CGRect)visibleBounds direction_:(MUKGridDirection)direction;
+- (NSIndexSet *)indexesOfCellsInBounds_:(CGRect)bounds cellSize_:(CGSize)cellSize maxCellsPerRow_:(NSInteger)maxCellsPerRow
 {
-    MUKGridCoordinate *firstCellCoordinate = [self coordinateOfCellOfSize_:cellSize atPoint:visibleBounds.origin direction_:direction decimalRow_:NULL decimalColumn_:NULL];
+    MUKGridCoordinate firstCellCoordinate = [[self class] coordinateOfCellOfSize_:cellSize atPoint:bounds.origin direction_:self.direction decimalRow_:NULL decimalColumn_:NULL];
     
-    CGPoint bottomDownPoint = CGPointMake(CGRectGetMaxX(visibleBounds), CGRectGetMaxY(visibleBounds));
+    CGPoint bottomDownPoint = CGPointMake(CGRectGetMaxX(bounds), CGRectGetMaxY(bounds));
     CGFloat row = 0.0, column = 0.0;
-    MUKGridCoordinate *lastCellCoordinate = [self coordinateOfCellOfSize_:cellSize atPoint:bottomDownPoint direction_:direction decimalRow_:&row decimalColumn_:&column];
+    MUKGridCoordinate lastCellCoordinate = [[self class] coordinateOfCellOfSize_:cellSize atPoint:bottomDownPoint direction_:self.direction decimalRow_:&row decimalColumn_:&column];
     
     if (ABS(row - (CGFloat)lastCellCoordinate.row) < 0.000001) {
         // No carry means that bottom down point is exactly between two cells
@@ -1245,34 +1242,31 @@
         lastCellCoordinate.column--;
     }
     
-    return [MUKGridCoordinate coordinatesInRectangleBetweenCoordinate:firstCellCoordinate andCoordinate:lastCellCoordinate];
-}
+    // Count how many coordinates are into the rectangle
+    NSInteger coordsCount = MUKGridCoordinatesCountBetweenCoordinates(firstCellCoordinate, lastCellCoordinate);
+    
+    // Create buffer on the heap
+    MUKGridCoordinate *coordinates = calloc(coordsCount, sizeof(MUKGridCoordinate));
+    
+    // Get coordinates
+    MUKGridCoordinatesBetweenCoordinates(firstCellCoordinate, lastCellCoordinate, &coordinates, coordsCount);
 
-- (NSIndexSet *)indexesOfCellsInBounds_:(CGRect)bounds cellSize_:(CGSize)cellSize maxCellsPerRow_:(NSInteger)maxCellsPerRow
-{
+    // Create index set
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
 
-    @autoreleasepool {
-        // Take coordinates
-        NSArray *coordinates = [[self class] coordinatesOfCellsOfSize_:cellSize inVisibleBounds_:bounds direction_:self.direction];
+    // Create indexes
+    for (NSInteger i=0; i<coordsCount; i++) {
+        NSInteger cellIndex = MUKGridCoordinateCellIndex(coordinates[i], maxCellsPerRow);
         
-        /*
-         Convert to indexes
-         Some coordinates could be out of bounds (e.g.: scroll bouncing, content
-         insets, ...)
-         */
-        [coordinates enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) 
-         {
-             MUKGridCoordinate *coordinate = obj;
-             NSInteger index = [coordinate cellIndexWithMaxCellsPerRow:maxCellsPerRow];
-             
-             // Validate index
-             if (index >= 0 && index < self.numberOfCells) {
-                 [indexSet addIndex:index];
-             }
-         }];
-    }
+        // Validate index
+        if (cellIndex >= 0 && cellIndex < self.numberOfCells) {
+            [indexSet addIndex:cellIndex];
+        }
+    } // for
     
+    // Dispose coordinates C array on the heap
+    free(coordinates);
+
     return indexSet;
 }
 

@@ -26,43 +26,42 @@
 #import <Foundation/Foundation.h>
 
 /**
- This class expresses the position into a grid in terms of row and column couple.
+ This C struct expresses the position into a grid in terms of row and column
+ couple.
  
  Please note that a grid may have horizontal rows (in a vertical grid) or
  vertical rows (in an horizontal grid).
  */
-@interface MUKGridCoordinate : NSObject
-/** @name Properties */
+typedef struct {
+    NSInteger row;
+    NSInteger column;
+} MUKGridCoordinate;
+
 /**
- Row dimension of the coordinate.
- 
- Zero-based index.
+ Coordinate which equals to `MUKGridCoordinateMake(0, 0)`
  */
-@property (nonatomic) NSInteger row;
-/**
- Column dimension of the coordinate.
- 
- Zero-based index.
- */
-@property (nonatomic) NSInteger column;
+extern MUKGridCoordinate const MUKGridCoordinateZero;
 
 /** @name Initializers */
 /**
  Designated initializer.
  @param row Row dimension of the coordinate.
  @param column Column dimension of the coordinate.
- @return An initialized instance.
+ @return An initialized MUKGridCoordinate struct on the stack.
  */
-- (id)initWithRow:(NSInteger)row column:(NSInteger)column;
-/**
- Shortend to initialize a coordinate.
- @param row Row dimension of the coordinate.
- @param column Column dimension of the coordinate.
- @return An initialized instance.
- */
-+ (id)coordinateWithRow:(NSInteger)row column:(NSInteger)column;
+extern MUKGridCoordinate MUKGridCoordinateMake(NSInteger row, NSInteger column);
 
 /** @name Methods */
+/**
+ Number of coordinates between two given coordinates which form a rectangle.
+ 
+ Say you pass `(0,1)` and `(1,3)`, it returns `6`.
+ 
+ @param coord1 First coordinate.
+ @param coord2 Last coordinate.
+ @return Number of coordinates, including `coord1` and `coord2`.
+ */
+extern NSInteger MUKGridCoordinatesCountBetweenCoordinates(MUKGridCoordinate coord1, MUKGridCoordinate coord2);
 /**
  Coordinates between two given coordinates which form a rectangle.
  
@@ -70,25 +69,32 @@
  
  @param coord1 First coordinate.
  @param coord2 Last coordinate.
- @return Array of coordinates, including `coord1` and `coord2`.
+ @param coordinates Buffer to fill of coordinates.
+ @param maxCount Maximum size of buffer.
  */
-+ (NSArray *)coordinatesInRectangleBetweenCoordinate:(MUKGridCoordinate *)coord1 andCoordinate:(MUKGridCoordinate *)coord2;
-@end
-
-
-@interface MUKGridCoordinate (Cell)
+extern void MUKGridCoordinatesBetweenCoordinates(MUKGridCoordinate coord1, MUKGridCoordinate coord2, MUKGridCoordinate **coordinates, NSInteger maxCount);
 /**
- Sets row and column given a cell index.
- @param index Cell index.
+ Compares two coordinates.
+ 
+ @param coord1 First coordinate.
+ @param coord2 Second coordinate.
+ @return `YES` if coordinates have same row and column.
+ */
+extern BOOL MUKGridCoordinateEqualToCoordinate(MUKGridCoordinate coord1, MUKGridCoordinate coord2);
+
+/** @name Cell Methods */
+/**
+ Coordinate given a cell index.
+ @param cellIndex Cell index.
  @param maxCellsPerRow Number of cells which could be contained in a row.
  @warning If `index` is less than `0`, `index` will be clamped to `0`. 
  */
-- (void)setCellIndex:(NSInteger)index withMaxCellsPerRow:(NSInteger)maxCellsPerRow;
+extern MUKGridCoordinate MUKGridCoordinateFromCellIndex(NSInteger cellIndex, NSInteger maxCellsPerRow);
 /**
- Cell index represented by this coordinate.
+ Cell index represented by a coordinate.
+ @param coordinate Coordinate to transform into an index.
  @param maxCellsPerRow Number of cells which could be contained in a row.
- @return Cell index represented by this coordinate.
+ @return Cell index represented by the coordinate.
  @warning If `row` or `column` are less than `0`, they will be clamped to `0`.
  */
-- (NSInteger)cellIndexWithMaxCellsPerRow:(NSInteger)maxCellsPerRow;
-@end
+extern NSInteger MUKGridCoordinateCellIndex(MUKGridCoordinate coordinate, NSInteger maxCellsPerRow);

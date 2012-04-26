@@ -35,8 +35,8 @@
 /**
  Designated initializer.
  
- @property frame The frame rectangle for the view.
- @property recycleIdentifier Recycle identifier used during enqueue/dequeue dance.
+ @param frame The frame rectangle for the view.
+ @param recycleIdentifier Recycle identifier used during enqueue/dequeue dance.
  Please don't leave recycleIdentifier set to `nil` in order to use 
  MUKRecycleScrollView benefits.
  @return An initialized view object.

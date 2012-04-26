@@ -48,11 +48,7 @@
  You can also read real decimal coordinate to inspect returned coordinate
  validity
  */
-+ (MUKGridCoordinate *)coordinateOfCellOfSize_:(CGSize)cellSize atPoint:(CGPoint)point direction_:(MUKGridDirection)direction decimalRow_:(CGFloat *)decimalRow decimalColumn_:(CGFloat *)decimalColumn;
-/*
- Returns coordinates for cells in a rect in a rect
- */
-+ (NSArray *)coordinatesOfCellsOfSize_:(CGSize)cellSize inVisibleBounds_:(CGRect)visibleBounds direction_:(MUKGridDirection)direction;
++ (MUKGridCoordinate)coordinateOfCellOfSize_:(CGSize)cellSize atPoint:(CGPoint)point direction_:(MUKGridDirection)direction decimalRow_:(CGFloat *)decimalRow decimalColumn_:(CGFloat *)decimalColumn;
 /*
  Indexes of cells which should be layed out for given bounds.
  */

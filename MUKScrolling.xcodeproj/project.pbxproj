@@ -43,7 +43,7 @@
 		0665B4151547FF640001E1E1 /* MUKRecyclableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0665B4131547FF640001E1E1 /* MUKRecyclableView.m */; };
 		0665B42A15494A970001E1E1 /* MUKGridView_Storage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0665B42915494A970001E1E1 /* MUKGridView_Storage.h */; };
 		066863A4153726CC005D4BC1 /* MUKGridCoordinate.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863A2153726CC005D4BC1 /* MUKGridCoordinate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		066863A5153726CC005D4BC1 /* MUKGridCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863A3153726CC005D4BC1 /* MUKGridCoordinate.m */; };
+		066863A5153726CC005D4BC1 /* MUKGridCoordinate.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863A3153726CC005D4BC1 /* MUKGridCoordinate.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		066863A715384013005D4BC1 /* MUKGridView_Layout.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863A615384013005D4BC1 /* MUKGridView_Layout.h */; };
 		066863AB153844BC005D4BC1 /* MUKGridCellView_.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863A9153844BC005D4BC1 /* MUKGridCellView_.h */; };
 		066863AC153844BC005D4BC1 /* MUKGridCellView_.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863AA153844BC005D4BC1 /* MUKGridCellView_.m */; };
@@ -563,7 +563,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/appledoc \\\n--project-name \"MUKScrolling\" \\\n--project-company \"MeLive\" \\\n--company-id \"it.melive\" \\\n--output \"Documentation\" \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--ignore \"*.m\" \\\n--ignore \"Unit Tests\" \\\n--ignore \"Example\" \\\n--ignore \"Private\" \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}\"";
+			shellScript = "/usr/local/bin/appledoc \\\n--project-name \"MUKScrolling\" \\\n--project-company \"MeLive\" \\\n--company-id \"it.melive\" \\\n--output \"Documentation\" \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--ignore \"*.m\" \\\n--ignore \"Unit Tests\" \\\n--ignore \"Example\" \\\n--ignore \"Private\" \\\n--ignore \"Submodules\" \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -631,7 +631,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
@@ -658,7 +661,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;

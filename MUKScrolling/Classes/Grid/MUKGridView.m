@@ -24,7 +24,9 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "MUKGridView.h"
+#import "MUKRecyclingScrollView_Memory.h"
 
+#import "MUKGridView_Storage.h"
 #import "MUKGridView_RowsAndColumns.h"
 #import "MUKGridView_Layout.h"
 
@@ -57,6 +59,7 @@
 @synthesize headView = headView_, tailView = tailView_;
 
 @synthesize cellCreationHandler = cellCreationHandler_;
+@synthesize scrollHandler = scrollHandler_;
 @synthesize scrollCompletionHandler = scrollCompletionHandler_;
 @synthesize cellTapHandler = cellTapHandler_;
 @synthesize cellDoubleTapHandler = cellDoubleTapHandler_;
@@ -69,7 +72,9 @@
 @synthesize cellDidLayoutSubviewsHandler = cellDidLayoutSubviewsHandler_;
 @synthesize cellZoomedViewFrameHandler = cellZoomedViewFrameHandler_;
 @synthesize cellZoomedViewContentSizeHandler = cellZoomedViewContentSizeHandler_;
+@synthesize visibleCellsBoundsHandler = visibleCellsBoundsHandler_;
 
+@synthesize dequeuedHostCellViews_ = dequeuedHostCellViews__;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -125,6 +130,13 @@
             [(UIView<MUKRecyclable> *)tailView setRecycleIdentifier:nil];
         }
     }
+}
+
+- (NSMutableSet *)dequeuedHostCellViews_ {
+    if (dequeuedHostCellViews__ == nil) {
+        dequeuedHostCellViews__ = [[NSMutableSet alloc] init];
+    }
+    return dequeuedHostCellViews__;
 }
 
 #pragma mark - Overrides
@@ -215,6 +227,8 @@
     UIView<MUKRecyclable> *cellView = [super dequeueViewWithIdentifier:recycleIdentifier];
     
     if ([cellView isKindOfClass:[MUKGridCellView_ class]]) {
+        // Don't release host cell view
+        [self.dequeuedHostCellViews_ addObject:cellView];
         return [(MUKGridCellView_ *)cellView guestView];
     }
     
@@ -255,6 +269,13 @@
     }
 }
 
+#pragma mark - Overrides (Private Methods)
+
+- (void)memoryWarningNotification_:(NSNotification *)notification {
+    [super memoryWarningNotification_:notification];
+    self.dequeuedHostCellViews_ = nil;
+}
+
 #pragma mark - Methods
 
 - (void)reloadData {    
@@ -262,7 +283,9 @@
     [self adjustContentSizeAndContentOffsetIfNeededOrForcing_:YES];
     
     // Empty view and enqueue subviews for reuse
-    [[self visibleHostCellViews_] enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+    self.dequeuedHostCellViews_ = nil;
+    [[self visibleHostCellViews_] enumerateObjectsUsingBlock:^(id obj, BOOL *stop) 
+    {
         [self enqueueView:obj];
     }];
     
@@ -287,6 +310,7 @@
 }
 
 - (void)removeAllHandlers {
+    self.scrollHandler = nil;
     self.scrollCompletionHandler = nil;
     self.cellTapHandler = nil;
     self.cellDoubleTapHandler = nil;
@@ -299,6 +323,7 @@
     self.cellDidLayoutSubviewsHandler = nil;
     self.cellZoomedViewFrameHandler = nil;
     self.cellZoomedViewContentSizeHandler = nil;
+    self.visibleCellsBoundsHandler = nil;
 }
 
 #pragma mark - Layout
@@ -306,10 +331,22 @@
 - (NSIndexSet *)indexesOfCellsInVisibleBounds {
     // Normalize bounds of cells
     CGRect normalizedBounds = [self normalizedVisibleBounds_];
+    
+    CGRect visibleCellsBounds = CGRectZero;
+    if (self.visibleCellsBoundsHandler) {
+        visibleCellsBounds = self.visibleCellsBoundsHandler(normalizedBounds);
+    }
+    
+    // Set default if needed
+    if (CGRectEqualToRect(CGRectZero, visibleCellsBounds)) {
+        visibleCellsBounds = normalizedBounds;
+    }
+    
+    // Use bounds of proper size to perform calculations
     CGSize cellSize = [self.cellSize sizeRespectSize:normalizedBounds.size];
     NSInteger maxCellsPerRow = [[self class] maxCellsPerRowInContainerSize_:normalizedBounds.size cellSize_:cellSize direction_:self.direction];
 
-    return [self indexesOfCellsInBounds_:normalizedBounds cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow];
+    return [self indexesOfCellsInBounds_:visibleCellsBounds cellSize_:cellSize maxCellsPerRow_:maxCellsPerRow];
 }
 
 - (UIView<MUKRecyclable> *)createCellViewAtIndex:(NSInteger)index {
@@ -656,33 +693,54 @@
     
     CGRect cellFrame = [self frameOfCellAtIndex:index];
     
-    // Create if not found
+    // Create if not found in visible cells
     if (cellView == nil) {
         UIView<MUKRecyclable> *guestView = [self createCellViewAtIndex:index];
-        cellView = [[MUKGridCellView_ alloc] initWithFrame:cellFrame];
-        cellView.clipsToBounds = YES;
         
-        cellView.guestView = guestView;
+        /*
+         If guest view is in a MUKGridCellView_, it means it is dequeued.
+         Reuse also that view and remove from the dequeued pool.
+         */
+        if ([guestView.superview isKindOfClass:[MUKGridCellView_ class]])
+        {
+            cellView = (MUKGridCellView_ *)guestView.superview;
+            if (!CGRectEqualToRect(cellFrame, cellView.frame)) {
+                cellView.frame = cellFrame;
+            }
+            
+            [self.dequeuedHostCellViews_ removeObject:cellView];
+        }
+        /*
+         Not dequeued: create brand new host cell view.
+         */
+        else {
+            cellView = [[MUKGridCellView_ alloc] initWithFrame:cellFrame];
+            cellView.clipsToBounds = YES;
+            cellView.guestView = guestView;
+            
+            __unsafe_unretained MUKGridView *weakSelf = self;
+            __unsafe_unretained MUKGridCellView_ *weakCellView = cellView;
+            cellView.willLayoutSubviewsHandler = ^{
+                [weakSelf willLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
+            };
+            
+            cellView.didLayoutSubviewsHandler = ^{
+                [weakSelf didLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
+            };
+            
+            cellView.delegate = self;
+            [cellView.singleTapGestureRecognizer addTarget:self action:@selector(handleCellTap_:)];
+            [cellView.doubleTapGestureRecognizer addTarget:self action:@selector(handleCellDoubleTap_:)];
+        }
+              
+        // Be sure to give the correct index to the cell
         cellView.cellIndex = index;
         
-        __unsafe_unretained MUKGridView *weakSelf = self;
-        __unsafe_unretained MUKGridCellView_ *weakCellView = cellView;
-        cellView.willLayoutSubviewsHandler = ^{
-            [weakSelf willLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
-        };
-        
-        cellView.didLayoutSubviewsHandler = ^{
-            [weakSelf didLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
-        };
-        
-        cellView.delegate = self;
-        [cellView.singleTapGestureRecognizer addTarget:self action:@selector(handleCellTap_:)];
-        [cellView.doubleTapGestureRecognizer addTarget:self action:@selector(handleCellDoubleTap_:)];
-        
+        // Add cell
         [self addSubview:cellView];
     }
     
-    // If found, adjust frame
+    // If found in visible views, adjust frame
     // This comparison is done for performance
     else if (!CGRectEqualToRect(cellFrame, cellView.frame)) {
         cellView.frame = cellFrame;
@@ -1219,6 +1277,14 @@
 }
 
 #pragma mark - <UIScrollViewDelegate>
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (self == scrollView) {
+        if (self.scrollHandler) {
+            self.scrollHandler();
+        }
+    }
+}
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     if (self == scrollView) {

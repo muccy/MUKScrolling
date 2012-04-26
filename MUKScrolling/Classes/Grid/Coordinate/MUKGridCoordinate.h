@@ -51,9 +51,16 @@
  Designated initializer.
  @param row Row dimension of the coordinate.
  @param column Column dimension of the coordinate.
- @return
+ @return An initialized instance.
  */
 - (id)initWithRow:(NSInteger)row column:(NSInteger)column;
+/**
+ Shortend to initialize a coordinate.
+ @param row Row dimension of the coordinate.
+ @param column Column dimension of the coordinate.
+ @return An initialized instance.
+ */
++ (id)coordinateWithRow:(NSInteger)row column:(NSInteger)column;
 
 /** @name Methods */
 /**

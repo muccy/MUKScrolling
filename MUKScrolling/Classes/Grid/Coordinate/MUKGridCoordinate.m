@@ -37,6 +37,10 @@
     return self;
 }
 
++ (id)coordinateWithRow:(NSInteger)row column:(NSInteger)column {
+    return [[self alloc] initWithRow:row column:column];
+}
+
 - (BOOL)isEqual:(id)object {
     BOOL equals = [super isEqual:object];
     
@@ -55,17 +59,16 @@
     if (!coord1 || !coord2) return nil;
     NSMutableArray *coordinates = [NSMutableArray array];
     
-    for (NSInteger c = coord1.column; c <= coord2.column; c++) {
-        for (NSInteger r = coord1.row; r <= coord2.row; r++) {
-            MUKGridCoordinate *coordinate = [[MUKGridCoordinate alloc] init];
-            if (coordinate) {
-                coordinate.row = r;
-                coordinate.column = c;
-                
-                [coordinates addObject:coordinate];
-            }
-        } // for r
-    } // for column
+    @autoreleasepool {
+        for (NSInteger c = coord1.column; c <= coord2.column; c++) {
+            for (NSInteger r = coord1.row; r <= coord2.row; r++) {
+                MUKGridCoordinate *coordinate = [MUKGridCoordinate coordinateWithRow:r column:c];
+                if (coordinate) {
+                    [coordinates addObject:coordinate];
+                }
+            } // for r
+        } // for column
+    }
     
     return coordinates;
 }

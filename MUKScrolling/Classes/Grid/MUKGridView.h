@@ -64,6 +64,7 @@ typedef enum {
  
  This class implements following methods of `UIScrollViewDelegate` protocol:
  
+ * `- (void)scrollViewDidScroll:(UIScrollView *)scrollView`
  * `- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView`
  * `- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate`
  * `- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView`
@@ -155,6 +156,32 @@ typedef enum {
 */
 @property (nonatomic, copy) UIView<MUKRecyclable>* (^cellCreationHandler)(NSInteger cellIndex);
 /**
+ Handler to feed bounds used to calculate visible cells in 
+ indexesOfCellsInVisibleBounds.
+ 
+ This could be handy when you use `clipsToBounds = NO` in a bigger superview.
+ 
+ `normalizedBounds` are used if you return `CGRectZero` or you do not set this
+ handler.
+ */
+@property (nonatomic, copy) CGRect (^visibleCellsBoundsHandler)(CGRect normalizedBounds);
+/**
+ Handler which is called just before cell subviews are layed out.
+ 
+ @see willLayoutSubviewsOfCellView:atIndex:
+ */
+@property (nonatomic, copy) void (^cellWillLayoutSubviewsHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
+/**
+ Handler which is called just after cell subviews are layed out.
+ 
+ @see didLayoutSubviewsOfCellView:atIndex:
+ */
+@property (nonatomic, copy) void (^cellDidLayoutSubviewsHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
+/**
+ Handler called at every scroll step.
+ */
+@property (nonatomic, copy) void (^scrollHandler)(void);
+/**
  Callback which signals when an animated scrolling did finish.
  
  @see didFinishScrollingOfKind:
@@ -215,18 +242,6 @@ typedef enum {
  */
 
 @property (nonatomic, copy) CGSize (^cellZoomedViewContentSizeHandler)(UIView<MUKRecyclable> *cellView, UIView *zoomedView, NSInteger cellIndex, float scale, CGSize boundsSize);
-/**
- Handler which is called just before cell subviews are layed out.
- 
- @see willLayoutSubviewsOfCellView:atIndex:
- */
-@property (nonatomic, copy) void (^cellWillLayoutSubviewsHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
-/**
- Handler which is called just after cell subviews are layed out.
- 
- @see didLayoutSubviewsOfCellView:atIndex:
- */
-@property (nonatomic, copy) void (^cellDidLayoutSubviewsHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
 
 
 
@@ -262,8 +277,8 @@ typedef enum {
  @return Indexes of cells to display. Those indexes are less than numberOfCells
  and are greater than `0`.
  
- @warning This method may not use `self.bounds` if you set content inset, headView
- or tailView.
+ @warning This method may not use `self.bounds` if you set 
+ visibleCellsBoundsHandler, content inset, headView or tailView.
  */
 - (NSIndexSet *)indexesOfCellsInVisibleBounds;
 /**

@@ -3,7 +3,7 @@ MUKScrolling
 MUKScrolling is a simple, block-based, ARC-enabled, iOS 4+ library built to provide you some useful scrolling views.
 It is composed by two main classes:
 * `MUKRecyclingScrollView`, an `UIScrollView` subclass which implements some basic methods to recycle subviews like `UITableView` does.
-* `MUKGridView`, a concrete `MUKRecyclingScrollView` subclass which implements the logic to display horizontal and vertical grids of cells (see examples: you can thumbnails grid, pages carousels, ...).
+* `MUKGridView`, a concrete `MUKRecyclingScrollView` subclass which implements the logic to display horizontal and vertical grids of cells (see examples: you can create thumbnails grid, pages carousels, ...).
 
 There are other more complex solutions (different but, probabily better under some aspects) like [GMGridView], which acts more like `UITableView`, if you want.
 

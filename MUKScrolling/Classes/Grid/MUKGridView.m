@@ -583,11 +583,13 @@
         MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
         
         CGRect zoomRect;
+        BOOL performZoom = NO;
         
         if (cellView.zoomed) {
             // Zoom out
             zoomRect = cellView.frame;
             zoomRect.origin = CGPointZero;
+            performZoom = YES;
         }
         else if (ABS(self.doubleTapZoomScale - 1.0f) > 0.0001f) {
             // Zoom in
@@ -597,9 +599,13 @@
             CGPoint center = [recognizer locationInView:cellView.zoomView];
             zoomRect.origin.x = center.x - (zoomRect.size.width  / 2.0);
             zoomRect.origin.y = center.y - (zoomRect.size.height / 2.0);
+            
+            performZoom = YES;
         }
         
-        [cellView zoomToRect:zoomRect animated:YES];
+        if (performZoom) {
+            [cellView zoomToRect:zoomRect animated:YES];
+        }
         
         [self didDoubleTapCellAtIndex:cellView.cellIndex];
     }

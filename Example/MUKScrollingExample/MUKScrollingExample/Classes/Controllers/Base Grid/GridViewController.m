@@ -26,41 +26,6 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.gridView = [[MUKGridView alloc] initWithFrame:self.view.bounds];
-    __unsafe_unretained MUKGridView *weakGridView = self.gridView;
-    
-    self.gridView.scrollCompletionHandler = ^(MUKGridScrollKind scrollKind) {
-        NSString *kind;
-        switch (scrollKind) {
-            case MUKGridScrollKindAnimated:
-                kind = @"Animated";
-                break;
-                
-            case MUKGridScrollKindUserDrag:
-                kind = @"Drag";
-                break;
-                
-            case MUKGridScrollKindUserDeceleration:
-                kind = @"Deceleration";
-                break;
-                
-            case MUKGridScrollKindUserScrollToTop:
-                kind = @"Scroll to top";
-                break;
-                
-            default:
-                kind = @"Unknown";
-                break;
-        }
-        
-        NSLog(@"=============");
-        NSLog(@"Scrolled with kind %@", kind);
-        NSLog(@"Visible indexes %@", [weakGridView indexesOfVisibleCells]);
-    };
-    
-    self.gridView.cellTapHandler = ^(NSInteger index) {
-        NSLog(@"=============");
-        NSLog(@"Cell at index %i tapped", index);
-    };
     
     self.gridView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.gridView];

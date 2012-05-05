@@ -46,8 +46,11 @@
     
     self.gridView.numberOfCells = [self chosenCellsNumber_];
     self.gridView.direction = [self chosenDirection_];
+    self.gridView.detectsDoubleTapGesture = YES;
+    self.gridView.detectsLongPressGesture = YES;
     
     __unsafe_unretained MUKGridView *weakGridView = self.gridView;
+    
     self.gridView.cellCreationHandler = ^(NSInteger index) {
         LabelCellView *cellView = (LabelCellView *)[weakGridView dequeueViewWithIdentifier:@"Cell"];
         
@@ -61,6 +64,50 @@
         
         cellView.label.text = [NSString stringWithFormat:@"%i", index];
         return cellView;
+    };
+        
+    self.gridView.scrollCompletionHandler = ^(MUKGridScrollKind scrollKind) {
+        NSString *kind;
+        switch (scrollKind) {
+            case MUKGridScrollKindAnimated:
+                kind = @"Animated";
+                break;
+                
+            case MUKGridScrollKindUserDrag:
+                kind = @"Drag";
+                break;
+                
+            case MUKGridScrollKindUserDeceleration:
+                kind = @"Deceleration";
+                break;
+                
+            case MUKGridScrollKindUserScrollToTop:
+                kind = @"Scroll to top";
+                break;
+                
+            default:
+                kind = @"Unknown";
+                break;
+        }
+        
+        NSLog(@"Scrolled with kind %@", kind);
+        NSLog(@"Visible indexes %@", [weakGridView indexesOfVisibleCells]);
+    };
+    
+    self.gridView.cellTouchedHandler = ^(NSInteger index, NSSet *touches) {
+        NSLog(@"Cell at index %i touched (%i touches)", index, [touches count]);
+    };
+    
+    self.gridView.cellTappedHandler = ^(NSInteger index) {
+        NSLog(@"Cell at index %i tapped", index);
+    };
+    
+    self.gridView.cellDoubleTappedHandler = ^(NSInteger index) {
+        NSLog(@"Cell at index %i double tapped", index);
+    };
+    
+    self.gridView.cellLongPressedHandler = ^(NSInteger index, BOOL finished) {
+        NSLog(@"Cell at index %i long pressed (%@)", index, (finished ? @"finished" : @"not finished"));
     };
 }
 

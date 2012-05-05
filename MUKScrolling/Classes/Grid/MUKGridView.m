@@ -29,17 +29,16 @@
 #import "MUKGridView_Storage.h"
 #import "MUKGridView_RowsAndColumns.h"
 #import "MUKGridView_Layout.h"
+#import "MUKGridView_Cell.h"
 
 #import "MUKGridCellView_.h"
+#import "MUKGridCellViewTapGestureRecognizer_.h"
 
 #define DEBUG_STATS     0
 
 @interface MUKGridView ()
 - (void)commonIntialization_;
-
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate;
-- (void)handleCellTap_:(UITapGestureRecognizer *)recognizer;
-- (void)handleCellDoubleTap_:(UITapGestureRecognizer *)recognizer;
 @end
 
 @implementation MUKGridView {
@@ -53,7 +52,8 @@
 @synthesize direction = direction_;
 @synthesize cellSize = cellSize_;
 @synthesize numberOfCells = numberOfCells_;
-@synthesize doubleTapZoomScale = doubleTapZoomScale_;
+@synthesize detectsDoubleTapGesture = detectsDoubleTapGesture_;
+@synthesize doubleTapZoomScale = doubleTapZoomScale_, detectsLongPressGesture = detectsLongPressGesture_;
 @synthesize changesZoomedViewFrameWhileZooming = changesZoomedViewFrameWhileZooming_;
 @synthesize autoresizesContentOffset = autoresizesContentOffset_;
 @synthesize headView = headView_, tailView = tailView_;
@@ -61,8 +61,10 @@
 @synthesize cellCreationHandler = cellCreationHandler_;
 @synthesize scrollHandler = scrollHandler_;
 @synthesize scrollCompletionHandler = scrollCompletionHandler_;
-@synthesize cellTapHandler = cellTapHandler_;
-@synthesize cellDoubleTapHandler = cellDoubleTapHandler_;
+@synthesize cellTouchedHandler = cellTouchedHandler_;
+@synthesize cellTappedHandler = cellTappedHandler_;
+@synthesize cellDoubleTappedHandler = cellDoubleTappedHandler_;
+@synthesize cellLongPressedHandler = cellLongPressedHandler_;
 @synthesize cellOptionsHandler = cellOptionsHandler_;
 @synthesize cellZoomBeginningHandler = zoomBeginningHandler_;
 @synthesize cellZoomCompletionHandler = zoomCompletionHandler_;
@@ -312,8 +314,10 @@
 - (void)removeAllHandlers {
     self.scrollHandler = nil;
     self.scrollCompletionHandler = nil;
-    self.cellTapHandler = nil;
-    self.cellDoubleTapHandler = nil;
+    self.cellTouchedHandler = nil;
+    self.cellTappedHandler = nil;
+    self.cellDoubleTappedHandler = nil;
+    self.cellLongPressedHandler = nil;
     self.cellOptionsHandler = nil;
     self.cellZoomViewHandler = nil;
     self.cellZoomBeginningHandler = nil;
@@ -431,15 +435,27 @@
 
 #pragma mark - Tap
 
+- (void)didTouchCell:(NSSet *)touches atIndex:(NSInteger)index {
+    if (self.cellTouchedHandler) {
+        self.cellTouchedHandler(index, touches);
+    }
+}
+
 - (void)didTapCellAtIndex:(NSInteger)index {
-    if (self.cellTapHandler) {
-        self.cellTapHandler(index);
+    if (self.cellTappedHandler) {
+        self.cellTappedHandler(index);
     }
 }
 
 - (void)didDoubleTapCellAtIndex:(NSInteger)index {
-    if (self.cellDoubleTapHandler) {
-        self.cellDoubleTapHandler(index);
+    if (self.cellDoubleTappedHandler) {
+        self.cellDoubleTappedHandler(index);
+    }
+}
+
+- (void)didLongPressCellAtIndex:(NSInteger)index finished:(BOOL)finished {
+    if (self.cellLongPressedHandler) {
+        self.cellLongPressedHandler(index, finished);
     }
 }
 
@@ -560,10 +576,11 @@
 
 - (void)commonIntialization_ {
     [self setScrollViewDelegate_:self];
-    self.doubleTapZoomScale = 2.0f;
-    self.autoresizesContentOffset = YES;
-    self.changesZoomedViewFrameWhileZooming = YES;
+    doubleTapZoomScale_ = 2.0f;
+    autoresizesContentOffset_ = YES;
+    changesZoomedViewFrameWhileZooming_ = YES;
     firstLayout_ = YES;
+    detectsDoubleTapGesture_ = YES;
 }
 
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate 
@@ -571,45 +588,7 @@
     [super setDelegate:scrollViewDelegate];
 }
 
-- (void)handleCellTap_:(UITapGestureRecognizer *)recognizer {
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
-        MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
-        [self didTapCellAtIndex:cellView.cellIndex];
-    }
-}
-
-- (void)handleCellDoubleTap_:(UITapGestureRecognizer *)recognizer {
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
-        MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
-        
-        CGRect zoomRect;
-        BOOL performZoom = NO;
-        
-        if (cellView.zoomed) {
-            // Zoom out
-            zoomRect = cellView.frame;
-            zoomRect.origin = CGPointZero;
-            performZoom = YES;
-        }
-        else if (ABS(self.doubleTapZoomScale - 1.0f) > 0.0001f) {
-            // Zoom in
-            zoomRect.size.height = cellView.frame.size.height / self.doubleTapZoomScale;
-            zoomRect.size.width  = cellView.frame.size.width  / self.doubleTapZoomScale;
-            
-            CGPoint center = [recognizer locationInView:cellView.zoomView];
-            zoomRect.origin.x = center.x - (zoomRect.size.width  / 2.0);
-            zoomRect.origin.y = center.y - (zoomRect.size.height / 2.0);
-            
-            performZoom = YES;
-        }
-        
-        if (performZoom) {
-            [cellView zoomToRect:zoomRect animated:YES];
-        }
-        
-        [self didDoubleTapCellAtIndex:cellView.cellIndex];
-    }
-}
+#pragma mark - Private: Layout
 
 - (BOOL)adjustContentSizeAndContentOffsetIfNeededOrForcing_:(BOOL)force {
     BOOL shouldAdjustContentSize = (force || !CGSizeEqualToSize(lastBoundsSize_, self.bounds.size));
@@ -646,8 +625,6 @@
     
     return shouldAdjustContentSize;
 }
-
-#pragma mark - Private: Layout
 
 + (MUKGridCellView_ *)cellViewWithIndex_:(NSInteger)index inViews_:(NSSet *)views
 {
@@ -722,24 +699,16 @@
             cellView = [[MUKGridCellView_ alloc] initWithFrame:cellFrame];
             cellView.clipsToBounds = YES;
             cellView.guestView = guestView;
-            
-            __unsafe_unretained MUKGridView *weakSelf = self;
-            __unsafe_unretained MUKGridCellView_ *weakCellView = cellView;
-            cellView.willLayoutSubviewsHandler = ^{
-                [weakSelf willLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
-            };
-            
-            cellView.didLayoutSubviewsHandler = ^{
-                [weakSelf didLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
-            };
-            
             cellView.delegate = self;
-            [cellView.singleTapGestureRecognizer addTarget:self action:@selector(handleCellTap_:)];
-            [cellView.doubleTapGestureRecognizer addTarget:self action:@selector(handleCellDoubleTap_:)];
+            
+            [self attachHandlersToNewCellView_:cellView];
         }
-              
+        
         // Be sure to give the correct index to the cell
         cellView.cellIndex = index;
+        
+        // Adjust gesture recognizers
+        [self attachRequiredGestureRecognizersToCellView_:cellView];       
         
         // Add cell
         [self addSubview:cellView];
@@ -1274,6 +1243,126 @@
     free(coordinates);
 
     return indexSet;
+}
+
+#pragma mark - Private: Cell
+
+- (void)attachHandlersToNewCellView_:(MUKGridCellView_ *)cellView {
+    __unsafe_unretained MUKGridView *weakSelf = self;
+    __unsafe_unretained MUKGridCellView_ *weakCellView = cellView;
+    cellView.willLayoutSubviewsHandler = ^{
+        [weakSelf willLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
+    };
+    
+    cellView.didLayoutSubviewsHandler = ^{
+        [weakSelf didLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
+    };
+}
+
+- (void)attachRequiredGestureRecognizersToCellView_:(MUKGridCellView_ *)cellView
+{
+    // Attach double tap gesture recognizer if needed
+    if (self.detectsDoubleTapGesture == NO) {
+        if (cellView.doubleTapGestureRecognizer) {
+            [cellView removeGestureRecognizer:cellView.doubleTapGestureRecognizer];
+            cellView.doubleTapGestureRecognizer = nil;
+        }
+    }
+    else {
+        if (cellView.doubleTapGestureRecognizer == nil) {
+            cellView.doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleCellDoubleTap_:)];
+            cellView.doubleTapGestureRecognizer.numberOfTapsRequired = 2;
+            [cellView addGestureRecognizer:cellView.doubleTapGestureRecognizer];
+        }
+    }
+    
+    // Attach single tap gesture recognizer
+    MUKGridCellViewTapGestureRecognizer_ *singleTapRecognizer;
+    
+    if (cellView.singleTapGestureRecognizer) {
+        singleTapRecognizer = cellView.singleTapGestureRecognizer;
+    }
+    else {
+        singleTapRecognizer = [[MUKGridCellViewTapGestureRecognizer_ alloc] initWithTarget:self action:@selector(handleCellTap_:)];
+        cellView.singleTapGestureRecognizer = singleTapRecognizer;
+        
+        __unsafe_unretained MUKGridView *weakSelf = self;
+        __unsafe_unretained MUKGridCellView_ *weakCellView = cellView;
+        singleTapRecognizer.touchesBeganHandler = ^(NSSet *touches) {
+            [weakSelf didTouchCell:touches atIndex:weakCellView.cellIndex];
+        };
+        
+        [cellView addGestureRecognizer:singleTapRecognizer];
+    }
+    
+    if (cellView.doubleTapGestureRecognizer) {
+        [singleTapRecognizer requireGestureRecognizerToFail:cellView.doubleTapGestureRecognizer];
+    }
+    
+    // Attach long pressure gesture recognizer if needed
+    if (self.detectsLongPressGesture == NO) {
+        if (cellView.longPressGestureRecognizer) {
+            [cellView removeGestureRecognizer:cellView.longPressGestureRecognizer];
+            cellView.longPressGestureRecognizer = nil;
+        }
+    }
+    else {
+        if (cellView.longPressGestureRecognizer == nil) {
+            cellView.longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleCellLongPress_:)];
+            [cellView addGestureRecognizer:cellView.longPressGestureRecognizer];
+        }
+    }
+}
+
+- (void)handleCellTap_:(UITapGestureRecognizer *)recognizer {    
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
+        [self didTapCellAtIndex:cellView.cellIndex];
+    }
+}
+
+- (void)handleCellDoubleTap_:(UITapGestureRecognizer *)recognizer {    
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
+        
+        CGRect zoomRect;
+        BOOL performZoom = NO;
+        
+        if (cellView.zoomed) {
+            // Zoom out
+            zoomRect = cellView.frame;
+            zoomRect.origin = CGPointZero;
+            performZoom = YES;
+        }
+        else if (ABS(self.doubleTapZoomScale - 1.0f) > 0.0001f) {
+            // Zoom in
+            zoomRect.size.height = cellView.frame.size.height / self.doubleTapZoomScale;
+            zoomRect.size.width  = cellView.frame.size.width  / self.doubleTapZoomScale;
+            
+            CGPoint center = [recognizer locationInView:cellView.zoomView];
+            zoomRect.origin.x = center.x - (zoomRect.size.width  / 2.0);
+            zoomRect.origin.y = center.y - (zoomRect.size.height / 2.0);
+            
+            performZoom = YES;
+        }
+        
+        if (performZoom) {
+            [cellView zoomToRect:zoomRect animated:YES];
+        }
+        
+        [self didDoubleTapCellAtIndex:cellView.cellIndex];
+    }
+}
+
+- (void)handleCellLongPress_:(UILongPressGestureRecognizer *)recognizer { 
+    MUKGridCellView_ *cellView = (MUKGridCellView_ *)recognizer.view;
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        [self didLongPressCellAtIndex:cellView.cellIndex finished:NO];
+    }
+    else if (recognizer.state == UIGestureRecognizerStateEnded) {
+        [self didLongPressCellAtIndex:cellView.cellIndex finished:YES];
+    }
 }
 
 #pragma mark - <UIScrollViewDelegate>

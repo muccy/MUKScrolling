@@ -23,24 +23,20 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
-#import "MUKRecyclable.h"
-#import "MUKGridCellOptions.h"
 #import "MUKGridCellViewTapGestureRecognizer_.h"
+#import <UIKit/UIGestureRecognizerSubclass.h>
 
-@interface MUKGridCellView_ : UIScrollView <MUKRecyclable>
-@property (nonatomic) NSInteger cellIndex;
-@property (nonatomic, strong) UIView<MUKRecyclable> *guestView;
-@property (nonatomic, strong) UIView *zoomView;
-@property (nonatomic, strong) MUKGridCellViewTapGestureRecognizer_ *singleTapGestureRecognizer;
-@property (nonatomic, strong) UITapGestureRecognizer *doubleTapGestureRecognizer;
-@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer;
-@property (nonatomic, getter = isZoomed) BOOL zoomed;
+@implementation MUKGridCellViewTapGestureRecognizer_
+@synthesize touchesBeganHandler = touchesBeganHandler_;
 
-@property (nonatomic, copy) void (^willLayoutSubviewsHandler)(void);
-@property (nonatomic, copy) void (^didLayoutSubviewsHandler)(void);
+#pragma mark - Overrides
 
-- (BOOL)isZoomingEnabled;
-- (void)applyOptions:(MUKGridCellOptions *)options;
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    
+    if (self.touchesBeganHandler) {
+        self.touchesBeganHandler(touches);
+    }
+}
 
 @end

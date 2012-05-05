@@ -24,23 +24,10 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <UIKit/UIKit.h>
-#import "MUKRecyclable.h"
-#import "MUKGridCellOptions.h"
-#import "MUKGridCellViewTapGestureRecognizer_.h"
 
-@interface MUKGridCellView_ : UIScrollView <MUKRecyclable>
-@property (nonatomic) NSInteger cellIndex;
-@property (nonatomic, strong) UIView<MUKRecyclable> *guestView;
-@property (nonatomic, strong) UIView *zoomView;
-@property (nonatomic, strong) MUKGridCellViewTapGestureRecognizer_ *singleTapGestureRecognizer;
-@property (nonatomic, strong) UITapGestureRecognizer *doubleTapGestureRecognizer;
-@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer;
-@property (nonatomic, getter = isZoomed) BOOL zoomed;
-
-@property (nonatomic, copy) void (^willLayoutSubviewsHandler)(void);
-@property (nonatomic, copy) void (^didLayoutSubviewsHandler)(void);
-
-- (BOOL)isZoomingEnabled;
-- (void)applyOptions:(MUKGridCellOptions *)options;
-
+/*
+ A normal gesture recognizer which says when touches began with a block
+ */
+@interface MUKGridCellViewTapGestureRecognizer_ : UITapGestureRecognizer
+@property (nonatomic, copy) void (^touchesBeganHandler)(NSSet *touches);
 @end

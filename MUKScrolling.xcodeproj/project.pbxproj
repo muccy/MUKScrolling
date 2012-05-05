@@ -39,6 +39,9 @@
 		06339C3115359C4C00FB07ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06339C2F15359C3F00FB07ED /* CoreGraphics.framework */; };
 		06339C6F1535F13100FB07ED /* MUKGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 06339C6D1535F13100FB07ED /* MUKGridView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06339C701535F13100FB07ED /* MUKGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C6E1535F13100FB07ED /* MUKGridView.m */; };
+		065FE36B155529300039601F /* MUKGridView_Cell.h in Headers */ = {isa = PBXBuildFile; fileRef = 065FE36A155529300039601F /* MUKGridView_Cell.h */; };
+		065FE37215552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.h in Headers */ = {isa = PBXBuildFile; fileRef = 065FE37015552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.h */; };
+		065FE37315552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.m in Sources */ = {isa = PBXBuildFile; fileRef = 065FE37115552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.m */; };
 		0665B4141547FF640001E1E1 /* MUKRecyclableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0665B4121547FF640001E1E1 /* MUKRecyclableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0665B4151547FF640001E1E1 /* MUKRecyclableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0665B4131547FF640001E1E1 /* MUKRecyclableView.m */; };
 		0665B42A15494A970001E1E1 /* MUKGridView_Storage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0665B42915494A970001E1E1 /* MUKGridView_Storage.h */; };
@@ -121,6 +124,9 @@
 		06339C2F15359C3F00FB07ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		06339C6D1535F13100FB07ED /* MUKGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView.h; sourceTree = "<group>"; };
 		06339C6E1535F13100FB07ED /* MUKGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridView.m; sourceTree = "<group>"; };
+		065FE36A155529300039601F /* MUKGridView_Cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView_Cell.h; sourceTree = "<group>"; };
+		065FE37015552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCellViewTapGestureRecognizer_.h; sourceTree = "<group>"; };
+		065FE37115552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellViewTapGestureRecognizer_.m; sourceTree = "<group>"; };
 		0665B4121547FF640001E1E1 /* MUKRecyclableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKRecyclableView.h; sourceTree = "<group>"; };
 		0665B4131547FF640001E1E1 /* MUKRecyclableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKRecyclableView.m; sourceTree = "<group>"; };
 		0665B42915494A970001E1E1 /* MUKGridView_Storage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView_Storage.h; sourceTree = "<group>"; };
@@ -285,12 +291,23 @@
 		06339C711535F2CA00FB07ED /* Private */ = {
 			isa = PBXGroup;
 			children = (
+				065FE36F15552D930039601F /* Tap Recognizer */,
 				066863A815384468005D4BC1 /* Cell */,
 				06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */,
 				066863A615384013005D4BC1 /* MUKGridView_Layout.h */,
 				0665B42915494A970001E1E1 /* MUKGridView_Storage.h */,
+				065FE36A155529300039601F /* MUKGridView_Cell.h */,
 			);
 			path = Private;
+			sourceTree = "<group>";
+		};
+		065FE36F15552D930039601F /* Tap Recognizer */ = {
+			isa = PBXGroup;
+			children = (
+				065FE37015552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.h */,
+				065FE37115552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.m */,
+			);
+			path = "Tap Recognizer";
 			sourceTree = "<group>";
 		};
 		0665B4111547FF530001E1E1 /* Recyclable View */ = {
@@ -418,6 +435,8 @@
 				06A5525F153EC9AD0086A526 /* MUKGridCellOptions.h in Headers */,
 				0665B4141547FF640001E1E1 /* MUKRecyclableView.h in Headers */,
 				0665B42A15494A970001E1E1 /* MUKGridView_Storage.h in Headers */,
+				065FE36B155529300039601F /* MUKGridView_Cell.h in Headers */,
+				065FE37215552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,6 +599,7 @@
 				066863D815396690005D4BC1 /* MUKGridCellFixedSize.m in Sources */,
 				06A55260153EC9AD0086A526 /* MUKGridCellOptions.m in Sources */,
 				0665B4151547FF640001E1E1 /* MUKRecyclableView.m in Sources */,
+				065FE37315552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

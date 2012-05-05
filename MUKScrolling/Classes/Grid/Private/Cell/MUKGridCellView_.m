@@ -29,7 +29,9 @@
 @synthesize cellIndex;
 @synthesize guestView = guestView_;
 @synthesize zoomView = zoomView_;
-@synthesize singleTapGestureRecognizer = singleTapGestureRecognizer_, doubleTapGestureRecognizer = doubleTapGestureRecognizer_;
+@synthesize singleTapGestureRecognizer = singleTapGestureRecognizer_;
+@synthesize doubleTapGestureRecognizer = doubleTapGestureRecognizer_;
+@synthesize longPressGestureRecognizer = longPressGestureRecognizer_;
 @synthesize zoomed = zoomed_;
 @synthesize willLayoutSubviewsHandler = willLayoutSubviewsHandler_;
 @synthesize didLayoutSubviewsHandler = didLayoutSubviewsHandler_;
@@ -54,26 +56,6 @@
     if (self.didLayoutSubviewsHandler) {
         self.didLayoutSubviewsHandler();
     }
-}
-
-- (UITapGestureRecognizer *)singleTapGestureRecognizer {
-    if (singleTapGestureRecognizer_ == nil) {
-        singleTapGestureRecognizer_ = [[UITapGestureRecognizer alloc] init];
-        [singleTapGestureRecognizer_ requireGestureRecognizerToFail:self.doubleTapGestureRecognizer];
-        [self addGestureRecognizer:singleTapGestureRecognizer_];
-    }
-    
-    return singleTapGestureRecognizer_;
-}
-
-- (UITapGestureRecognizer *)doubleTapGestureRecognizer {
-    if (doubleTapGestureRecognizer_ == nil) {
-        doubleTapGestureRecognizer_ = [[UITapGestureRecognizer alloc] init];
-        doubleTapGestureRecognizer_.numberOfTapsRequired = 2;
-        [self addGestureRecognizer:doubleTapGestureRecognizer_];
-    }
-    
-    return doubleTapGestureRecognizer_;
 }
 
 - (void)setRecycleIdentifier:(NSString *)recycleIdentifier {

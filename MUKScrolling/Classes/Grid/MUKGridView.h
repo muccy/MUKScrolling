@@ -98,6 +98,18 @@ typedef enum {
  */
 @property (nonatomic) NSInteger numberOfCells;
 /**
+ Double tap is detected in cells.
+ 
+ Default is `YES`.
+ */
+@property (nonatomic) BOOL detectsDoubleTapGesture;
+/**
+ Long pressure is detected in cells.
+ 
+ Default is `NO`.
+ */
+@property (nonatomic) BOOL detectsLongPressGesture;
+/**
  Zoom scale to adopt with double tap gesture.
  
  `2.0` is default.
@@ -188,17 +200,29 @@ typedef enum {
  */
 @property (nonatomic, copy) void (^scrollCompletionHandler)(MUKGridScrollKind scrollKind);
 /**
+ Callback which signals when a cell is touched.
+ 
+ @see didTouchCellAtIndex:
+ */
+@property (nonatomic, copy) void (^cellTouchedHandler)(NSInteger cellIndex, NSSet *touches);
+/**
  Callback which signals when a cell is tapped.
  
  @see didTapCellAtIndex:
  */
-@property (nonatomic, copy) void (^cellTapHandler)(NSInteger cellIndex);
+@property (nonatomic, copy) void (^cellTappedHandler)(NSInteger cellIndex);
 /**
  Callback which signals when a cell is double tapped.
  
  @see didDoubleTapCellAtIndex:
  */
-@property (nonatomic, copy) void (^cellDoubleTapHandler)(NSInteger cellIndex);
+@property (nonatomic, copy) void (^cellDoubleTappedHandler)(NSInteger cellIndex);
+/**
+ Callback which signals when a cell is long pressed.
+ 
+ @see didLongPressCellAtIndex:
+ */
+@property (nonatomic, copy) void (^cellLongPressedHandler)(NSInteger cellIndex, BOOL finished);
 /**
  Handler to set options for a cell.
 
@@ -383,19 +407,39 @@ typedef enum {
 
 @interface MUKGridView (Taps)
 /**
+ Callback which signals when a cell is touched.
+ @param index Cell index in the grid.
+ @param touches Touches set.
+ 
+ Default implementation calls cellTouchedHandler.
+ */
+- (void)didTouchCell:(NSSet *)touches atIndex:(NSInteger)index;
+/**
  Callback which signals when a cell is tapped.
  @param index Cell index in the grid.
  
- Default implementation calls cellTapHandler.
+ Default implementation calls cellTappedHandler.
  */
 - (void)didTapCellAtIndex:(NSInteger)index;
 /**
  Callback which signals when a cell is double tapped.
  @param index Cell index in the grid.
  
- Default implementation calls cellDoubleTapHandler.
+ Default implementation calls cellDoubleTappedHandler.
  */
 - (void)didDoubleTapCellAtIndex:(NSInteger)index;
+/**
+ Callback which signals when a cell is long pressed.
+ @param index Cell index in the grid.
+ @param finished `YES` if finger has lifted after gesture.
+ 
+ This method is called once when gesture is started (when finger is down on
+ the cell for 0.5s) with `finished` = `NO` and when gesture is completed (when
+ finger has been lifted from cell) with `finished` = `YES`.
+ 
+ Default implementation calls cellLongPressedHandler.
+ */
+- (void)didLongPressCellAtIndex:(NSInteger)index finished:(BOOL)finished;
 @end
 
 

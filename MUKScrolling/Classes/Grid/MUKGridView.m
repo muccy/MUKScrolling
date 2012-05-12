@@ -311,6 +311,12 @@
     return cellView.guestView;
 }
 
+- (void)setOptions:(MUKGridCellOptions *)options forCellAtIndex:(NSInteger)index
+{    
+    MUKGridCellView_ *cellView = [[self class] cellViewWithIndex_:index inViews_:[self visibleHostCellViews_]];
+    [cellView applyOptions:(options ?: [[MUKGridCellOptions alloc] init])];
+}
+
 - (void)removeAllHandlers {
     self.scrollHandler = nil;
     self.scrollCompletionHandler = nil;

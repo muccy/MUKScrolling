@@ -289,6 +289,16 @@ typedef enum {
  */
 - (UIView<MUKRecyclable> *)cellViewAtIndex:(NSInteger)index;
 /**
+ Set options for an existing cell.
+ 
+ If cell does not exist, options are not set.
+ 
+ @param options Cell options to set. If you pass `nil`, default options are
+ set.
+ @param index Cell index in the grid.
+ */
+- (void)setOptions:(MUKGridCellOptions *)options forCellAtIndex:(NSInteger)index;
+/**
  Shortend to set all handlers to `nil`.
  */
 - (void)removeAllHandlers;

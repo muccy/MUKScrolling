@@ -59,6 +59,7 @@
 @synthesize headView = headView_, tailView = tailView_;
 
 @synthesize cellCreationHandler = cellCreationHandler_;
+@synthesize cellEnqueuedHandler = cellEnqueuedHandler_;
 @synthesize scrollHandler = scrollHandler_;
 @synthesize scrollCompletionHandler = scrollCompletionHandler_;
 @synthesize cellTouchedHandler = cellTouchedHandler_;
@@ -268,6 +269,8 @@
         cellView.zoomed = NO;
         cellView.zoomScale = 1.0;
         cellView.zoomView = nil;
+        
+        [self didEnqueueCellView:cellView.guestView atIndex:cellView.cellIndex];
     }
 }
 
@@ -319,6 +322,7 @@
 
 - (void)removeAllHandlers {
     self.scrollHandler = nil;
+    self.cellEnqueuedHandler = nil;
     self.scrollCompletionHandler = nil;
     self.cellTouchedHandler = nil;
     self.cellTappedHandler = nil;
@@ -400,6 +404,13 @@
 {
     if (self.cellDidLayoutSubviewsHandler) {
         self.cellDidLayoutSubviewsHandler(cellView, index);
+    }
+}
+
+- (void)didEnqueueCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index
+{
+    if (self.cellEnqueuedHandler) {
+        self.cellEnqueuedHandler(cellView, index);
     }
 }
 

@@ -168,6 +168,12 @@ typedef enum {
 */
 @property (nonatomic, copy) UIView<MUKRecyclable>* (^cellCreationHandler)(NSInteger cellIndex);
 /**
+ Handler called when a cell is enqueued.
+ 
+ @see didEnqueueCellView:atIndex:
+ */
+@property (nonatomic, copy) void (^cellEnqueuedHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
+/**
  Handler to feed bounds used to calculate visible cells in 
  indexesOfCellsInVisibleBounds.
  
@@ -364,6 +370,15 @@ typedef enum {
  @param index Cell index in the grid.
  */
 - (void)didLayoutSubviewsOfCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index;
+/**
+ Callback invoked when a cell is enqueued.
+ 
+ Default implementation invokes cellEnqueuedHandler.
+ 
+ @param cellView Cell view layed out.
+ @param index Cell index in the grid.
+ */
+- (void)didEnqueueCellView:(UIView<MUKRecyclable> *)cellView atIndex:(NSInteger)index;
 @end
 
 

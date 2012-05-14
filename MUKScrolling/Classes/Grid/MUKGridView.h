@@ -385,9 +385,6 @@ typedef enum {
 @interface MUKGridView (Scroll)
 /**
  Scroll grid to a cell.
- @param index Index of cell to show.
- @param position How to show cell scrolling.
- @param animated `YES` if scroll will be animated.
  
  You could set cell position after scroll in four ways:
  
@@ -401,6 +398,13 @@ typedef enum {
  * `MUKGridScrollPositionTail` scrolls to show cell tail (bottom for vertical 
  grids, right for horizontal grids). If cell is at head of the grid, cell could
  not be at exact tail after scrolling.
+ 
+ @param index Index of cell to show.
+ @param position How to show cell scrolling.
+ @param animated `YES` if scroll will be animated.
+ @warning If you have set `contentInset`, its value is subtracted from new
+ content offset. Content inset must not be considered during scrolling and
+ this method is compliant with that rule.
  */
 - (void)scrollToCellAtIndex:(NSInteger)index position:(MUKGridScrollPosition)position animated:(BOOL)animated;
 /**

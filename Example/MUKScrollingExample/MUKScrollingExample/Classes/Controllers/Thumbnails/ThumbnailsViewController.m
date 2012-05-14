@@ -35,7 +35,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self adjustGridView_];
     
     self.view.backgroundColor = [UIColor whiteColor];
     self.gridView.backgroundColor = [UIColor whiteColor];
@@ -99,6 +98,9 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    
+    [self adjustGridView_];
+    [self.gridView scrollToCellAtIndex:0 position:MUKGridScrollPositionTail animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

@@ -34,11 +34,18 @@
 #import "MUKGridCellView_.h"
 #import "MUKGridCellViewTapGestureRecognizer_.h"
 
-#define DEBUG_STATS     0
+#define DEBUG_STATS                 0
+#define DEBUG_SCROLL_INFOS_TIMER    0
 
 @interface MUKGridView ()
 - (void)commonIntialization_;
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate;
+
+#if DEBUG_SCROLL_INFOS_TIMER
+@property (nonatomic, strong) NSTimer *debugScrollInfosTimer_;
+- (void)startDebugScrollInfos_;
+- (void)debugScrollInfosTimerFired_:(NSTimer *)timer;
+#endif
 @end
 
 @implementation MUKGridView {
@@ -78,6 +85,9 @@
 @synthesize visibleCellsBoundsHandler = visibleCellsBoundsHandler_;
 
 @synthesize dequeuedHostCellViews_ = dequeuedHostCellViews__;
+#if DEBUG_SCROLL_INFOS_TIMER
+@synthesize debugScrollInfosTimer_ = debugScrollInfosTimer__;
+#endif
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -107,6 +117,10 @@
 
 - (void)dealloc {
     [self setScrollViewDelegate_:nil];
+    
+#if DEBUG_SCROLL_INFOS_TIMER
+    [self.debugScrollInfosTimer_ invalidate];
+#endif
 }
 
 #pragma mark - Accessors
@@ -437,11 +451,15 @@
     // Fix aligned bounds
     CGRect fixedBounds = [[self class] bounds_:alignedBounds inContainerSize_:normalizedContentSize direction_:self.direction];
     
-    // Re-shift considering head view
-    CGRect boundsWithHeadView = [[self class] rect_:fixedBounds shiftingByHeadView_:self.headView direction_:self.direction]; 
+    // Head view height is already calculated in frameOfCellAtIndex
+    CGPoint newContentOffset = fixedBounds.origin;
+    
+    // Do not calculate insets
+    newContentOffset.x -= self.contentInset.left;
+    newContentOffset.y -= self.contentInset.top;
     
     // Perform scroll
-    [self setContentOffset:boundsWithHeadView.origin animated:animated];
+    [self setContentOffset:newContentOffset animated:animated];
 }
 
 - (void)didFinishScrollingOfKind:(MUKGridScrollKind)scrollKind {
@@ -598,12 +616,28 @@
     changesZoomedViewFrameWhileZooming_ = YES;
     firstLayout_ = YES;
     detectsDoubleTapGesture_ = YES;
+    
+#if DEBUG_SCROLL_INFOS_TIMER
+    [self startDebugScrollInfos_];
+#endif
 }
 
 - (void)setScrollViewDelegate_:(id<UIScrollViewDelegate>)scrollViewDelegate 
 {
     [super setDelegate:scrollViewDelegate];
 }
+
+#if DEBUG_SCROLL_INFOS_TIMER
+
+- (void)startDebugScrollInfos_ {
+    self.debugScrollInfosTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(debugScrollInfosTimerFired_:) userInfo:nil repeats:YES];
+}
+
+- (void)debugScrollInfosTimerFired_:(NSTimer *)timer {
+    NSLog(@"\n\n\nDebug scroll Infos:\nContent offset: %@\nContent inset: %@", NSStringFromCGPoint(self.contentOffset), NSStringFromUIEdgeInsets(self.contentInset));
+}
+
+#endif
 
 #pragma mark - Private: Layout
 

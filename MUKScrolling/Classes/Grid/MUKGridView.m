@@ -67,6 +67,7 @@
 
 @synthesize cellCreationHandler = cellCreationHandler_;
 @synthesize cellEnqueuedHandler = cellEnqueuedHandler_;
+@synthesize didLayoutSubviewsHandler = didLayoutSubviewsHandler_;
 @synthesize scrollHandler = scrollHandler_;
 @synthesize scrollCompletionHandler = scrollCompletionHandler_;
 @synthesize cellTouchedHandler = cellTouchedHandler_;
@@ -183,6 +184,10 @@
     }
     
     firstLayout_ = NO;
+    
+    if (self.didLayoutSubviewsHandler) {
+        self.didLayoutSubviewsHandler();
+    }
     
 #if DEBUG_STATS
     NSLog(@"=======");

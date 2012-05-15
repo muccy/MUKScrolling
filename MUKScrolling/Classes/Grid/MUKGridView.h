@@ -174,6 +174,10 @@ typedef enum {
  */
 @property (nonatomic, copy) void (^cellEnqueuedHandler)(UIView<MUKRecyclable> *cellView, NSInteger cellIndex);
 /**
+ Handler called at bottom of `layoutSubviews` implementation.
+ */
+@property (nonatomic, copy) void (^didLayoutSubviewsHandler)(void);
+/**
  Handler to feed bounds used to calculate visible cells in 
  indexesOfCellsInVisibleBounds.
  

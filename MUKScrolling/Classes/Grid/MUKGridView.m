@@ -289,6 +289,9 @@
         cellView.zoomScale = 1.0;
         cellView.zoomView = nil;
         
+        // Reset content size
+        cellView.contentSize = CGSizeZero;
+        
         [self didEnqueueCellView:cellView.guestView atIndex:cellView.cellIndex];
     }
 }

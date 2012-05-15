@@ -342,6 +342,7 @@
 - (void)removeAllHandlers {
     self.scrollHandler = nil;
     self.cellEnqueuedHandler = nil;
+    self.didLayoutSubviewsHandler = nil;
     self.scrollCompletionHandler = nil;
     self.cellTouchedHandler = nil;
     self.cellTappedHandler = nil;

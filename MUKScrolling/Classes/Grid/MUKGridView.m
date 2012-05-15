@@ -434,6 +434,10 @@
 {
     if (index < 0 || index >= self.numberOfCells) return;
     
+    // Calculate with an updated content size
+    [self adjustContentSize_];
+    
+    // Where is the cell?
     CGRect cellFrame = [self frameOfCellAtIndex:index];    
     
     // Normalize bounds of cells

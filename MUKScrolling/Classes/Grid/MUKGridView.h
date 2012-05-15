@@ -401,12 +401,35 @@ typedef enum {
  
  @param index Index of cell to show.
  @param position How to show cell scrolling.
+ @param shiftBackByHeadContentInset If `YES`, head content inset (top for
+ vertical grids or left for horizontal ones) is substracted to the new content
+ offset. This is useful when you use grid in a fullscreen view controller which
+ displays content under a transparent navigation bar.
  @param animated `YES` if scroll will be animated.
- @warning If you have set `contentInset`, its value is subtracted from new
- content offset. Content inset must not be considered during scrolling and
- this method is compliant with that rule.
+ */
+- (void)scrollToCellAtIndex:(NSInteger)index position:(MUKGridScrollPosition)position shiftBackByHeadContentInset:(BOOL)shiftBackByHeadContentInset animated:(BOOL)animated;
+/**
+ Scroll grid to a cell.
+ 
+ It calls scrollToCellAtIndex:position:shiftBackByHeadContentInset:animated:
+ with `shiftBackByHeadContentInset` = `YES`.
+ 
+ @param index Index of cell to show.
+ @param position How to show cell scrolling.
+ @param animated `YES` if scroll will be animated.
+ @see scrollToCellAtIndex:position:shiftBackByHeadContentInset:animated:
  */
 - (void)scrollToCellAtIndex:(NSInteger)index position:(MUKGridScrollPosition)position animated:(BOOL)animated;
+/**
+ Scrolls to head.
+ 
+ @param shiftBackByHeadContentInset If `YES`, head content inset (top for
+ vertical grids or left for horizontal ones) is substracted to the new content
+ offset. This is useful when you use grid in a fullscreen view controller which
+ displays content under a transparent navigation bar.
+ @param animated `YES` if scroll will be animated.
+ */
+- (void)scrollToHeadShiftingBackByHeadContentInset:(BOOL)shiftBackByHeadContentInset animated:(BOOL)animated;
 /**
  Callback for animated scroll.
  @param scrollKind The kind of scroll animation.

@@ -430,7 +430,7 @@
 
 #pragma mark - Scroll
 
-- (void)scrollToCellAtIndex:(NSInteger)index position:(MUKGridScrollPosition)position animated:(BOOL)animated
+- (void)scrollToCellAtIndex:(NSInteger)index position:(MUKGridScrollPosition)position shiftBackByHeadContentInset:(BOOL)shiftBackByHeadContentInset animated:(BOOL)animated
 {
     if (index < 0 || index >= self.numberOfCells) return;
     
@@ -438,7 +438,7 @@
     
     // Normalize bounds of cells
     CGRect normalizedBounds = [self normalizedVisibleBounds_];
-
+    
     // Normalize content size
     CGSize normalizedContentSize = [[self class] size_:self.contentSize subtractingHeadView_:self.headView tailView_:self.tailView direction_:self.direction];
     
@@ -455,8 +455,37 @@
     CGPoint newContentOffset = fixedBounds.origin;
     
     // Do not calculate insets
-    newContentOffset.x -= self.contentInset.left;
-    newContentOffset.y -= self.contentInset.top;
+    if (shiftBackByHeadContentInset) {
+        if (self.direction == MUKGridDirectionVertical) {
+            newContentOffset.y -= self.contentInset.top;
+        }
+        else {
+            newContentOffset.x -= self.contentInset.left;
+        }
+    }
+
+    // Perform scroll
+    [self setContentOffset:newContentOffset animated:animated];
+}
+
+- (void)scrollToCellAtIndex:(NSInteger)index position:(MUKGridScrollPosition)position animated:(BOOL)animated
+{
+    [self scrollToCellAtIndex:index position:position shiftBackByHeadContentInset:YES animated:animated];
+}
+
+- (void)scrollToHeadShiftingBackByHeadContentInset:(BOOL)shiftBackByHeadContentInset animated:(BOOL)animated
+{
+    CGPoint newContentOffset = CGPointZero;
+    
+    // Do not calculate insets
+    if (shiftBackByHeadContentInset) {
+        if (self.direction == MUKGridDirectionVertical) {
+            newContentOffset.y -= self.contentInset.top;
+        }
+        else {
+            newContentOffset.x -= self.contentInset.left;
+        }
+    }
     
     // Perform scroll
     [self setContentOffset:newContentOffset animated:animated];

@@ -844,42 +844,40 @@
 
 + (CGPoint)autoresizedContentOffsetWithRatio_:(CGSize)contentOffsetRatio updatedContentSize_:(CGSize)contentSize visibleBoundsSize_:(CGSize)boundsSize contentInset_:(UIEdgeInsets)contentInset
 {
+    if (isnan(contentOffsetRatio.width)) contentOffsetRatio.width = 0.0f;
+    if (isnan(contentOffsetRatio.height)) contentOffsetRatio.height = 0.0f;
+    
     CGPoint newContentOffset;
-    if (!isnan(contentOffsetRatio.width) && !isnan(contentOffsetRatio.height))
-    {
-        CGSize extendedContentSize = [self contentSize_:contentSize extendedByContentInset_:contentInset];
-        
-        newContentOffset.x = contentOffsetRatio.width * extendedContentSize.width;
-        newContentOffset.y = contentOffsetRatio.height * extendedContentSize.height;
-        
-        // Shift back content offset
-        newContentOffset.x -= contentInset.left;
-        newContentOffset.y -= contentInset.top;
-        
-        // Don't go under the tail
-        CGFloat maxX = newContentOffset.x + boundsSize.width;
-        CGFloat maxY = newContentOffset.y + boundsSize.height;
-        
-        CGFloat maxContainerX = contentSize.width + contentInset.right;
-        CGFloat maxContainerY = contentSize.height + contentInset.bottom;
-        
-        if (maxX > maxContainerX) {
-            newContentOffset.x -= (maxX - maxContainerX);
-        }
-        
-        if (maxY > maxContainerY) {
-            newContentOffset.y -= (maxY - maxContainerY);
-        }
-        
-        // Don't go over the head
-        // (also if it means to go under the tail)
-        newContentOffset.x = MAX(-contentInset.left, newContentOffset.x);
-        newContentOffset.y = MAX(-contentInset.top, newContentOffset.y);
-    }
-    else {
-        newContentOffset = CGPointMake(-1.0f, -1.0f);
+
+    CGSize extendedContentSize = [self contentSize_:contentSize extendedByContentInset_:contentInset];
+    
+    newContentOffset.x = contentOffsetRatio.width * extendedContentSize.width;
+    newContentOffset.y = contentOffsetRatio.height * extendedContentSize.height;
+    
+    // Shift back content offset
+    newContentOffset.x -= contentInset.left;
+    newContentOffset.y -= contentInset.top;
+    
+    // Don't go under the tail
+    CGFloat maxX = newContentOffset.x + boundsSize.width;
+    CGFloat maxY = newContentOffset.y + boundsSize.height;
+    
+    CGFloat maxContainerX = contentSize.width + contentInset.right;
+    CGFloat maxContainerY = contentSize.height + contentInset.bottom;
+    
+    if (maxX > maxContainerX) {
+        newContentOffset.x -= (maxX - maxContainerX);
     }
     
+    if (maxY > maxContainerY) {
+        newContentOffset.y -= (maxY - maxContainerY);
+    }
+    
+    // Don't go over the head
+    // (also if it means to go under the tail)
+    newContentOffset.x = MAX(-contentInset.left, newContentOffset.x);
+    newContentOffset.y = MAX(-contentInset.top, newContentOffset.y);
+
     return newContentOffset;
 }
 

@@ -25,29 +25,28 @@ Installation
 #### Step 1: add MUKScrolling to your project
 Drag or *Add To Files...* `MUKScrolling.xcodeproj` to your project.
 
-<img src="http://i.imgur.com/7HdHW.png" />
+<img src="http://i.imgur.com/MZZwt.png" />
 
 Please remember not to create a copy of files while adding project: you only need a reference to it.
 
 <img src="http://i.imgur.com/kXEJZ.png" />
 
+Now disclose `MUKScrolling.xcodeproj` and drag contents of `Dependencies` folder to your project. With this step you are adding `MUKScrolling` dependencies. If your project already contains dependencies please take care to use updated libraries.
+
+<img src="http://i.imgur.com/JJjrG.png" />
 
 #### Step 2: make your project dependent
 Click on your project and, then, your app target:
 
-<img src="http://i.imgur.com/IHlI9.png" />
+<img src="http://i.imgur.com/J10tA.png" />
 
-Add dependency clicking on + button in *Target Dependencies* pane and choosing static library target (`MUKScrolling`):
+Add dependency clicking on + button in *Target Dependencies* pane and choosing static library target (`MUKScrolling`) and its dependency (`MUKToolkit`):
 
-<img src="http://i.imgur.com/gCtIG.png" />
+<img src="http://i.imgur.com/XUAMK.png" />
 
 Link your project clicking on + button in *Link binary with Libraries* pane and choosing static library product (`libMUKScrolling.a`). Link also submodule dependency (`libMUKToolkit.a`):
 
 <img src="http://i.imgur.com/Cqjx5.png" />
-
-Your project, now, should be like this:
-
-<img src="http://i.imgur.com/iFn2I.png" />
 
 #### Step 3: link required frameworks
 You need to link those framework in order to support `MUKToolkit` dependency:
@@ -64,14 +63,14 @@ To do so you only need to click on + button in *Link binary with Libraries* pane
 #### Step 4: load categories
 In order to load every method in `MUKToolkit` dependency you need to insert `-ObjC` flag to `Other Linker Flags` in *Build Settings* of your project.
 
-<img src="http://i.imgur.com/uwQrk.png" /> 
+<img src="http://i.imgur.com/u9OUD.png" /> 
 
 
 #### Step 5: import headers
 You only need to write `#import <MUKScrolling/MUKScrolling.h>` when you need headers.
 You can also import `MUKScrolling` headers in your `pch` file:
 
-<img src="http://i.imgur.com/1cEX6.png" />
+<img src="http://i.imgur.com/owsNo.png" />
 
 
 Documentation
@@ -116,5 +115,3 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 [GMGridView]: https://github.com/gmoledina/GMGridView
 [jverkoey iOS Framework]: https://github.com/jverkoey/iOS-Framework
 [appledoc]: https://github.com/tomaz/appledoc
-
-    

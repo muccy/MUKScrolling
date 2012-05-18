@@ -24,7 +24,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "MUKGridView.h"
-#import <MUKToolkit/MUKToolkit.h>
+
+#import "MUK+Geometry.h"
 
 @class MUKGridCellView_;
 @interface MUKGridView ()

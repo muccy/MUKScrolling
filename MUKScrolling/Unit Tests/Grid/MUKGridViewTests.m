@@ -32,11 +32,7 @@
 #import "MUKGridCellView_.h"
 #import "MUKGridCellFixedSize.h"
 
-#import "MUK.h"
-#import "MUK+URL.h"
-#import "MUK+Data.h"
-#import "MUK+Date.h"
-#import "MUK+String.h"
+#import <MUKToolkit/MUKToolkit.h>
 
 @implementation MUKGridViewTests
 

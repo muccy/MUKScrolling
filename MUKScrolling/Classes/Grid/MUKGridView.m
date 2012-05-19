@@ -34,7 +34,7 @@
 #import "MUKGridCellView_.h"
 #import "MUKGridCellViewTapGestureRecognizer_.h"
 
-#import "MUK+Geometry.h"
+#import <MUKToolkit/MUKToolkit.h>
 
 #define DEBUG_STATS                 0
 #define DEBUG_SCROLL_INFOS_TIMER    0

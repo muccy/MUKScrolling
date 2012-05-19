@@ -25,7 +25,7 @@
 
 #import "MUKGridView.h"
 
-#import "MUK+Geometry.h"
+#import <MUKToolkit/MUKToolkit.h>
 
 @class MUKGridCellView_;
 @interface MUKGridView ()

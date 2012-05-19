@@ -63,6 +63,16 @@
 		06D0FCC21535F932008E652E /* MUKGridViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06D0FCC11535F932008E652E /* MUKGridViewTests.m */; };
 		06D7B92615668724006F1E42 /* libMUKToolkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A4A91E15668649004B9504 /* libMUKToolkit.a */; };
 		06D7B92815668729006F1E42 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06D7B92715668729006F1E42 /* Security.framework */; };
+		06FF1B46156788E40040DA06 /* MUK.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B914156686DF006F1E42 /* MUK.h */; };
+		06FF1B47156788E40040DA06 /* MUK+String.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B915156686DF006F1E42 /* MUK+String.h */; };
+		06FF1B48156788E40040DA06 /* MUK+Date.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B916156686DF006F1E42 /* MUK+Date.h */; };
+		06FF1B49156788E40040DA06 /* MUK+Array.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B917156686DF006F1E42 /* MUK+Array.h */; };
+		06FF1B4A156788E40040DA06 /* MUK+URL.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B918156686DF006F1E42 /* MUK+URL.h */; };
+		06FF1B4B156788E40040DA06 /* MUK+Geometry.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B919156686DF006F1E42 /* MUK+Geometry.h */; };
+		06FF1B4C156788E40040DA06 /* MUK+Object.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B91A156686DF006F1E42 /* MUK+Object.h */; };
+		06FF1B4D156788E40040DA06 /* MUK+Data.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B91B156686DF006F1E42 /* MUK+Data.h */; };
+		06FF1B4F15678A6C0040DA06 /* MUKToolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 06FF1B4E15678A6C0040DA06 /* MUKToolkit.h */; };
+		06FF1B5015678A740040DA06 /* MUKToolkit.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06FF1B4E15678A6C0040DA06 /* MUKToolkit.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +105,28 @@
 			remoteInfo = MUKToolkit;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		06FF1B45156788C90040DA06 /* Copy MUKToolkit Headers */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = MUK/DependenciesHeaders/MUKToolkit;
+			dstSubfolderSpec = 16;
+			files = (
+				06FF1B5015678A740040DA06 /* MUKToolkit.h in Copy MUKToolkit Headers */,
+				06FF1B46156788E40040DA06 /* MUK.h in Copy MUKToolkit Headers */,
+				06FF1B47156788E40040DA06 /* MUK+String.h in Copy MUKToolkit Headers */,
+				06FF1B48156788E40040DA06 /* MUK+Date.h in Copy MUKToolkit Headers */,
+				06FF1B49156788E40040DA06 /* MUK+Array.h in Copy MUKToolkit Headers */,
+				06FF1B4A156788E40040DA06 /* MUK+URL.h in Copy MUKToolkit Headers */,
+				06FF1B4B156788E40040DA06 /* MUK+Geometry.h in Copy MUKToolkit Headers */,
+				06FF1B4C156788E40040DA06 /* MUK+Object.h in Copy MUKToolkit Headers */,
+				06FF1B4D156788E40040DA06 /* MUK+Data.h in Copy MUKToolkit Headers */,
+			);
+			name = "Copy MUKToolkit Headers";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		06339BC9153584FD00FB07ED /* libMUKScrolling.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMUKScrolling.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,6 +186,7 @@
 		06D7B91A156686DF006F1E42 /* MUK+Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MUK+Object.h"; path = "Submodules/MUKToolkit/MUKToolkit/Classes/Object/MUK+Object.h"; sourceTree = "<group>"; };
 		06D7B91B156686DF006F1E42 /* MUK+Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MUK+Data.h"; path = "Submodules/MUKToolkit/MUKToolkit/Classes/Data/MUK+Data.h"; sourceTree = "<group>"; };
 		06D7B92715668729006F1E42 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		06FF1B4E15678A6C0040DA06 /* MUKToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MUKToolkit.h; path = Submodules/MUKToolkit/MUKToolkit/MUKToolkit.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,8 +224,8 @@
 				06339BFC153585B900FB07ED /* LICENSE */,
 				06339BD1153584FD00FB07ED /* MUKScrolling.h */,
 				06339BD0153584FD00FB07ED /* MUKScrolling-Prefix.pch */,
-				06D7B91215668696006F1E42 /* Dependencies Public Headers */,
 				06339BFD153585D800FB07ED /* Classes */,
+				06D7B91215668696006F1E42 /* Dependencies Public Headers */,
 				06339BFE153585E000FB07ED /* Unit Tests */,
 				06339BCB153584FD00FB07ED /* Frameworks */,
 				06339BCA153584FD00FB07ED /* Products */,
@@ -438,6 +471,7 @@
 		06D7B913156686B4006F1E42 /* MUKToolkit */ = {
 			isa = PBXGroup;
 			children = (
+				06FF1B4E15678A6C0040DA06 /* MUKToolkit.h */,
 				06D7B914156686DF006F1E42 /* MUK.h */,
 				06D7B915156686DF006F1E42 /* MUK+String.h */,
 				06D7B916156686DF006F1E42 /* MUK+Date.h */,
@@ -474,6 +508,7 @@
 				0665B42A15494A970001E1E1 /* MUKGridView_Storage.h in Headers */,
 				065FE36B155529300039601F /* MUKGridView_Cell.h in Headers */,
 				065FE37215552DBE0039601F /* MUKGridCellViewTapGestureRecognizer_.h in Headers */,
+				06FF1B4F15678A6C0040DA06 /* MUKToolkit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,6 +519,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 06339BED153584FE00FB07ED /* Build configuration list for PBXNativeTarget "MUKScrolling" */;
 			buildPhases = (
+				06FF1B45156788C90040DA06 /* Copy MUKToolkit Headers */,
 				06339BC5153584FD00FB07ED /* Sources */,
 				06339BC6153584FD00FB07ED /* Frameworks */,
 				06339BC7153584FD00FB07ED /* Headers */,
@@ -738,6 +774,7 @@
 				DSTROOT = /tmp/MUKScrolling.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MUKScrolling/MUKScrolling-Prefix.pch";
+				HEADER_SEARCH_PATHS = "${BUILT_PRODUCTS_DIR}/MUK/DependenciesHeaders";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -750,6 +787,7 @@
 				DSTROOT = /tmp/MUKScrolling.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MUKScrolling/MUKScrolling-Prefix.pch";
+				HEADER_SEARCH_PATHS = "${BUILT_PRODUCTS_DIR}/MUK/DependenciesHeaders";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

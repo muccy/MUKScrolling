@@ -113,7 +113,6 @@
 		068CA8C0153DCDD70090E065 /* PagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagesViewController.h; sourceTree = "<group>"; };
 		068CA8C1153DCDD70090E065 /* PagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PagesViewController.m; sourceTree = "<group>"; };
 		068CA8C2153DCDD70090E065 /* PagesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PagesViewController.xib; sourceTree = "<group>"; };
-		0699888E153C5B6700CBE31E /* libMUKToolkit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMUKToolkit.a; path = "../../Submodules/MUKToolkit/build/Release-iphoneos/libMUKToolkit.a"; sourceTree = "<group>"; };
 		06BCEFF4153EC23E0065D11C /* ImagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagesViewController.h; sourceTree = "<group>"; };
 		06BCEFF5153EC23E0065D11C /* ImagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagesViewController.m; sourceTree = "<group>"; };
 		06BCEFF8153EC49E0065D11C /* autumn.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = autumn.jpg; sourceTree = "<group>"; };
@@ -167,7 +166,6 @@
 			isa = PBXGroup;
 			children = (
 				06D7B95915668953006F1E42 /* Security.framework */,
-				0699888E153C5B6700CBE31E /* libMUKToolkit.a */,
 				06D7B94C15668936006F1E42 /* MUKToolkit.xcodeproj */,
 				06339C5E1535F0BE00FB07ED /* MUKScrolling.xcodeproj */,
 				06339C411535F09200FB07ED /* UIKit.framework */,

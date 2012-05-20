@@ -61,8 +61,8 @@
 		06A55260153EC9AD0086A526 /* MUKGridCellOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A5525E153EC9AD0086A526 /* MUKGridCellOptions.m */; };
 		06D0FCB91535F697008E652E /* MUKGridView_RowsAndColumns.h in Headers */ = {isa = PBXBuildFile; fileRef = 06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */; };
 		06D0FCC21535F932008E652E /* MUKGridViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 06D0FCC11535F932008E652E /* MUKGridViewTests.m */; };
-		06D7B92615668724006F1E42 /* libMUKToolkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A4A91E15668649004B9504 /* libMUKToolkit.a */; };
 		06D7B92815668729006F1E42 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06D7B92715668729006F1E42 /* Security.framework */; };
+		06EEEE6615694DAE0090EE76 /* libMUKToolkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06EEEE6515694DAE0090EE76 /* libMUKToolkit.a */; };
 		06FF1B46156788E40040DA06 /* MUK.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B914156686DF006F1E42 /* MUK.h */; };
 		06FF1B47156788E40040DA06 /* MUK+String.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B915156686DF006F1E42 /* MUK+String.h */; };
 		06FF1B48156788E40040DA06 /* MUK+Date.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 06D7B916156686DF006F1E42 /* MUK+Date.h */; };
@@ -82,27 +82,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 06339BC8153584FD00FB07ED;
 			remoteInfo = MUKScrolling;
-		};
-		06A4A91D15668649004B9504 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 06A4A91415668648004B9504 /* MUKToolkit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 065793871523337F00D6762A;
-			remoteInfo = MUKToolkit;
-		};
-		06A4A91F15668649004B9504 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 06A4A91415668648004B9504 /* MUKToolkit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 065793971523337F00D6762A;
-			remoteInfo = MUKToolkitTests;
-		};
-		06D7B9241566871B006F1E42 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 06A4A91415668648004B9504 /* MUKToolkit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 065793861523337F00D6762A;
-			remoteInfo = MUKToolkit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -171,7 +150,6 @@
 		066863BC15387538005D4BC1 /* MUKGridViewPrivateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridViewPrivateTests.m; sourceTree = "<group>"; };
 		066863D515396690005D4BC1 /* MUKGridCellFixedSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCellFixedSize.h; sourceTree = "<group>"; };
 		066863D615396690005D4BC1 /* MUKGridCellFixedSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellFixedSize.m; sourceTree = "<group>"; };
-		06A4A91415668648004B9504 /* MUKToolkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MUKToolkit.xcodeproj; path = Submodules/MUKToolkit/MUKToolkit.xcodeproj; sourceTree = "<group>"; };
 		06A5525D153EC9AD0086A526 /* MUKGridCellOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCellOptions.h; sourceTree = "<group>"; };
 		06A5525E153EC9AD0086A526 /* MUKGridCellOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellOptions.m; sourceTree = "<group>"; };
 		06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView_RowsAndColumns.h; sourceTree = "<group>"; };
@@ -186,6 +164,7 @@
 		06D7B91A156686DF006F1E42 /* MUK+Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MUK+Object.h"; path = "Submodules/MUKToolkit/MUKToolkit/Classes/Object/MUK+Object.h"; sourceTree = "<group>"; };
 		06D7B91B156686DF006F1E42 /* MUK+Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MUK+Data.h"; path = "Submodules/MUKToolkit/MUKToolkit/Classes/Data/MUK+Data.h"; sourceTree = "<group>"; };
 		06D7B92715668729006F1E42 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		06EEEE6515694DAE0090EE76 /* libMUKToolkit.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libMUKToolkit.a; path = "Submodules/MUKToolkit/build/Release-iphoneos/libMUKToolkit.a"; sourceTree = "<group>"; };
 		06FF1B4E15678A6C0040DA06 /* MUKToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MUKToolkit.h; path = Submodules/MUKToolkit/MUKToolkit/MUKToolkit.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -204,7 +183,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06D7B92615668724006F1E42 /* libMUKToolkit.a in Frameworks */,
+				06EEEE6615694DAE0090EE76 /* libMUKToolkit.a in Frameworks */,
 				06339BE1153584FE00FB07ED /* libMUKScrolling.a in Frameworks */,
 				06D7B92815668729006F1E42 /* Security.framework in Frameworks */,
 				06339C3115359C4C00FB07ED /* CoreGraphics.framework in Frameworks */,
@@ -220,7 +199,6 @@
 		06339BBE153584FD00FB07ED = {
 			isa = PBXGroup;
 			children = (
-				06D7B90E15668687006F1E42 /* Dependencies */,
 				06339BFC153585B900FB07ED /* LICENSE */,
 				06339BD1153584FD00FB07ED /* MUKScrolling.h */,
 				06339BD0153584FD00FB07ED /* MUKScrolling-Prefix.pch */,
@@ -244,6 +222,7 @@
 		06339BCB153584FD00FB07ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				06EEEE6515694DAE0090EE76 /* libMUKToolkit.a */,
 				06D7B92715668729006F1E42 /* Security.framework */,
 				06339C2F15359C3F00FB07ED /* CoreGraphics.framework */,
 				06339C0E153587E400FB07ED /* UIKit.framework */,
@@ -422,15 +401,6 @@
 			path = Fixed;
 			sourceTree = "<group>";
 		};
-		06A4A91515668648004B9504 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				06A4A91E15668649004B9504 /* libMUKToolkit.a */,
-				06A4A92015668649004B9504 /* MUKToolkitTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		06A5525C153EC99D0086A526 /* Cell Options */ = {
 			isa = PBXGroup;
 			children = (
@@ -450,14 +420,6 @@
 				06D0FCC11535F932008E652E /* MUKGridViewTests.m */,
 			);
 			path = Grid;
-			sourceTree = "<group>";
-		};
-		06D7B90E15668687006F1E42 /* Dependencies */ = {
-			isa = PBXGroup;
-			children = (
-				06A4A91415668648004B9504 /* MUKToolkit.xcodeproj */,
-			);
-			name = Dependencies;
 			sourceTree = "<group>";
 		};
 		06D7B91215668696006F1E42 /* Dependencies Public Headers */ = {
@@ -546,7 +508,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				06D7B9251566871B006F1E42 /* PBXTargetDependency */,
 				06339BE0153584FE00FB07ED /* PBXTargetDependency */,
 			);
 			name = MUKScrollingTests;
@@ -572,12 +533,6 @@
 			mainGroup = 06339BBE153584FD00FB07ED;
 			productRefGroup = 06339BCA153584FD00FB07ED /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 06A4A91515668648004B9504 /* Products */;
-					ProjectRef = 06A4A91415668648004B9504 /* MUKToolkit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				06339BC8153584FD00FB07ED /* MUKScrolling */,
@@ -586,23 +541,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		06A4A91E15668649004B9504 /* libMUKToolkit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libMUKToolkit.a;
-			remoteRef = 06A4A91D15668649004B9504 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		06A4A92015668649004B9504 /* MUKToolkitTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MUKToolkitTests.octest;
-			remoteRef = 06A4A91F15668649004B9504 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		06339BD6153584FD00FB07ED /* Resources */ = {
@@ -694,11 +632,6 @@
 			isa = PBXTargetDependency;
 			target = 06339BC8153584FD00FB07ED /* MUKScrolling */;
 			targetProxy = 06339BDF153584FE00FB07ED /* PBXContainerItemProxy */;
-		};
-		06D7B9251566871B006F1E42 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = MUKToolkit;
-			targetProxy = 06D7B9241566871B006F1E42 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

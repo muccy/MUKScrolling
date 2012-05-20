@@ -31,9 +31,9 @@ Please remember not to create a copy of files while adding project: you only nee
 
 <img src="http://i.imgur.com/kXEJZ.png" />
 
-Now disclose `MUKScrolling.xcodeproj` and drag contents of `Dependencies` folder to your project. With this step you are adding `MUKScrolling` dependencies. If your project already contains dependencies please take care to use updated libraries.
+Now add `MUKToolkit.xcodeproj` by choosing that project from `Submodules/MUKToolkit`. With this step you are adding `MUKObjectCache` dependencies. If your project already contains dependencies please take care to use updated libraries.
 
-<img src="http://i.imgur.com/JJjrG.png" />
+<img src="http://i.imgur.com/AQkuD.png" />
 
 #### Step 2: make your project dependent
 Click on your project and, then, your app target:

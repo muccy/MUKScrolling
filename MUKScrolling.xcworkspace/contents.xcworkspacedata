@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "Dependencies">
+      <FileRef
+         location = "group:Submodules/MUKToolkit/MUKToolkit.xcodeproj">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:MUKScrolling.xcodeproj">
+   </FileRef>
+</Workspace>

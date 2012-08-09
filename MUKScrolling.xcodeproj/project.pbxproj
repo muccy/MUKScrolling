@@ -57,6 +57,7 @@
 		066863BD15387538005D4BC1 /* MUKGridViewPrivateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863BC15387538005D4BC1 /* MUKGridViewPrivateTests.m */; };
 		066863D715396690005D4BC1 /* MUKGridCellFixedSize.h in Headers */ = {isa = PBXBuildFile; fileRef = 066863D515396690005D4BC1 /* MUKGridCellFixedSize.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		066863D815396690005D4BC1 /* MUKGridCellFixedSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 066863D615396690005D4BC1 /* MUKGridCellFixedSize.m */; };
+		0675630B15D39DE500D72C58 /* MUK+Color.h in Copy MUKToolkit Headers */ = {isa = PBXBuildFile; fileRef = 0675630915D39DDE00D72C58 /* MUK+Color.h */; };
 		06A5525F153EC9AD0086A526 /* MUKGridCellOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 06A5525D153EC9AD0086A526 /* MUKGridCellOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06A55260153EC9AD0086A526 /* MUKGridCellOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A5525E153EC9AD0086A526 /* MUKGridCellOptions.m */; };
 		06D0FCB91535F697008E652E /* MUKGridView_RowsAndColumns.h in Headers */ = {isa = PBXBuildFile; fileRef = 06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */; };
@@ -101,6 +102,7 @@
 				06FF1B4B156788E40040DA06 /* MUK+Geometry.h in Copy MUKToolkit Headers */,
 				06FF1B4C156788E40040DA06 /* MUK+Object.h in Copy MUKToolkit Headers */,
 				06FF1B4D156788E40040DA06 /* MUK+Data.h in Copy MUKToolkit Headers */,
+				0675630B15D39DE500D72C58 /* MUK+Color.h in Copy MUKToolkit Headers */,
 			);
 			name = "Copy MUKToolkit Headers";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -150,6 +152,7 @@
 		066863BC15387538005D4BC1 /* MUKGridViewPrivateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridViewPrivateTests.m; sourceTree = "<group>"; };
 		066863D515396690005D4BC1 /* MUKGridCellFixedSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCellFixedSize.h; sourceTree = "<group>"; };
 		066863D615396690005D4BC1 /* MUKGridCellFixedSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellFixedSize.m; sourceTree = "<group>"; };
+		0675630915D39DDE00D72C58 /* MUK+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = "MUK+Color.h"; path = "Submodules/MUKToolkit/MUKToolkit/Classes/Color/MUK+Color.h"; sourceTree = "<group>"; };
 		06A5525D153EC9AD0086A526 /* MUKGridCellOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridCellOptions.h; sourceTree = "<group>"; };
 		06A5525E153EC9AD0086A526 /* MUKGridCellOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUKGridCellOptions.m; sourceTree = "<group>"; };
 		06D0FCB81535F697008E652E /* MUKGridView_RowsAndColumns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUKGridView_RowsAndColumns.h; sourceTree = "<group>"; };
@@ -436,6 +439,7 @@
 				06FF1B4E15678A6C0040DA06 /* MUKToolkit.h */,
 				06D7B914156686DF006F1E42 /* MUK.h */,
 				06D7B915156686DF006F1E42 /* MUK+String.h */,
+				0675630915D39DDE00D72C58 /* MUK+Color.h */,
 				06D7B916156686DF006F1E42 /* MUK+Date.h */,
 				06D7B917156686DF006F1E42 /* MUK+Array.h */,
 				06D7B918156686DF006F1E42 /* MUK+URL.h */,

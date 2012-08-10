@@ -539,7 +539,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nMUK_DEPENDENT_PROJECT_NAME=\"MUKToolkit\"\nMUK_DEPENDENT_PROJECT_DIR=\"${SRCROOT}/Submodules/${MUK_DEPENDENT_PROJECT_NAME}\"\nMUK_TARGET_DIR=\"${BUILT_PRODUCTS_DIR}/MUK_DependenciesHeaders/${MUK_DEPENDENT_PROJECT_NAME}\"\n\n# Create headers folder\necho -e \"Creating target folder for ${MUK_DEPENDENT_PROJECT_NAME}...\\n${MUK_TARGET_DIR}\"\nmkdir -p \"${MUK_TARGET_DIR}\"\n\n# Copy all headers\nfind \"${MUK_DEPENDENT_PROJECT_DIR}\" -name \"*.h\" | while read line; do\n# The -a ensures that the headers maintain the source modification date\n/bin/cp -a \"$line\" \"${MUK_TARGET_DIR}\"\ndone";
+			shellScript = "set -e\n\nMUK_DEPENDENT_PROJECT_NAME=\"MUKToolkit\"\nMUK_DEPENDENT_PROJECT_DIR=\"${SRCROOT}/Submodules/${MUK_DEPENDENT_PROJECT_NAME}/${MUK_DEPENDENT_PROJECT_NAME}\"\nMUK_TARGET_DIR=\"${BUILT_PRODUCTS_DIR}/MUK_DependenciesHeaders/${MUK_DEPENDENT_PROJECT_NAME}\"\n\n# Create headers folder\necho -e \"Creating target folder for ${MUK_DEPENDENT_PROJECT_NAME}...\\n${MUK_TARGET_DIR}\"\nmkdir -p \"${MUK_TARGET_DIR}\"\n\n# Copy all headers\nfind \"${MUK_DEPENDENT_PROJECT_DIR}\" -name \"*.h\" | while read line; do\n# The -a ensures that the headers maintain the source modification date\n/bin/cp -a \"$line\" \"${MUK_TARGET_DIR}\"\ndone";
 		};
 /* End PBXShellScriptBuildPhase section */
 

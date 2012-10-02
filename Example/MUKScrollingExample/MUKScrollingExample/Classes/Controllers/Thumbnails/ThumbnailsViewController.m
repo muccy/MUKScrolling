@@ -60,7 +60,7 @@
             cellView.imageOffset = kImageOffset;
         }
         
-        UIImage *image = [weakSelf.images_ objectAtIndex:index];
+        UIImage *image = (weakSelf.images_)[index];
         cellView.imageView.image = image;
         cellView.label.text = [NSString stringWithFormat:@"%i", index];
         
@@ -114,8 +114,7 @@
 
 - (NSArray *)images_ {
     if (images__ == nil) {        
-        images__ = [[NSArray alloc] initWithObjects:
-                    [UIImage imageNamed:@"colors.jpg"],
+        images__ = @[[UIImage imageNamed:@"colors.jpg"],
                     [UIImage imageNamed:@"autumn.jpg"],
                     [UIImage imageNamed:@"building.jpg"],
                     [UIImage imageNamed:@"cat.jpg"],
@@ -169,8 +168,7 @@
                     [UIImage imageNamed:@"autumn.jpg"],
                     [UIImage imageNamed:@"building.jpg"],
                     [UIImage imageNamed:@"cat.jpg"],
-                    [UIImage imageNamed:@"garden.jpg"],
-                    nil];
+                    [UIImage imageNamed:@"garden.jpg"]];
     }
     return images__;
 }

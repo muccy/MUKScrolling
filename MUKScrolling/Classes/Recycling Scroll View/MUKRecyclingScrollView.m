@@ -223,12 +223,12 @@
 
 - (NSMutableSet *)recycleSetWithIdentifier_:(NSString *)recycleIdentifier create_:(BOOL)create
 {
-    NSMutableSet *recycleSet = [self.recyclableViews_ objectForKey:recycleIdentifier];
+    NSMutableSet *recycleSet = (self.recyclableViews_)[recycleIdentifier];
     
     // Create a recycle set
     if (create && recycleIdentifier != nil && recycleSet == nil) {
         recycleSet = [NSMutableSet set];
-        [self.recyclableViews_ setObject:recycleSet forKey:recycleIdentifier];
+        (self.recyclableViews_)[recycleIdentifier] = recycleSet;
     }
     
     return recycleSet;

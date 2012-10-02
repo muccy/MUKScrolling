@@ -130,7 +130,7 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
-    RootViewControllerRow_ *row = [self.rows_ objectAtIndex:indexPath.row];
+    RootViewControllerRow_ *row = (self.rows_)[indexPath.row];
     cell.textLabel.text = row.title;
     cell.detailTextLabel.text = row.subtitle;
 
@@ -141,7 +141,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    RootViewControllerRow_ *row = [self.rows_ objectAtIndex:indexPath.row];
+    RootViewControllerRow_ *row = (self.rows_)[indexPath.row];
     if (row.selectionHandler) {
         row.selectionHandler();
     }

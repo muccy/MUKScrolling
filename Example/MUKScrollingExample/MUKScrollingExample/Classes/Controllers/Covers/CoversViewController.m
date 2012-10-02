@@ -107,7 +107,7 @@ static NSString *const kCoverViewIdentifier = @"Cover";
             coverView.backgroundColor = [UIColor clearColor];
         }
         
-        Cover_ *cover = [weakSelf.covers_ objectAtIndex:cellIndex];
+        Cover_ *cover = (weakSelf.covers_)[cellIndex];
         [weakSelf configureCoverView_:coverView withCover_:cover];
         coverView.alpha = kOtherCoversAlpha;
         

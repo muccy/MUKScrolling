@@ -14,6 +14,7 @@
 		06339C4E1535F09200FB07ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 06339C4D1535F09200FB07ED /* main.m */; };
 		06383F1B1543F38300423A3A /* ThumbnailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06383F1A1543F38300423A3A /* ThumbnailsViewController.m */; };
 		06383F1F1543F44700423A3A /* ThumbnailCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06383F1E1543F44700423A3A /* ThumbnailCellView.m */; };
+		065911E2161B2D41002E5D03 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 065911E1161B2D41002E5D03 /* Default-568h@2x.png */; };
 		0665B4051547FC660001E1E1 /* CoversViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0665B4031547FC660001E1E1 /* CoversViewController.m */; };
 		0665B4061547FC660001E1E1 /* CoversViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0665B4041547FC660001E1E1 /* CoversViewController.xib */; };
 		0665B42815480C820001E1E1 /* CoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0665B42715480C820001E1E1 /* CoverView.m */; };
@@ -96,6 +97,7 @@
 		06383F1A1543F38300423A3A /* ThumbnailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailsViewController.m; sourceTree = "<group>"; };
 		06383F1D1543F44700423A3A /* ThumbnailCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailCellView.h; sourceTree = "<group>"; };
 		06383F1E1543F44700423A3A /* ThumbnailCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailCellView.m; sourceTree = "<group>"; };
+		065911E1161B2D41002E5D03 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		0665B4021547FC660001E1E1 /* CoversViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoversViewController.h; sourceTree = "<group>"; };
 		0665B4031547FC660001E1E1 /* CoversViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoversViewController.m; sourceTree = "<group>"; };
 		0665B4041547FC660001E1E1 /* CoversViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CoversViewController.xib; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 		06339C481535F09200FB07ED /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				065911E1161B2D41002E5D03 /* Default-568h@2x.png */,
 				06339C491535F09200FB07ED /* MUKScrollingExample-Info.plist */,
 				06339C4A1535F09200FB07ED /* InfoPlist.strings */,
 				06339C4D1535F09200FB07ED /* main.m */,
@@ -474,6 +477,7 @@
 				06BCF000153EC49E0065D11C /* colors.jpg in Resources */,
 				06BCF001153EC49E0065D11C /* garden.jpg in Resources */,
 				0665B4061547FC660001E1E1 /* CoversViewController.xib in Resources */,
+				065911E2161B2D41002E5D03 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,9 +535,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Muccinelli (959P8R4D7Z)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Muccinelli (M35YVMF4FT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -543,13 +546,12 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PROVISIONING_PROFILE = "29A718E1-5F0E-4F78-BCCB-BD08AC04BC69";
+				PROVISIONING_PROFILE = "0B358AD7-A169-452B-8E89-BED293479E28";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -558,19 +560,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Muccinelli (959P8R4D7Z)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-ObjC";
-				PROVISIONING_PROFILE = "29A718E1-5F0E-4F78-BCCB-BD08AC04BC69";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

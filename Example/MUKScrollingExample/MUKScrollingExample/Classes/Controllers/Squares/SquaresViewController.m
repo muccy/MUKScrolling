@@ -49,7 +49,7 @@
     self.gridView.detectsDoubleTapGesture = YES;
     self.gridView.detectsLongPressGesture = YES;
     
-    __unsafe_unretained MUKGridView *weakGridView = self.gridView;
+    __weak MUKGridView *weakGridView = self.gridView;
     
     self.gridView.cellCreationHandler = ^(NSInteger index) {
         LabelCellView *cellView = (LabelCellView *)[weakGridView dequeueViewWithIdentifier:@"Cell"];

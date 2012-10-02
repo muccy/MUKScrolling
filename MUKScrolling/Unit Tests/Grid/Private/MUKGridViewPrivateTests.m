@@ -405,7 +405,7 @@
     cellView.recycleIdentifier = @"Foo";
     
     __block BOOL recycledCell = NO;
-    __unsafe_unretained GridViewMock *weakGridView = gridView;
+    __weak GridViewMock *weakGridView = gridView;
     [gridView setCellCreationHandler:^UIView<MUKRecyclable> *(NSInteger index)
      {
          UIView<MUKRecyclable> *returnedCell = [weakGridView dequeueViewWithIdentifier:@"Foo"];

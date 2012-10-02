@@ -147,7 +147,7 @@
     
     __block NSUInteger handlerCallsCount = 0;
     __block NSInteger recycledCellsCount = 0;
-    __unsafe_unretained MUKGridView *weakGridView = gridView;
+    __weak MUKGridView *weakGridView = gridView;
     gridView.cellCreationHandler = ^(NSInteger index) {
         handlerCallsCount++;
         

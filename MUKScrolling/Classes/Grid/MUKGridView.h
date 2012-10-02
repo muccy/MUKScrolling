@@ -152,7 +152,7 @@ typedef enum {
  Block takes index of requested cell view and must return a recyclable view.
  
  Please use recycling. Example:
-     __unsafe_unretained MUKGridView *weakGridView = self.gridView;
+     __weak MUKGridView *weakGridView = self.gridView;
      [self.gridView setCellCreationHandler:^(NSInteger index) 
      {
         MyCellView *cellView = (MyCellView *)[weakGridView dequeueViewWithIdentifier:@"MyCell"];

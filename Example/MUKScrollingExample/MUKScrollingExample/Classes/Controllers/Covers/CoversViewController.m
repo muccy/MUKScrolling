@@ -88,8 +88,8 @@ static NSString *const kCoverViewIdentifier = @"Cover";
     
     [self updatePageControl_];
     
-    __unsafe_unretained MUKGridView *weakGridView = self.gridView;
-    __unsafe_unretained CoversViewController *weakSelf = self;
+    __weak MUKGridView *weakGridView = self.gridView;
+    __weak CoversViewController *weakSelf = self;
     
     self.gridView.cellSize = [[MUKGridCellSize alloc] initWithSizeHandler:^CGSize(CGSize containerSize) 
     {

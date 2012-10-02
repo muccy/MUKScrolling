@@ -1341,14 +1341,24 @@
 #pragma mark - Private: Cell
 
 - (void)attachHandlersToNewCellView_:(MUKGridCellView_ *)cellView {
-    __unsafe_unretained MUKGridView *weakSelf = self;
-    __unsafe_unretained MUKGridCellView_ *weakCellView = cellView;
+    __weak MUKGridView *weakSelf = self;
+    __weak MUKGridCellView_ *weakCellView = cellView;
     cellView.willLayoutSubviewsHandler = ^{
-        [weakSelf willLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
+        if (weakSelf && weakCellView) {
+            MUKGridView *strongSelf = weakSelf;
+            MUKGridCellView_ *strongCellView = weakCellView;
+            
+            [strongSelf willLayoutSubviewsOfCellView:strongCellView.guestView atIndex:strongCellView.cellIndex];
+        }
     };
     
     cellView.didLayoutSubviewsHandler = ^{
-        [weakSelf didLayoutSubviewsOfCellView:weakCellView.guestView atIndex:weakCellView.cellIndex];
+        if (weakSelf && weakCellView) {
+            MUKGridView *strongSelf = weakSelf;
+            MUKGridCellView_ *strongCellView = weakCellView;
+            
+            [strongSelf didLayoutSubviewsOfCellView:strongCellView.guestView atIndex:strongCellView.cellIndex];
+        }
     };
 }
 
@@ -1379,10 +1389,16 @@
         singleTapRecognizer = [[MUKGridCellViewTapGestureRecognizer_ alloc] initWithTarget:self action:@selector(handleCellTap_:)];
         cellView.singleTapGestureRecognizer = singleTapRecognizer;
         
-        __unsafe_unretained MUKGridView *weakSelf = self;
-        __unsafe_unretained MUKGridCellView_ *weakCellView = cellView;
+        __weak MUKGridView *weakSelf = self;
+        __weak MUKGridCellView_ *weakCellView = cellView;
+        
         singleTapRecognizer.touchesBeganHandler = ^(NSSet *touches) {
-            [weakSelf didTouchCell:touches atIndex:weakCellView.cellIndex];
+            if (weakSelf && weakCellView) {
+                MUKGridView *strongSelf = weakSelf;
+                MUKGridCellView_ *strongCellView = weakCellView;
+                
+                [strongSelf didTouchCell:touches atIndex:strongCellView.cellIndex];
+            }
         };
         
         [cellView addGestureRecognizer:singleTapRecognizer];

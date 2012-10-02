@@ -43,8 +43,8 @@
     self.gridView.showsVerticalScrollIndicator = NO;
     self.gridView.showsHorizontalScrollIndicator = NO;
     
-    __unsafe_unretained MUKGridView *weakGridView = self.gridView;
-    __unsafe_unretained ImagesViewController *weakSelf = self;
+    __weak MUKGridView *weakGridView = self.gridView;
+    __weak ImagesViewController *weakSelf = self;
     
     self.gridView.cellCreationHandler = ^(NSInteger index) {
         ImageCellView *cellView = (ImageCellView *)[weakGridView dequeueViewWithIdentifier:@"Cell"];

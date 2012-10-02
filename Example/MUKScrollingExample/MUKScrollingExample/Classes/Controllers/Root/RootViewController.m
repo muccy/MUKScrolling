@@ -43,7 +43,7 @@
 
 - (NSArray *)rows_ {
     if (rows_ == nil) {
-        __unsafe_unretained RootViewController *weakSelf = self;
+        __weak RootViewController *weakSelf = self;
         NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
         RootViewControllerRow_ *row;
         

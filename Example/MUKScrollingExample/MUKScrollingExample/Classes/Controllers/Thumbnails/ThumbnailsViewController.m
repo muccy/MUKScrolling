@@ -44,8 +44,8 @@
     self.gridView.numberOfCells = [self.images_ count];
     self.gridView.direction = MUKGridDirectionVertical;
     
-    __unsafe_unretained MUKGridView *weakGridView = self.gridView;
-    __unsafe_unretained ThumbnailsViewController *weakSelf = self;
+    __weak MUKGridView *weakGridView = self.gridView;
+    __weak ThumbnailsViewController *weakSelf = self;
     
     self.gridView.cellCreationHandler = ^(NSInteger index) {
         ThumbnailCellView *cellView = (ThumbnailCellView *)[weakGridView dequeueViewWithIdentifier:@"Cell"];

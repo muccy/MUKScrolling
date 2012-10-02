@@ -53,8 +53,8 @@
     self.gridView.showsVerticalScrollIndicator = NO;
     self.gridView.showsHorizontalScrollIndicator = NO;
     
-    __unsafe_unretained MUKGridView *weakGridView = self.gridView;
-    __unsafe_unretained PagesViewController *weakSelf = self;
+    __weak MUKGridView *weakGridView = self.gridView;
+    __weak PagesViewController *weakSelf = self;
     
     self.gridView.cellCreationHandler = ^(NSInteger index) {
         LabelCellView *cellView = (LabelCellView *)[weakGridView dequeueViewWithIdentifier:@"Cell"];
